@@ -7,12 +7,15 @@ import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.mylibrary.R
+import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.home.Home
 
 enum class MainSections(
@@ -49,6 +52,17 @@ fun MainBottomBar(
     tabs: Array<MainSections>,
     currentRoute: String,
     navigationRoute: (String) -> Unit,
+    color: Color = Color.White,
+    contentColor : Color = Color.Gray
+    //todo 색상 추가
 ) {
+    val routes = remember { tabs.map { it.route } }
+    val currentSection = tabs.first { it.route == currentRoute }
 
+    BookDiarySurface(
+        color = color,
+        contentColor = contentColor
+    ){
+
+    }
 }
