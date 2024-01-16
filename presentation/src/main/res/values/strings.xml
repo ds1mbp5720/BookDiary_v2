@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BookDiary_v2</string>
+    <string name="str_home">HOME</string>
+    <string name="str_search">SEARCH</string>
+    <string name="str_record">RECORD</string>
+    <string name="str_profile">MY PAGE</string>
 </resources>
