@@ -21,7 +21,7 @@ fun Search(
         bottomBar = {
             BookDiaryBottomBar(
                 tabs = MainSections.values(),
-                currentRoute = MainSections.HOME.route,
+                currentRoute = MainSections.SEARCH.route,
                 navigateToRoute = onNavigateToRoute
             )
         },

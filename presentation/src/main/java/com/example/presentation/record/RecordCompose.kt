@@ -21,7 +21,7 @@ fun Record(
         bottomBar = {
             BookDiaryBottomBar(
                 tabs = MainSections.values(),
-                currentRoute = MainSections.HOME.route,
+                currentRoute = MainSections.RECORD.route,
                 navigateToRoute = onNavigateToRoute
             )
         },

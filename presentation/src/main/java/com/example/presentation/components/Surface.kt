@@ -17,24 +17,26 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.example.presentation.theme.BookDiaryTheme
 import kotlin.math.ln
 
 @Composable
 fun BookDiarySurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    color : Color = Color.White,
-    contentColor : Color = Color.Gray,
+    color : Color = BookDiaryTheme.colors.uiBackground,
+    contentColor : Color = BookDiaryTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
 ) {
     Box(
-        modifier = modifier.shadow(elevation = elevation, shape = shape, clip = false)
+        modifier = modifier
+            .shadow(elevation = elevation, shape = shape, clip = false)
             .zIndex(elevation.value)
-            .then(if (border != null) Modifier.border(border, shape) else Modifier )
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
             .background(
-                color = getBackgroundColorForElevation(color = color, elevation =  elevation),
+                color = getBackgroundColorForElevation(color = color, elevation = elevation),
                 shape = shape
             )
             .clip(shape)

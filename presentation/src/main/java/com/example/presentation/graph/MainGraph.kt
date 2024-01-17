@@ -57,6 +57,7 @@ import com.example.presentation.home.Home
 import com.example.presentation.profile.Profile
 import com.example.presentation.record.Record
 import com.example.presentation.search.Search
+import com.example.presentation.theme.BookDiaryTheme
 import java.util.Locale
 
 private val TextIconSpacing = 2.dp
@@ -98,8 +99,8 @@ fun BookDiaryBottomBar(
     tabs: Array<MainSections>,
     currentRoute: String,
     navigateToRoute: (String) -> Unit,
-    color: Color = Color.White,
-    contentColor : Color = Color.Gray
+    color: Color = BookDiaryTheme.colors.iconPrimary,
+    contentColor : Color = BookDiaryTheme.colors.iconInteractive
     //todo 색상 추가
 ) {
     val routes = remember { tabs.map { it.route } }
@@ -124,7 +125,7 @@ fun BookDiaryBottomBar(
             tabs.forEach { section ->
                 val selected = section == currentSection
                 val tint by animateColorAsState(
-                    targetValue = if(selected) Color.White else Color.Gray,
+                    targetValue = if(selected) BookDiaryTheme.colors.iconInteractive else BookDiaryTheme.colors.iconInteractiveInactive,
                     label = ""
                 )
                 val text = stringResource(id = section.title).uppercase(currentLocale)
@@ -321,7 +322,7 @@ private fun BookDiaryBottomNavLayout(
 @Composable
 private fun BookDiaryBottomNavIndicator(
     strokeWidth: Dp = 2.dp,
-    color: Color = Color.White,
+    color: Color = BookDiaryTheme.colors.iconInteractive,
     shape: Shape = BottomNavIndicatorShape
 ) {
     Spacer(
