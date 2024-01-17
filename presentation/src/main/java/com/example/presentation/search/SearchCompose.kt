@@ -1,4 +1,4 @@
-package com.example.presentation.home
+package com.example.presentation.search
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 
 @Composable
-fun Home(
+fun Search(
     onBookClick: (Long) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -27,7 +27,7 @@ fun Home(
         },
         modifier = modifier
     ) {paddingValues ->
-        HomeScreen(
+        SearchScreen(
             onBookClick = onBookClick,
             modifier = Modifier.padding(paddingValues)
         )
@@ -35,14 +35,14 @@ fun Home(
 }
 
 @Composable
-private fun HomeScreen(
+private fun SearchScreen(
 
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ){
     BookDiarySurface {
         Box(modifier = modifier.fillMaxSize()){
-            Text(text = "HomeScreen")
+            Text(text = "SearchScreen")
         }
     }
 }

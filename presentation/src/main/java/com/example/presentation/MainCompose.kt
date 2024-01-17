@@ -42,12 +42,12 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     ){
         addMainGraph(onBookSelected, onNavigateToRoute)
     }
-    composable(
+    /*composable(
         "",
         arguments = listOf(navArgument(MainDestinations.BOOK_ID_KEY) { type = NavType.LongType })
     ) {navBackStackEntry ->
         val arguments = requireNotNull(navBackStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
         // todo compose 책 상세화면 추가 (bookId, upPress)
-    }
+    }*/
 }

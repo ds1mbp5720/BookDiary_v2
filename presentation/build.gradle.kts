@@ -73,7 +73,7 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.compose.foundation:foundation-android:1.5.2")
     implementation("androidx.navigation:navigation-compose:2.7.3")  // 2.4.2
-
+    implementation("androidx.compose.ui:ui-util")
     implementation("com.github.bumptech.glide:glide:4.11.0")
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
