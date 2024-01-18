@@ -70,10 +70,10 @@ enum class MainSections(
     val icon: ImageVector,
     val route: String
 ) {
-    HOME(R.string.str_home, Icons.Outlined.Home ,"home/home"),
-    SEARCH(R.string.str_search, Icons.Outlined.Search ,"home/search"),
-    RECORD(R.string.str_record, Icons.Outlined.Create ,"home/record"),
-    PROFILE(R.string.str_profile, Icons.Outlined.AccountCircle ,"home/profile")
+    HOME(R.string.str_home, Icons.Outlined.Home ,"main/home"),
+    SEARCH(R.string.str_search, Icons.Outlined.Search ,"main/search"),
+    RECORD(R.string.str_record, Icons.Outlined.Create ,"main/record"),
+    PROFILE(R.string.str_profile, Icons.Outlined.AccountCircle ,"main/profile")
 }
 fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
@@ -101,7 +101,6 @@ fun BookDiaryBottomBar(
     navigateToRoute: (String) -> Unit,
     color: Color = BookDiaryTheme.colors.iconPrimary,
     contentColor : Color = BookDiaryTheme.colors.iconInteractive
-    //todo 색상 추가
 ) {
     val routes = remember { tabs.map { it.route } }
     val currentSection = tabs.first { it.route == currentRoute }

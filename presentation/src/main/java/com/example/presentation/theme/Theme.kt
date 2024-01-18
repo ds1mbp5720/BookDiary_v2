@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColorPalette = BookDiaryColors(
-    brand = Shadow5,
+    brand = Ocean8,
     brandSecondary = Ocean3,
     uiBackground = Neutral0,
     uiBorder = Neutral4,
@@ -49,7 +49,7 @@ private val LightColorPalette = BookDiaryColors(
 )
 
 private val DarkColorPalette = BookDiaryColors(
-    brand = Shadow1,
+    brand = Ocean4,
     brandSecondary = Ocean2,
     uiBackground = Neutral8,
     uiBorder = Neutral3,

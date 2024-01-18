@@ -5,6 +5,9 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
 }
+fun getTTBKey(propertyKey: String): String {
+    return com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir).getProperty(propertyKey)
+}
 
 android {
     namespace = "com.example.data"
@@ -13,6 +16,7 @@ android {
     defaultConfig {
         minSdk = 24
 
+        buildConfigField("String", "TTB_KEY", getTTBKey("TTB_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -29,6 +33,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

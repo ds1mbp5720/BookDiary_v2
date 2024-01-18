@@ -1,5 +1,7 @@
 package com.example.data.datasource
 
+import com.example.data.BuildConfig
+import com.example.data.dto.BookListData
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,9 +17,20 @@ interface BookListDataSource {
      */
     @GET("ItemList.aspx")
     suspend fun getBookList(
-        @Query("ttbkey") ttbkey: String,
+        @Query("ttbkey") ttbkey: String = BuildConfig.TTB_KEY,
         @Query("QueryType") QueryType: String, // 리스트 종류
+        @Query("start") start: Int,
+        @Query("SearchTarget") SearchTarget:String = "Book",
         @Query("output") output: String = "js",
         @Query("Version") Version: String = "20131101"
-    )
+    ): BookListData
+
+    @GET("ItemSearch.aspx")
+    suspend fun searchBookList(
+        @Query("ttbkey") ttbkey: String = BuildConfig.TTB_KEY,
+        @Query("Query") Query: String, // 검색어
+        @Query("start") start: Int,
+        @Query("output") output: String = "js",
+        @Query("Version") Version: String = "20131101"
+    ): BookListData
 }
