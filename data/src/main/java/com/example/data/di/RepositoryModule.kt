@@ -1,7 +1,9 @@
 package com.example.data.di
 
 import com.example.data.repository.BookListRepositoryImpl
+import com.example.data.repository.OffStoreRepositoryImpl
 import com.example.domain.repository.BookListRepository
+import com.example.domain.repository.OffStoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,9 @@ abstract class RepositoryModule {
     abstract fun bindsBookRepository(
         bookListRepositoryImpl: BookListRepositoryImpl
     ): BookListRepository
+
+    @Binds
+    abstract fun bindsOffStoreRepository(
+        offStoreRepositoryImpl: OffStoreRepositoryImpl
+    ): OffStoreRepository
 }
