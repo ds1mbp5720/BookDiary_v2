@@ -54,6 +54,7 @@ import androidx.navigation.compose.composable
 import com.example.mylibrary.R
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.home.Home
+import com.example.presentation.home.HomeViewModel
 import com.example.presentation.profile.Profile
 import com.example.presentation.record.Record
 import com.example.presentation.search.Search
@@ -78,10 +79,11 @@ enum class MainSections(
 fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onNavigateToRoute: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel
 ) {
     composable(MainSections.HOME.route){ from ->
-        Home(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
+        Home(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
     }
     composable(MainSections.SEARCH.route){ from ->
         Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
