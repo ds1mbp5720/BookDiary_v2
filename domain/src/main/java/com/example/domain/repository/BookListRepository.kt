@@ -1,9 +1,12 @@
 package com.example.domain.repository
 
+import androidx.paging.PagingData
 import com.example.domain.model.BookListModel
+import com.example.domain.model.BookModel
 import kotlinx.coroutines.flow.Flow
 
 interface BookListRepository {
-    fun getBookList(): Flow<BookListModel>
+    fun getBookList(queryType: String, start: Int): Flow<BookListModel>
+    fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>>
     fun searchBookList(): Flow<BookListModel>
 }

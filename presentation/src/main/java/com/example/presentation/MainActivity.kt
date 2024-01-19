@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.domain.model.BookListModel
 import com.example.presentation.home.BookListState
 import com.example.presentation.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,10 +17,15 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
+    private val categoryBookList = mutableListOf<BookListModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeUiState()
-        homeViewModel.getBookList()
+        homeViewModel.getBookList("ItemNewAll")
+        /*homeViewModel.getBookList("ItemNewSpecial")
+        homeViewModel.getBookList("Bestseller")
+        homeViewModel.getBookList("BlogBest")*/
+        homeViewModel.getBookPagingList("ItemNewAll")
         setContent {
             BookDiaryApp()
         }
@@ -32,11 +38,16 @@ class MainActivity: ComponentActivity() {
                     when(it){
                         is BookListState.Success -> {
                                 Log.e("","통신 activity ${it.data}")
+                            it.data?.let { it1 ->
+                                homeViewModel.addCategoryBookList(it1)
+                            }
                         }
                         is BookListState.Loading -> {}
                         is BookListState.Error -> {
                             Log.e("","통신 activity error ${it.message} / ${it.resultCode}")
                         }
+
+                        else -> {}
                     }
                 }
             }

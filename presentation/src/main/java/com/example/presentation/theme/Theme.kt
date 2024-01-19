@@ -74,15 +74,15 @@ private val DarkColorPalette = BookDiaryColors(
 
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Ocean5,
+    secondary = Ocean1,
+    tertiary = Ocean6
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Ocean5,
+    secondary = Ocean1,
+    tertiary = Ocean6
 )
 
 @Composable

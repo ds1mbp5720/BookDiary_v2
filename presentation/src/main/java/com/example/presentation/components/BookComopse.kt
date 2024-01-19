@@ -1,5 +1,6 @@
 package com.example.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -25,6 +27,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +38,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.mirroringIcon
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 private val cardWidth = 170.dp
 private val cardPadding = 16.dp
@@ -47,7 +55,8 @@ private val cardPadding = 16.dp
 @Composable
 fun BookListContent(
     contentTile: String,
-    books: List<BookModel>,
+    //books: List<BookModel>,
+    books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     index: Int = 0
@@ -92,7 +101,8 @@ fun BookListContent(
 @Composable
 fun BookItemsRow(
     index : Int,
-    books: List<BookModel>,
+    //books: List<BookModel>,
+    books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -107,9 +117,20 @@ fun BookItemsRow(
     LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(start = 24.dp, end = 24.dp)
+        contentPadding = PaddingValues(start = 24.dp, end = 24.dp),
+        userScrollEnabled = true
     ){
-        itemsIndexed(books) {index, item ->
+        items(books.itemCount){
+            BookItem(
+                books.itemSnapshotList[it],
+                onBookClick,
+                it,
+                gradient,
+                gradientWidth = gradientWidth,
+                scroll.value
+            )
+        }
+        /*itemsIndexed(books) {index, item ->
             BookItem(
                 item,
                 onBookClick,
@@ -118,13 +139,30 @@ fun BookItemsRow(
                 gradientWidth = gradientWidth,
                 scroll.value
             )
+        }*/
+        books.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    Log.e("","페이징 리프레시 로드")
+                }
+                loadState.refresh is LoadState.Error -> {
+                    Log.e("","페이징 리프레시 에러")
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    Log.e("","페이징 어펜드 로드")
+                }
+                loadState.append is LoadState.Error -> {
+                    Log.e("","페이징 어펜드 에러")
+                }
+            }
         }
     }
 }
 
 @Composable
 fun BookItem(
-    book: BookModel,
+    book: BookModel?,
     onBookClick: (Long) -> Unit,
     index: Int,
     gradient: List<Color>,
@@ -147,7 +185,7 @@ fun BookItem(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onBookClick(book.itemId?.toLong() ?: 0) }
+                .clickable { onBookClick(book?.itemId?.toLong() ?: 0) }
         ) {
             Box(
                modifier = Modifier
@@ -162,7 +200,7 @@ fun BookItem(
                         .offsetGradientBackground(gradient, gradientWidth, gradientOffSet)
                 )
                 BookCoverImage(
-                    imageUrl = book.cover ?: "",
+                    imageUrl = book?.cover ?: "",
                     contentDescription = null,
                     modifier = Modifier
                         .size(120.dp)
@@ -171,7 +209,7 @@ fun BookItem(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = book.title ?: "",
+                text = book?.title ?: "",
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium,
@@ -180,7 +218,7 @@ fun BookItem(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = book.author ?: "",
+                text = book?.author ?: "",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BookDiaryTheme.colors.textHelp,
                 modifier = Modifier.padding(horizontal = 16.dp)

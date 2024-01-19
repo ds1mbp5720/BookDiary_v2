@@ -12,10 +12,14 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.domain.model.BookListModel
 import com.example.domain.model.BookModel
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.BookListContent
@@ -29,8 +33,9 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val bookListState = viewModel.bookListData.collectAsState()
-    Log.e("","통신 결과 compose $bookListState")
+    //val bookListState = viewModel.bookListData.collectAsState()
+    val categoryBookList = viewModel.categoryBookListData.collectAsState()
+    val pagingItems: LazyPagingItems<BookModel> = viewModel.pagingBookListData.collectAsLazyPagingItems()
     Scaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -41,32 +46,40 @@ fun Home(
         },
         modifier = modifier
     ) {paddingValues ->
-        bookListState.value.data?.bookList?.let {
+        /*bookListState.value.data?.let {
             HomeScreen(
                 bookList = it,
                 onBookClick = onBookClick,
                 modifier = Modifier.padding(paddingValues)
             )
-        }
+        }*/
+        HomeScreen(
+            bookList = pagingItems,
+            onBookClick = onBookClick,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 }
 
 @Composable
 private fun HomeScreen(
-    bookList: List<BookModel>,
+    //bookList: List<BookModel>,
+    bookList: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ){
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
         Box{
-            BookCollectionList(bookList, onBookClick,)
+            BookCollectionList(bookList = bookList, contentTitle = "테스트",onBookClick =  onBookClick,)
         }
     }
 }
 
 @Composable
 private fun BookCollectionList(
-    bookList: List<BookModel>,
+    //bookList: List<BookModel>,
+    bookList: LazyPagingItems<BookModel>,
+    contentTitle: String,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -78,7 +91,7 @@ private fun BookCollectionList(
                 ))
 
             BookListContent(
-                contentTile = "테스트 카테고리",
+                contentTile = contentTitle,
                 books = bookList,
                 onBookClick = onBookClick,
 

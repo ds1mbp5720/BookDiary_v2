@@ -78,6 +78,10 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
 
+    //paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:3.3.0-alpha02")
+
     //ImagePicker
     implementation("com.github.Drjacky:ImagePicker:2.1.12")
 //EventBus

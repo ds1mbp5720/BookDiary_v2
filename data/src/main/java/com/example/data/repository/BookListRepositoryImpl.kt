@@ -1,9 +1,15 @@
 package com.example.data.repository
 
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.data.datasource.BookListDataSource
+import com.example.data.dto.BookData
 import com.example.data.mapper.toDomain
+import com.example.data.paging.BookListPagingSource
 import com.example.domain.model.BookListModel
+import com.example.domain.model.BookModel
 import com.example.domain.repository.BookListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -15,10 +21,10 @@ import javax.inject.Inject
 class BookListRepositoryImpl @Inject constructor(
     private val bookListDataSource: BookListDataSource
 ): BookListRepository {
-    override fun getBookList(): Flow<BookListModel> = flow {
+    override fun getBookList(queryType: String, start: Int): Flow<BookListModel> = flow {
         val response = bookListDataSource.getBookList(
-            QueryType = "ItemNewAll",
-            start = 1,
+            QueryType = queryType,
+            start = start,
         )
         emit(response.toDomain())
     }.retry {
@@ -26,6 +32,14 @@ class BookListRepositoryImpl @Inject constructor(
     }.catch {e->
         if(e is HttpException)
             throw e
+    }
+    override fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10, prefetchDistance = 3),
+            pagingSourceFactory = {
+                BookListPagingSource(queryType,bookListDataSource)
+            }
+        ).flow
     }
 
     override fun searchBookList(): Flow<BookListModel> = flow {
