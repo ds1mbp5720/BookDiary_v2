@@ -1,11 +1,9 @@
 package com.example.data.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.data.datasource.BookListDataSource
-import com.example.data.dto.BookData
 import com.example.data.mapper.toDomain
 import com.example.data.paging.BookListPagingSource
 import com.example.domain.model.BookListModel
@@ -35,7 +33,7 @@ class BookListRepositoryImpl @Inject constructor(
     }
     override fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 10, prefetchDistance = 3),
+            config = PagingConfig(pageSize = 10, prefetchDistance = 100),
             pagingSourceFactory = {
                 BookListPagingSource(queryType,bookListDataSource)
             }

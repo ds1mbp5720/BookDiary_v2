@@ -1,6 +1,5 @@
 package com.example.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -27,8 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,8 +41,6 @@ import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.mirroringIcon
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 private val cardWidth = 170.dp
 private val cardPadding = 16.dp
@@ -143,17 +136,13 @@ fun BookItemsRow(
         books.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
-                    Log.e("","페이징 리프레시 로드")
                 }
                 loadState.refresh is LoadState.Error -> {
-                    Log.e("","페이징 리프레시 에러")
                 }
 
                 loadState.append is LoadState.Loading -> {
-                    Log.e("","페이징 어펜드 로드")
                 }
                 loadState.append is LoadState.Error -> {
-                    Log.e("","페이징 어펜드 에러")
                 }
             }
         }
