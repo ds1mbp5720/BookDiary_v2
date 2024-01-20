@@ -21,26 +21,23 @@ class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeUiState()
-        homeViewModel.getBookList("ItemNewAll")
-        /*homeViewModel.getBookList("ItemNewSpecial")
-        homeViewModel.getBookList("Bestseller")
-        homeViewModel.getBookList("BlogBest")*/
-        homeViewModel.getBookPagingList("ItemNewAll")
+        homeViewModel.getBookListToItemNewAll1("ItemNewAll")
+        homeViewModel.getBookListToItemNewAll2("ItemNewSpecial")
+        homeViewModel.getBookListToItemNewAll3("Bestseller")
+        homeViewModel.getBookListToItemNewAll4("BlogBest")
         setContent {
             BookDiaryApp()
         }
 
     }
     private fun observeUiState(){
-        lifecycleScope.launch {
+        // flow 사용으로 해당 부분 미사용
+        /*lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 homeViewModel.bookListData.collect{
                     when(it){
                         is BookListState.Success -> {
                                 Log.e("","통신 activity ${it.data}")
-                            it.data?.let { it1 ->
-                                homeViewModel.addCategoryBookList(it1)
-                            }
                         }
                         is BookListState.Loading -> {}
                         is BookListState.Error -> {
@@ -51,6 +48,6 @@ class MainActivity: ComponentActivity() {
                     }
                 }
             }
-        }
+        }*/
     }
 }

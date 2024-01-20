@@ -13,10 +13,10 @@ class BookListPagingSource(
     private val bookListDataSource: BookListDataSource
 ) : PagingSource<Int, BookModel>() {
     override fun getRefreshKey(state: PagingState<Int, BookModel>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
+        return state.anchorPosition/*?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
-        }
+        }*/
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BookModel> {

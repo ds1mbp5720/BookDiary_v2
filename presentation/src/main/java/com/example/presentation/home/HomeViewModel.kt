@@ -25,41 +25,54 @@ class HomeViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
     application: Application
 ):AndroidViewModel(application) {
-    private val _bookListData = MutableStateFlow<BookListState>(BookListState.Loading)
-    val bookListData: StateFlow<BookListState> = _bookListData.asStateFlow()
-
-    private val _categoryBookListData = MutableStateFlow<MutableList<BookListModel>?>(null)
-    val categoryBookListData: StateFlow<MutableList<BookListModel>?> = _categoryBookListData.asStateFlow()
-    private val copyCategoryList = mutableListOf<BookListModel>()
-
-    fun getBookList(queryType: String){
-        viewModelScope.launch {
-           bookListUseCase.getBookList(queryType, 1).onStart {
-               _bookListData.value = BookListState.Loading
-           }.catch {
-               _bookListData.value = BookListState.Error()
-           }.collect {
-               _bookListData.value = BookListState.Success(it)
-           }
-        }
-    }
-    private val _pagingBookListData: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
-    val pagingBookListData: StateFlow<PagingData<BookModel>> = _pagingBookListData.asStateFlow()
-    fun getBookPagingList(queryType: String){
+    // 종류별 책 리스트 flow 생성
+    private val _bookListDataItemNewAll: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
+    val bookListDataItemNewAll: StateFlow<PagingData<BookModel>> = _bookListDataItemNewAll.asStateFlow()
+    private val _bookListDataItemNewSpecial: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
+    val bookListDataItemNewSpecial: StateFlow<PagingData<BookModel>> = _bookListDataItemNewSpecial.asStateFlow()
+    private val _bookListDataBestseller: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
+    val bookListDataBestseller: StateFlow<PagingData<BookModel>> = _bookListDataBestseller.asStateFlow()
+    private val _bookListDataBlogBest: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
+    val bookListDataBlogBest: StateFlow<PagingData<BookModel>> = _bookListDataBlogBest.asStateFlow()
+    fun getBookListToItemNewAll1(queryType: String){
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .collect{
-                _pagingBookListData.emit(it)
+                     _bookListDataItemNewAll.emit(it)
             }
         }
     }
-
-    fun addCategoryBookList(bookListModel: BookListModel){
-        copyCategoryList.add(bookListModel)
-        Log.e("","통신 결과 viewModel 사이즈 ${copyCategoryList.size}")
-        _categoryBookListData.value = copyCategoryList
+    fun getBookListToItemNewAll2(queryType: String){
+        viewModelScope.launch {
+            bookListUseCase.getBookListPaging(queryType)
+                .distinctUntilChanged()
+                .cachedIn(viewModelScope)
+                .collect{
+                    _bookListDataItemNewAll.emit(it)
+                }
+        }
+    }
+    fun getBookListToItemNewAll3(queryType: String){
+        viewModelScope.launch {
+            bookListUseCase.getBookListPaging(queryType)
+                .distinctUntilChanged()
+                .cachedIn(viewModelScope)
+                .collect{
+                    _bookListDataItemNewAll.emit(it)
+                }
+        }
+    }
+    fun getBookListToItemNewAll4(queryType: String){
+        viewModelScope.launch {
+            bookListUseCase.getBookListPaging(queryType)
+                .distinctUntilChanged()
+                .cachedIn(viewModelScope)
+                .collect{
+                    _bookListDataItemNewAll.emit(it)
+                }
+        }
     }
 }
 

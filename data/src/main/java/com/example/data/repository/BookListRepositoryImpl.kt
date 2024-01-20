@@ -33,7 +33,7 @@ class BookListRepositoryImpl @Inject constructor(
     }
     override fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 10, prefetchDistance = 100),
+            config = PagingConfig(pageSize = 1, prefetchDistance = 50, maxSize = 300),
             pagingSourceFactory = {
                 BookListPagingSource(queryType,bookListDataSource)
             }

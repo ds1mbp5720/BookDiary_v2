@@ -1,5 +1,6 @@
 package com.example.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -113,6 +115,7 @@ fun BookItemsRow(
         contentPadding = PaddingValues(start = 24.dp, end = 24.dp),
         userScrollEnabled = true
     ){
+        Log.e("","페이징 리스트 체크 ${books.itemCount}")
         items(books.itemCount){
             BookItem(
                 books.itemSnapshotList[it],
@@ -167,7 +170,7 @@ fun BookItem(
         modifier = modifier
             .size(
                 width = cardWidth,
-                height = 240.dp
+                height = 265.dp
             )
             .padding(bottom = 16.dp)
     ) {
@@ -179,7 +182,7 @@ fun BookItem(
             Box(
                modifier = Modifier
                    .fillMaxWidth()
-                   .height(160.dp)
+                   .height(180.dp)
             ){
                 val gradientOffSet = left - (scroll / 3f)
                 Box(
@@ -192,7 +195,8 @@ fun BookItem(
                     imageUrl = book?.cover ?: "",
                     contentDescription = null,
                     modifier = Modifier
-                        .size(120.dp)
+                        .width(140.dp)
+                        .height(160.dp)
                         .align(Alignment.BottomCenter)
                 )
             }
@@ -208,10 +212,12 @@ fun BookItem(
             Spacer(modifier = Modifier.height(5.dp))
             Text(
                 text = book?.author ?: "",
+                maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
                 color = BookDiaryTheme.colors.textHelp,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
         }
     }
 }
@@ -233,7 +239,7 @@ fun BookCoverImage(
         GlideImage(
             model = imageUrl,
             contentDescription = contentDescription,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize(),
         ){
             it.error(R.drawable.book_24)

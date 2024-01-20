@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
@@ -33,9 +34,10 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
-    //val bookListState = viewModel.bookListData.collectAsState()
-    val categoryBookList = viewModel.categoryBookListData.collectAsState()
-    val pagingItems: LazyPagingItems<BookModel> = viewModel.pagingBookListData.collectAsLazyPagingItems()
+    val bookListDataItemNewAll: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewAll.collectAsLazyPagingItems()
+    val bookListDataItemNewSpecial: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewSpecial.collectAsLazyPagingItems()
+    val bookListDataBestseller: LazyPagingItems<BookModel> = viewModel.bookListDataBestseller.collectAsLazyPagingItems()
+    val bookListDataBlogBest: LazyPagingItems<BookModel> = viewModel.bookListDataBlogBest.collectAsLazyPagingItems()
     Scaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -54,7 +56,10 @@ fun Home(
             )
         }*/
         HomeScreen(
-            bookList = pagingItems,
+            bookListDataItemNewAll = bookListDataItemNewAll,
+            bookListDataItemNewSpecial = bookListDataItemNewSpecial,
+            bookListDataBestseller = bookListDataBestseller,
+            bookListDataBlogBest = bookListDataBlogBest,
             onBookClick = onBookClick,
             modifier = Modifier.padding(paddingValues)
         )
@@ -63,23 +68,39 @@ fun Home(
 
 @Composable
 private fun HomeScreen(
-    //bookList: List<BookModel>,
-    bookList: LazyPagingItems<BookModel>,
+    bookListDataItemNewAll: LazyPagingItems<BookModel>,
+    bookListDataItemNewSpecial: LazyPagingItems<BookModel>,
+    bookListDataBestseller: LazyPagingItems<BookModel>,
+    bookListDataBlogBest: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ){
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
         Box{
-            BookCollectionList(bookList = bookList, contentTitle = "테스트",onBookClick =  onBookClick,)
+            BookCollectionList(
+                bookListDataItemNewAll = bookListDataItemNewAll,
+                bookListDataItemNewSpecial = bookListDataItemNewSpecial,
+                bookListDataBestseller = bookListDataBestseller,
+                bookListDataBlogBest = bookListDataBlogBest,
+                contentTitle1 = "신간 전체",
+                contentTitle2 = "주목할 만한 신간",
+                contentTitle3 = "베스트셀러",
+                contentTitle4 = "블로거 베스트셀러(국내 도서)",
+                onBookClick =  onBookClick,)
         }
     }
 }
 
 @Composable
 private fun BookCollectionList(
-    //bookList: List<BookModel>,
-    bookList: LazyPagingItems<BookModel>,
-    contentTitle: String,
+    bookListDataItemNewAll: LazyPagingItems<BookModel>,
+    bookListDataItemNewSpecial: LazyPagingItems<BookModel>,
+    bookListDataBestseller: LazyPagingItems<BookModel>,
+    bookListDataBlogBest: LazyPagingItems<BookModel>,
+    contentTitle1: String,
+    contentTitle2: String,
+    contentTitle3: String,
+    contentTitle4: String,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -91,12 +112,29 @@ private fun BookCollectionList(
                 ))
 
             BookListContent(
-                contentTile = contentTitle,
-                books = bookList,
+                contentTile = contentTitle1,
+                books = bookListDataItemNewAll,
                 onBookClick = onBookClick,
-
             )
-
+            Spacer(modifier = Modifier.height(10.dp))
+            BookListContent(
+                contentTile = contentTitle2,
+                books = bookListDataItemNewSpecial,
+                onBookClick = onBookClick,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            BookListContent(
+                contentTile = contentTitle3,
+                books = bookListDataBestseller,
+                onBookClick = onBookClick,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            BookListContent(
+                contentTile = contentTitle4,
+                books = bookListDataBlogBest,
+                onBookClick = onBookClick,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
 
         }
     }
