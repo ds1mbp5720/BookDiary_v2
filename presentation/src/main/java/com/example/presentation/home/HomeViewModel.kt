@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .collect{
-                    _bookListDataItemNewAll.emit(it)
+                    _bookListDataItemNewSpecial.emit(it)
                 }
         }
     }
@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .collect{
-                    _bookListDataItemNewAll.emit(it)
+                    _bookListDataBestseller.emit(it)
                 }
         }
     }
@@ -70,7 +70,7 @@ class HomeViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .collect{
-                    _bookListDataItemNewAll.emit(it)
+                    _bookListDataBlogBest.emit(it)
                 }
         }
     }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,13 +49,6 @@ fun Home(
         },
         modifier = modifier
     ) {paddingValues ->
-        /*bookListState.value.data?.let {
-            HomeScreen(
-                bookList = it,
-                onBookClick = onBookClick,
-                modifier = Modifier.padding(paddingValues)
-            )
-        }*/
         HomeScreen(
             bookListDataItemNewAll = bookListDataItemNewAll,
             bookListDataItemNewSpecial = bookListDataItemNewSpecial,
@@ -105,36 +99,40 @@ private fun BookCollectionList(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier){
-        Column{
-            Spacer(
-                modifier = Modifier.windowInsetsTopHeight(
-                    WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
-                ))
+        LazyColumn{
+            item{
+                Spacer(
+                    modifier = Modifier.windowInsetsTopHeight(
+                        WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
+                    ))
+                Log.e("","페이징 체크 ${bookListDataItemNewAll.itemCount} / " +
+                        "${bookListDataItemNewSpecial.itemCount} /${bookListDataBlogBest.itemCount} /${bookListDataBestseller.itemCount} /")
+                BookListContent(
+                    contentTile = contentTitle1,
+                    books = bookListDataItemNewAll,
+                    onBookClick = onBookClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                BookListContent(
+                    contentTile = contentTitle2,
+                    books = bookListDataItemNewSpecial,
+                    onBookClick = onBookClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                BookListContent(
+                    contentTile = contentTitle3,
+                    books = bookListDataBestseller,
+                    onBookClick = onBookClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                BookListContent(
+                    contentTile = contentTitle4,
+                    books = bookListDataBlogBest,
+                    onBookClick = onBookClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
 
-            BookListContent(
-                contentTile = contentTitle1,
-                books = bookListDataItemNewAll,
-                onBookClick = onBookClick,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            BookListContent(
-                contentTile = contentTitle2,
-                books = bookListDataItemNewSpecial,
-                onBookClick = onBookClick,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            BookListContent(
-                contentTile = contentTitle3,
-                books = bookListDataBestseller,
-                onBookClick = onBookClick,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            BookListContent(
-                contentTile = contentTitle4,
-                books = bookListDataBlogBest,
-                onBookClick = onBookClick,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
 
         }
     }
