@@ -31,9 +31,9 @@ class BookListRepositoryImpl @Inject constructor(
         if(e is HttpException)
             throw e
     }
-    override fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>> {
+    override fun getBookListPaging(queryType: String, size: Int): Flow<PagingData<BookModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 1, prefetchDistance = 50, maxSize = 300),
+            config = PagingConfig(pageSize = 1, prefetchDistance = size, maxSize = 300),
             pagingSourceFactory = {
                 BookListPagingSource(queryType,bookListDataSource)
             }
@@ -44,6 +44,18 @@ class BookListRepositoryImpl @Inject constructor(
         val response = bookListDataSource.searchBookList(
             Query = "셜록홈즈",
             start = 1,
+        )
+        emit(response.toDomain())
+    }.retry {
+        it is IllegalAccessException
+    }.catch {e->
+        if(e is HttpException)
+            throw e
+    }
+
+    override fun getBookDetail(itemId: Long): Flow<BookModel> = flow {
+        val response = bookListDataSource.getBookDetail(
+            ItemId = itemId
         )
         emit(response.toDomain())
     }.retry {

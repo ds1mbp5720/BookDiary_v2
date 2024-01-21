@@ -1,6 +1,5 @@
 package com.example.domain.usecase
 
-import android.util.Log
 import androidx.paging.PagingData
 import com.example.domain.model.BookListModel
 import com.example.domain.model.BookModel
@@ -19,14 +18,20 @@ class BookListUseCaseImpl @Inject constructor(
         }
     }
 
-    override fun getBookListPaging(queryType: String): Flow<PagingData<BookModel>> = flow{
-        bookListRepository.getBookListPaging(queryType).collect{
+    override fun getBookListPaging(queryType: String, size: Int): Flow<PagingData<BookModel>> = flow{
+        bookListRepository.getBookListPaging(queryType, size).collect{
             emit(it)
         }
     }
 
     override fun searchBookList(): Flow<BookListModel> = flow {
         bookListRepository.searchBookList().collect{
+            emit(it)
+        }
+    }
+
+    override fun getBookDetail(itemId: Long): Flow<BookModel> = flow {
+        bookListRepository.getBookDetail(itemId).collect{
             emit(it)
         }
     }

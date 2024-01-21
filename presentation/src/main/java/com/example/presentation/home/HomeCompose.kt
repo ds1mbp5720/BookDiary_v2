@@ -23,6 +23,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.domain.model.BookListModel
 import com.example.domain.model.BookModel
+import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.BookListContent
 import com.example.presentation.graph.BookDiaryBottomBar
@@ -105,32 +106,29 @@ private fun BookCollectionList(
                     modifier = Modifier.windowInsetsTopHeight(
                         WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
                     ))
-                Log.e("","페이징 체크 ${bookListDataItemNewAll.itemCount} / " +
-                        "${bookListDataItemNewSpecial.itemCount} /${bookListDataBlogBest.itemCount} /${bookListDataBestseller.itemCount} /")
                 BookListContent(
                     contentTile = contentTitle1,
                     books = bookListDataItemNewAll,
                     onBookClick = onBookClick,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
                     contentTile = contentTitle2,
                     books = bookListDataItemNewSpecial,
                     onBookClick = onBookClick,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
                     contentTile = contentTitle3,
                     books = bookListDataBestseller,
                     onBookClick = onBookClick,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
                     contentTile = contentTitle4,
                     books = bookListDataBlogBest,
                     onBookClick = onBookClick,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
 
 
