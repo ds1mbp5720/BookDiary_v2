@@ -115,7 +115,6 @@ fun BookItemsRow(
         contentPadding = PaddingValues(start = 24.dp, end = 24.dp),
         userScrollEnabled = true
     ){
-        Log.e("","페이징 리스트 체크 ${books.itemCount}")
         items(books.itemCount){
             BookItem(
                 books.itemSnapshotList[it],

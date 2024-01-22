@@ -4,4 +4,13 @@
     <string name="str_search">SEARCH</string>
     <string name="str_record">RECORD</string>
     <string name="str_profile">MY PAGE</string>
+
+    <string name="str_back">BACK</string>
+
+    <string name="str_detail_title">상세 정보</string>
+    <string name="str_category">카테고리</string>
+    <string name="str_publisher">출판사</string>
+    <string name="str_page">쪽수</string>
+    <string name="str_see_more">더보기</string>
+    <string name="str_see_less">접기</string>
 </resources>

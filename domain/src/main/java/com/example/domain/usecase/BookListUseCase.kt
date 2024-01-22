@@ -9,5 +9,5 @@ interface BookListUseCase {
     fun getBookList(queryType: String, start: Int): Flow<BookListModel>
     fun getBookListPaging(queryType: String, size: Int): Flow<PagingData<BookModel>>
     fun searchBookList(): Flow<BookListModel>
-    fun getBookDetail(itemId: Long): Flow<BookModel>
+    fun getBookDetail(itemId: Long): Flow<BookListModel>
 }

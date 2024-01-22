@@ -1,27 +1,21 @@
 package com.example.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.domain.model.BookListModel
 import com.example.domain.model.BookModel
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
@@ -36,10 +30,6 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val bookListDataItemNewAll: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewAll.collectAsLazyPagingItems()
-    val bookListDataItemNewSpecial: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewSpecial.collectAsLazyPagingItems()
-    val bookListDataBestseller: LazyPagingItems<BookModel> = viewModel.bookListDataBestseller.collectAsLazyPagingItems()
-    val bookListDataBlogBest: LazyPagingItems<BookModel> = viewModel.bookListDataBlogBest.collectAsLazyPagingItems()
     Scaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -51,36 +41,27 @@ fun Home(
         modifier = modifier
     ) {paddingValues ->
         HomeScreen(
-            bookListDataItemNewAll = bookListDataItemNewAll,
-            bookListDataItemNewSpecial = bookListDataItemNewSpecial,
-            bookListDataBestseller = bookListDataBestseller,
-            bookListDataBlogBest = bookListDataBlogBest,
             onBookClick = onBookClick,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            viewModel = viewModel
         )
     }
 }
 
 @Composable
 private fun HomeScreen(
-    bookListDataItemNewAll: LazyPagingItems<BookModel>,
-    bookListDataItemNewSpecial: LazyPagingItems<BookModel>,
-    bookListDataBestseller: LazyPagingItems<BookModel>,
-    bookListDataBlogBest: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel
 ){
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
         Box{
             BookCollectionList(
-                bookListDataItemNewAll = bookListDataItemNewAll,
-                bookListDataItemNewSpecial = bookListDataItemNewSpecial,
-                bookListDataBestseller = bookListDataBestseller,
-                bookListDataBlogBest = bookListDataBlogBest,
                 contentTitle1 = "신간 전체",
                 contentTitle2 = "주목할 만한 신간",
                 contentTitle3 = "베스트셀러",
                 contentTitle4 = "블로거 베스트셀러(국내 도서)",
+                viewModel = viewModel,
                 onBookClick =  onBookClick,)
         }
     }
@@ -88,17 +69,18 @@ private fun HomeScreen(
 
 @Composable
 private fun BookCollectionList(
-    bookListDataItemNewAll: LazyPagingItems<BookModel>,
-    bookListDataItemNewSpecial: LazyPagingItems<BookModel>,
-    bookListDataBestseller: LazyPagingItems<BookModel>,
-    bookListDataBlogBest: LazyPagingItems<BookModel>,
     contentTitle1: String,
     contentTitle2: String,
     contentTitle3: String,
     contentTitle4: String,
+    viewModel: HomeViewModel,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val bookListDataItemNewAll: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewAll.collectAsLazyPagingItems()
+    val bookListDataItemNewSpecial: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewSpecial.collectAsLazyPagingItems()
+    val bookListDataBestseller: LazyPagingItems<BookModel> = viewModel.bookListDataBestseller.collectAsLazyPagingItems()
+    val bookListDataBlogBest: LazyPagingItems<BookModel> = viewModel.bookListDataBlogBest.collectAsLazyPagingItems()
     Box(modifier = modifier){
         LazyColumn{
             item{

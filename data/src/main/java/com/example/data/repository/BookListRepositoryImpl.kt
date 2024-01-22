@@ -53,7 +53,7 @@ class BookListRepositoryImpl @Inject constructor(
             throw e
     }
 
-    override fun getBookDetail(itemId: Long): Flow<BookModel> = flow {
+    override fun getBookDetail(itemId: Long): Flow<BookListModel> = flow {
         val response = bookListDataSource.getBookDetail(
             ItemId = itemId
         )

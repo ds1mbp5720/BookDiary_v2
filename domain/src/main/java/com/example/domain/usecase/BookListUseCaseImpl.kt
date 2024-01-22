@@ -30,7 +30,7 @@ class BookListUseCaseImpl @Inject constructor(
         }
     }
 
-    override fun getBookDetail(itemId: Long): Flow<BookModel> = flow {
+    override fun getBookDetail(itemId: Long): Flow<BookListModel> = flow {
         bookListRepository.getBookDetail(itemId).collect{
             emit(it)
         }

@@ -3,6 +3,7 @@ package com.example.data.datasource
 import com.example.data.BuildConfig
 import com.example.data.dto.BookData
 import com.example.data.dto.BookListData
+import com.example.domain.model.BookListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -40,5 +41,5 @@ interface BookListDataSource {
         @Query("itemIdType") itemIdType: String = "ItemId",
         @Query("output") output: String = "js",
         @Query("Version") Version: String = "20131101"
-    ): BookData
+    ): BookListData
 }

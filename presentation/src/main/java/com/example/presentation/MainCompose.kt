@@ -1,6 +1,8 @@
 package com.example.presentation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -10,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.presentation.bookdetail.BookDetail
+import com.example.presentation.bookdetail.BookDetailState
 import com.example.presentation.bookdetail.BookDetailViewModel
 import com.example.presentation.graph.MainSections
 import com.example.presentation.graph.addMainGraph
@@ -46,18 +49,25 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     homeViewModel: HomeViewModel,
     bookDetailViewModel: BookDetailViewModel
 ) {
+    Log.e("","책 상세 호출 체크 그래프")
     navigation(
         route = MainDestinations.HOME_ROUTE,
         startDestination = MainSections.HOME.route,
     ){
         addMainGraph(onBookSelected, onNavigateToRoute, homeViewModel = homeViewModel)
     }
-    composable(
+    composable( // todo 이부분 여러번 호출로 발생하는 문제
         "${MainDestinations.BOOK_DETAIL_ROOT}/{${MainDestinations.BOOK_ID_KEY}}",
         arguments = listOf(navArgument(MainDestinations.BOOK_ID_KEY) { type = NavType.LongType })
-    ) {navBackStackEntry ->
-        val arguments = requireNotNull(navBackStackEntry.arguments)
+    ) {backStackEntry ->
+        val arguments = requireNotNull(backStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
-        BookDetail(bookId = bookId, upPress = upPress, bookDetailViewModel = bookDetailViewModel)
+        bookDetailViewModel.getBookDetail(itemId = bookId)
+        Log.e("","책 상세 호출 체크 composable")
+        //val bookState = bookDetailViewModel.bookDetail.collectAsState()
+        //if(bookState.value != BookDetailState.Loading && bookState.value != BookDetailState.Error()){
+            //val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsState().value.data?.bookList!![0]
+            BookDetail(bookId = bookId, upPress = upPress, bookDetailViewModel = bookDetailViewModel)
+        //}
     }
 }

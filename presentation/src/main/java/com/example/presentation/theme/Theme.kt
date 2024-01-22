@@ -32,6 +32,7 @@ private val LightColorPalette = BookDiaryColors(
     uiBackground = Neutral0,
     uiBorder = Neutral4,
     uiFloated = FunctionalGrey,
+    textPrimary = Neutral7,
     textSecondary = Neutral7,
     textHelp = Neutral6,
     textInteractive = Neutral0,
