@@ -20,6 +20,7 @@ interface BookListDataSource {
         @Query("ttbkey") ttbkey: String = BuildConfig.TTB_KEY,
         @Query("QueryType") QueryType: String, // 리스트 종류
         @Query("start") start: Int,
+        @Query("Cover") Cover: String = "MidBig",
         @Query("SearchTarget") SearchTarget:String = "Book",
         @Query("output") output: String = "js",
         @Query("Version") Version: String = "20131101"
@@ -29,6 +30,8 @@ interface BookListDataSource {
     suspend fun searchBookList(
         @Query("ttbkey") ttbkey: String = BuildConfig.TTB_KEY,
         @Query("Query") Query: String, // 검색어
+        @Query("QueryType") QueryType: String = "Keyword ", // Keyword : 제목 + 저자, Publisher : 출판사
+        @Query("SearchTarget") SearchTarget: String = "All",
         @Query("start") start: Int,
         @Query("output") output: String = "js",
         @Query("Version") Version: String = "20131101"
@@ -39,6 +42,8 @@ interface BookListDataSource {
         @Query("ttbkey") ttbkey: String = BuildConfig.TTB_KEY,
         @Query("ItemId") ItemId: Long,
         @Query("itemIdType") itemIdType: String = "ItemId",
+        @Query("Cover") Cover:String = "Big",
+        @Query("OptResult") OptResult: Array<String> = arrayOf("cardReviewImgList","ratingInfo","bestSellerRank"),
         @Query("output") output: String = "js",
         @Query("Version") Version: String = "20131101"
     ): BookListData
