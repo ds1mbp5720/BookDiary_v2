@@ -20,4 +20,6 @@
     <string name="str_btn_link">알라딘 화면 이동</string>
     <string name="str_btn_shop_inventory">재고 정보</string>
     <string name="str_btn_record">서랍에 저장</string>
+
+    <string name="str_search_hint">검색어 입력</string>
 </resources>

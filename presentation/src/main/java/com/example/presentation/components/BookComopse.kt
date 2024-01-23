@@ -1,6 +1,5 @@
 package com.example.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +43,8 @@ import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.mirroringIcon
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 private val cardWidth = 170.dp
 private val cardPadding = 16.dp
@@ -101,12 +102,12 @@ fun BookItemsRow(
     modifier: Modifier = Modifier
 ){
     val scroll = rememberScrollState(0)
-    val gradient = when ((index / 2) % 2) { // 나누는 숫자로 gradient 종류 설정 가능 -> 추후 추가 고려
-        0 -> BookDiaryTheme.colors.gradient6_1
-        else -> BookDiaryTheme.colors.gradient6_1
-    }
     val gradientWidth = with(LocalDensity.current) {
         (6 * (cardWidth + cardPadding).toPx())
+    }
+    val gradient = when ((index / 2) % 2) { // 나누는 숫자로 gradient 종류 설정 가능 -> 추후 추가 고려
+        0 -> BookDiaryTheme.colors.gradient6_1
+        else -> BookDiaryTheme.colors.gradient2_2
     }
     LazyRow(
         modifier = modifier,
@@ -119,7 +120,7 @@ fun BookItemsRow(
                 books.itemSnapshotList[it],
                 onBookClick,
                 it,
-                gradient,
+                BookDiaryTheme.colors.gradient6_1,
                 gradientWidth = gradientWidth,
                 scroll.value
             )

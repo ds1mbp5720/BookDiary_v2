@@ -38,6 +38,10 @@ val Brown2 = Color(0xFF946346)
 val Brown1 = Color(0xFFFCD66B)
 val Brown0 = Color(0xFFFFFCF7)
 
+val Red1 = Color(0xffd00036)
+val Red2 = Color(0xFFC5375C)
+val Red3 = Color(0xFFEE6D8E)
+
 val FunctionalRed = Color(0xffd00036)
 val FunctionalRedDark = Color(0xffea6d7e)
 val FunctionalGrey = Color(0xfff6f6f6)

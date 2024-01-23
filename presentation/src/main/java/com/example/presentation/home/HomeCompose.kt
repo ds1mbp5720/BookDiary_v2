@@ -18,6 +18,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.domain.model.BookModel
 import com.example.presentation.components.BookDiaryDivider
+import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.BookListContent
 import com.example.presentation.graph.BookDiaryBottomBar
@@ -30,7 +31,7 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
-    Scaffold(
+    BookDiaryScaffold(
         bottomBar = {
             BookDiaryBottomBar(
                 tabs = MainSections.values(),

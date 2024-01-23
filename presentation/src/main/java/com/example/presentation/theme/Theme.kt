@@ -42,9 +42,10 @@ private val LightColorPalette = BookDiaryColors(
     iconInteractiveInactive = Neutral1,
     error = FunctionalRed,
     gradient6_1 = listOf(Brown4, Brown1, Brown2, Brown1, Brown4),
+    gradient6_2 = listOf(Ocean8, Ocean3, Ocean2, Ocean1, Ocean4),
     gradient3_1 = listOf(Brown2, Brown1, Brown4),
-    gradient2_1 = listOf(Brown2, Brown0),
-    gradient2_2 = listOf(Brown1, Brown3),
+    gradient2_1 = listOf(Brown1, Brown0),
+    gradient2_2 = listOf(Red1, Red3),
     tornado1 = listOf(Brown3, Brown0),
     isDark = false
 )
@@ -65,6 +66,7 @@ private val DarkColorPalette = BookDiaryColors(
     iconInteractiveInactive = Neutral1,
     error = FunctionalRedDark,
     gradient6_1 = listOf(Brown4, Brown1, Brown2, Brown1, Brown4),
+    gradient6_2 = listOf(Brown4, Brown1, Brown2, Brown1, Brown4),
     gradient3_1 = listOf(Brown2, Brown1, Brown4),
     gradient2_1 = listOf(Brown2, Brown0),
     gradient2_2 = listOf(Brown1, Brown3),
@@ -129,6 +131,7 @@ object BookDiaryTheme {
 @Stable
 class BookDiaryColors(
     gradient6_1: List<Color>,
+    gradient6_2: List<Color>,
     gradient3_1: List<Color>,
     gradient2_1: List<Color>,
     gradient2_2: List<Color>,
@@ -155,6 +158,8 @@ class BookDiaryColors(
     isDark: Boolean
 ) {
     var gradient6_1 by mutableStateOf(gradient6_1)
+        private set
+    var gradient6_2 by mutableStateOf(gradient6_2)
         private set
     var gradient3_1 by mutableStateOf(gradient3_1)
         private set
@@ -207,6 +212,7 @@ class BookDiaryColors(
 
     fun update(other: BookDiaryColors) {
         gradient6_1 = other.gradient6_1
+        gradient6_2 = other.gradient6_2
         gradient3_1 = other.gradient3_1
         gradient2_1 = other.gradient2_1
         gradient2_2 = other.gradient2_2
@@ -235,6 +241,7 @@ class BookDiaryColors(
 
     fun copy(): BookDiaryColors = BookDiaryColors(
         gradient6_1 = gradient6_1,
+        gradient6_2 = gradient6_2,
         gradient3_1 = gradient3_1,
         gradient2_1 = gradient2_1,
         gradient2_2 = gradient2_2,
