@@ -1,7 +1,11 @@
 package com.example.data.mapper
 
 import com.example.data.dto.BookData
+import com.example.data.dto.RatingInfo
+import com.example.data.dto.SubInfo
 import com.example.domain.model.BookModel
+import com.example.domain.model.RatingInfoModel
+import com.example.domain.model.SubInfoModel
 
 object BookMapper {
     fun toDomain(data: BookData): BookModel {
@@ -27,10 +31,43 @@ object BookMapper {
             adult = data.adult,
             fixedPrice = data.fixedPrice,
             customerReviewRank = data.customerReviewRank,
-            //subInfo = data.subInfo
+            subInfo = data.subInfo?.toDomain()
         )
     }
 }
 fun BookData.toDomain(): BookModel {
     return BookMapper.toDomain(this)
+}
+
+object SubInfoMapper{
+    fun toDomain(data: SubInfo): SubInfoModel{
+        return SubInfoModel(
+            subTitle = data.subTitle,
+            originalTitle = data.originalTitle,
+            itemPage = data.itemPage,
+            subbarcode = data.subbarcode,
+            cardReviewImgList = data.cardReviewImgList,
+            ratingInfo = data.ratingInfo?.toDomain(),
+            bestSellerRank = data.bestSellerRank
+        )
+    }
+}
+
+fun SubInfo.toDomain(): SubInfoModel{
+    return SubInfoMapper.toDomain(this)
+}
+
+object RatingInfoMapper{
+    fun toDomain(data: RatingInfo): RatingInfoModel {
+        return RatingInfoModel(
+            ratingScore = data.ratingScore,
+            ratingCount = data.ratingCount,
+            commentReviewCount = data.commentReviewCount,
+            myReviewCount = data.myReviewCount
+        )
+    }
+}
+
+fun RatingInfo.toDomain(): RatingInfoModel{
+    return RatingInfoMapper.toDomain(this)
 }

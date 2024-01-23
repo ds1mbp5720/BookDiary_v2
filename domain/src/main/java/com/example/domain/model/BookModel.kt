@@ -22,5 +22,5 @@ data class BookModel(
     val adult: Boolean?,
     val fixedPrice: Boolean?,
     val customerReviewRank: String?,
-    //val subInfo: String?
+    val subInfo: SubInfoModel?
 )

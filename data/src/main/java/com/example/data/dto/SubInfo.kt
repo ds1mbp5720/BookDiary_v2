@@ -11,12 +11,12 @@ data class SubInfo(
     val itemPage: String?, //상품 쪽수
     @SerializedName("subbarcode")
     val subbarcode: String?, //부가기호
-    @SerializedName("cardReviewImgList ")
-    val cardReviewImgList : String?, //카드리뷰 이미지 경로
+    @SerializedName("cardReviewImgList")
+    val cardReviewImgList : List<String>?, //카드리뷰 이미지 경로
     @SerializedName("ratingInfo")
     val ratingInfo: RatingInfo?, //상품의 리뷰, 평점관련 개수
     @SerializedName("bestSellerRank")
-    val bestSellerRank: String?, //
+    val bestSellerRank: String?, //베스트셀러 순위
 )
 
 data class RatingInfo(
