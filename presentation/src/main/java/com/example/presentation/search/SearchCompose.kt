@@ -72,6 +72,9 @@ fun Search(
                     searching = state.searching,
                 )
                 BookDiaryDivider()
+
+                //todo 검색시 리스트 (메인화면 카테고리 리스트랑 동일한 lazyColum compose로)
+                //todo 검색어 미입력시 보여줄 부분 생각하기
             }
         }
     }
