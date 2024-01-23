@@ -31,7 +31,7 @@ object BookMapper {
             adult = data.adult,
             fixedPrice = data.fixedPrice,
             customerReviewRank = data.customerReviewRank,
-            subInfo = data.subInfo?.toDomain()
+            subInfo = data.subInfo.toDomain()
         )
     }
 }
@@ -46,7 +46,7 @@ object SubInfoMapper{
             originalTitle = data.originalTitle,
             itemPage = data.itemPage,
             subbarcode = data.subbarcode,
-            cardReviewImgList = data.cardReviewImgList,
+            cardReviewImgList = data.cardReviewImgList ?: listOf(""),
             ratingInfo = data.ratingInfo?.toDomain(),
             bestSellerRank = data.bestSellerRank
         )

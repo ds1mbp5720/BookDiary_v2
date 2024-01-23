@@ -1,6 +1,7 @@
 package com.example.presentation.components
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,7 +51,6 @@ private val cardPadding = 16.dp
 @Composable
 fun BookListContent(
     contentTile: String,
-    //books: List<BookModel>,
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -65,7 +65,7 @@ fun BookListContent(
         ){
             Text(
                 text = contentTile,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = BookDiaryTheme.colors.brand,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -96,7 +96,6 @@ fun BookListContent(
 @Composable
 fun BookItemsRow(
     index : Int,
-    //books: List<BookModel>,
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -125,16 +124,6 @@ fun BookItemsRow(
                 scroll.value
             )
         }
-        /*itemsIndexed(books) {index, item ->
-            BookItem(
-                item,
-                onBookClick,
-                index,
-                gradient,
-                gradientWidth = gradientWidth,
-                scroll.value
-            )
-        }*/
         books.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
@@ -233,7 +222,8 @@ fun BookCoverImage(
         color = Color.LightGray,
         elevation = elevation,
         shape = RectangleShape,
-        modifier = modifier
+        modifier = modifier,
+        border = BorderStroke(width = 1.dp, color = Color.Black)
     ){
         GlideImage(
             model = imageUrl,

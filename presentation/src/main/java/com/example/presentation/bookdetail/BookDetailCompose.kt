@@ -1,6 +1,9 @@
 package com.example.presentation.bookdetail
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +21,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -34,10 +40,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
@@ -45,11 +56,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
+import com.example.presentation.components.BasicButton
 import com.example.presentation.components.BookCoverImage
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
+import com.example.presentation.components.GlideCard
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.theme.Neutral5
 import com.example.presentation.util.mirroringBackIcon
@@ -84,12 +99,11 @@ fun BookDetail(
         if (bookDetailInfo != null) {
             Body(book = bookDetailInfo.bookList[0], scroll = scroll)
             Title(book =bookDetailInfo.bookList[0]) { scroll.value}
-            //Title(bookDetailViewModel = bookDetailViewModel) { scroll.value}
             Image(imageUrl = bookDetailInfo.bookList[0].cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
-            //Image(bookDetailViewModel = bookDetailViewModel) { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
+            detailBottomBar(modifier = Modifier.align(Alignment.BottomCenter), url = bookDetailInfo.bookList[0].link ?: "")
         }
         Up(upPress)
-        detailBottomBar(modifier = Modifier.align(Alignment.BottomCenter))
+
     }
 }
 
@@ -194,6 +208,8 @@ private fun Image(
     }
 
 }
+
+// scroll 하단 이동시 이미지 size 변경
 @Composable
 private fun CollapsingImageLayout(
     collapseFractionProvider: () -> Float,
@@ -227,6 +243,7 @@ private fun CollapsingImageLayout(
         }
     }
 }
+
 @Composable
 private fun Body(
     book: BookModel,
@@ -305,7 +322,64 @@ private fun Body(
                         color = BookDiaryTheme.colors.textHelp,
                         modifier = horizontalPadding
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(id = R.string.str_bestseller_rank),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
+
+                    Text(
+                        text = book.subInfo.bestSellerRank ?: "베스트셀러 순위 정보가 없습니다.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(id = R.string.str_rating_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+                    val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo?.ratingInfo?.ratingCount
+                    Text(
+                        text = ratingText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
                     BookDiaryDivider()
+
+                    Text(
+                        text = stringResource(id = R.string.str_cart_review),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    LazyRow(
+                        modifier = horizontalPadding
+                    ) {
+                         items(book.subInfo.cardReviewImgList){url ->
+                             GlideCard(
+                                 imageUrl = url,
+                                 modifier = Modifier.padding(start = 4.dp, end = 4.dp)
+                             )
+                         }
+                    }
+
+                    Spacer(modifier = Modifier
+                        .padding(bottom = bottomBarHeight)
+                        .navigationBarsPadding()
+                        .height(8.dp))
+
 
                     //todo 다른 책 리스트 가져와서 BookCollectoin 사용해서 뿌리기
                 }
@@ -315,8 +389,8 @@ private fun Body(
 
 }
 @Composable
-private fun detailBottomBar(modifier: Modifier = Modifier) {
-
+private fun detailBottomBar(modifier: Modifier = Modifier, url: String) {
+    val context = LocalContext.current
     BookDiarySurface(modifier) {
         Column {
             BookDiaryDivider()
@@ -327,7 +401,51 @@ private fun detailBottomBar(modifier: Modifier = Modifier) {
                     .then(horizontalPadding)
                     .heightIn(min = 56.dp)
             ){
-
+                BasicButton(
+                    onClick = {
+                        // todo 재고 정보 다이얼로그
+                    },
+                    modifier = Modifier.weight(1f),
+                    border = BorderStroke(width = 1.dp, color = Color.Black)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.str_btn_shop_inventory),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                BasicButton(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier.weight(1f),
+                    border = BorderStroke(width = 1.dp, color = Color.Black)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.str_btn_link),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                BasicButton(
+                    onClick = {
+                        // todo room db 에 추가
+                    },
+                    modifier = Modifier.weight(1f),
+                    border = BorderStroke(width = 1.dp, color = Color.Black)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.str_btn_record),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
             }
         }
 

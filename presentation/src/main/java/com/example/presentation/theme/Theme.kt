@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColorPalette = BookDiaryColors(
-    brand = Ocean8,
+    brand = Brown2,
     brandSecondary = Ocean3,
     uiBackground = Neutral0,
     uiBorder = Neutral4,
@@ -36,54 +36,53 @@ private val LightColorPalette = BookDiaryColors(
     textSecondary = Neutral7,
     textHelp = Neutral6,
     textInteractive = Neutral0,
-    textLink = Ocean11,
+    textLink = Brown9,
     iconSecondary = Neutral7,
     iconInteractive = Neutral0,
     iconInteractiveInactive = Neutral1,
     error = FunctionalRed,
-    gradient6_1 = listOf(Shadow4, Ocean3, Shadow2, Ocean3, Shadow4),
-    gradient3_1 = listOf(Shadow2, Ocean3, Shadow4),
-    gradient2_1 = listOf(Shadow4, Shadow11),
-    gradient2_2 = listOf(Ocean3, Shadow3),
-    tornado1 = listOf(Shadow4, Ocean3),
+    gradient6_1 = listOf(Brown4, Brown1, Brown2, Brown1, Brown4),
+    gradient3_1 = listOf(Brown2, Brown1, Brown4),
+    gradient2_1 = listOf(Brown2, Brown0),
+    gradient2_2 = listOf(Brown1, Brown3),
+    tornado1 = listOf(Brown3, Brown0),
     isDark = false
 )
 
 private val DarkColorPalette = BookDiaryColors(
-    brand = Ocean4,
-    brandSecondary = Ocean2,
-    uiBackground = Neutral8,
-    uiBorder = Neutral3,
+    brand = Brown2,
+    brandSecondary = Brown1,
+    uiBackground = Neutral0,
+    uiBorder = Neutral4,
     uiFloated = FunctionalDarkGrey,
-    textPrimary = Shadow1,
-    textSecondary = Neutral0,
-    textHelp = Neutral1,
-    textInteractive = Neutral7,
-    textLink = Ocean2,
-    iconPrimary = Shadow1,
-    iconSecondary = Neutral0,
-    iconInteractive = Neutral7,
-    iconInteractiveInactive = Neutral6,
+    textPrimary = Neutral7,
+    textSecondary = Neutral7,
+    textHelp = Neutral6,
+    textInteractive = Neutral0,
+    textLink = Brown9,
+    iconSecondary = Neutral7,
+    iconInteractive = Neutral0,
+    iconInteractiveInactive = Neutral1,
     error = FunctionalRedDark,
-    gradient6_1 = listOf(Shadow5, Ocean7, Shadow9, Ocean7, Shadow5),
-    gradient3_1 = listOf(Shadow9, Ocean7, Shadow5),
-    gradient2_1 = listOf(Ocean3, Shadow3),
-    gradient2_2 = listOf(Ocean4, Shadow2),
-    tornado1 = listOf(Shadow4, Ocean3),
+    gradient6_1 = listOf(Brown4, Brown1, Brown2, Brown1, Brown4),
+    gradient3_1 = listOf(Brown2, Brown1, Brown4),
+    gradient2_1 = listOf(Brown2, Brown0),
+    gradient2_2 = listOf(Brown1, Brown3),
+    tornado1 = listOf(Brown1, Brown0),
     isDark = true
 )
 
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Ocean5,
-    secondary = Ocean1,
-    tertiary = Ocean6
+    primary = Brown0,
+    secondary = Brown2,
+    tertiary = Brown1
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Ocean5,
-    secondary = Ocean1,
-    tertiary = Ocean6
+    primary = Brown0,
+    secondary = Brown2,
+    tertiary = Brown1
 )
 
 @Composable
@@ -279,7 +278,7 @@ private val LocalBookDiaryColors = staticCompositionLocalOf<BookDiaryColors> {
     error("No BookDiaryColorPalette provided")
 }
 fun debugColors(
-    debugColor: Color = Color.Magenta
+    debugColor: Color = Brown3
 ): ColorScheme = ColorScheme(
         primary = debugColor,
         onPrimary = debugColor,

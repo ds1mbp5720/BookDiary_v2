@@ -10,7 +10,14 @@
     <string name="str_detail_title">상세 정보</string>
     <string name="str_category">카테고리</string>
     <string name="str_publisher">출판사</string>
+    <string name="str_rating_title">리뷰</string>
+    <string name="str_cart_review">카드 리뷰</string>
+    <string name="str_bestseller_rank">주간베스트셀러 순위</string>
     <string name="str_page">쪽수</string>
     <string name="str_see_more">더보기</string>
     <string name="str_see_less">접기</string>
+
+    <string name="str_btn_link">알라딘 화면 이동</string>
+    <string name="str_btn_shop_inventory">재고 정보</string>
+    <string name="str_btn_record">서랍에 저장</string>
 </resources>
