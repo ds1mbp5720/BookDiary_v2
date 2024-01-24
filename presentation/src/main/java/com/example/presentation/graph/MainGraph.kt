@@ -57,7 +57,9 @@ import com.example.presentation.home.Home
 import com.example.presentation.home.HomeViewModel
 import com.example.presentation.profile.Profile
 import com.example.presentation.record.Record
+import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.Search
+import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
 import java.util.Locale
 
@@ -80,7 +82,9 @@ fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    recordViewModel: RecordViewModel,
+    searchViewModel: SearchViewModel
 ) {
     composable(MainSections.HOME.route){ from ->
         Home(onBookClick = { id -> onBookSelected(id, from)}, onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
@@ -89,7 +93,7 @@ fun NavGraphBuilder.addMainGraph(
         Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
     }
     composable(MainSections.RECORD.route){ from ->
-        Record(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
+        Record(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = recordViewModel)
     }
     composable(MainSections.PROFILE.route){ from ->
         Profile(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)

@@ -79,6 +79,10 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
 
+    //rx
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
+
     //paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")

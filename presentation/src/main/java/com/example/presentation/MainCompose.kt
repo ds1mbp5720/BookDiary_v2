@@ -19,6 +19,8 @@ import com.example.presentation.graph.addMainGraph
 import com.example.presentation.home.HomeViewModel
 import com.example.presentation.navigation.MainDestinations
 import com.example.presentation.navigation.rememberBookDiaryNavController
+import com.example.presentation.record.RecordViewModel
+import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
 
 @Composable
@@ -26,6 +28,8 @@ fun BookDiaryApp() {
     BookDiaryTheme {
         val bookDiaryNavController = rememberBookDiaryNavController()
         val homeViewModel: HomeViewModel = viewModel()
+        val recordViewModel: RecordViewModel = viewModel()
+        val searchViewModel: SearchViewModel = viewModel()
         val bookDetailViewModel: BookDetailViewModel = viewModel()
         NavHost(
             navController = bookDiaryNavController.navController,
@@ -36,6 +40,8 @@ fun BookDiaryApp() {
                 upPress = bookDiaryNavController::upPress,
                 onNavigateToRoute = bookDiaryNavController::navigateToBottomBarRoute,
                 homeViewModel = homeViewModel,
+                recordViewModel = recordViewModel,
+                searchViewModel = searchViewModel,
                 bookDetailViewModel = bookDetailViewModel
             )
         }
@@ -47,6 +53,8 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     upPress: () -> Unit,
     onNavigateToRoute: (String) -> Unit,
     homeViewModel: HomeViewModel,
+    recordViewModel: RecordViewModel,
+    searchViewModel: SearchViewModel,
     bookDetailViewModel: BookDetailViewModel
 ) {
     Log.e("","책 상세 호출 체크 그래프")
@@ -54,7 +62,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
         route = MainDestinations.HOME_ROUTE,
         startDestination = MainSections.HOME.route,
     ){
-        addMainGraph(onBookSelected, onNavigateToRoute, homeViewModel = homeViewModel)
+        addMainGraph(onBookSelected, onNavigateToRoute, homeViewModel = homeViewModel, recordViewModel = recordViewModel, searchViewModel = searchViewModel,)
     }
     composable( // todo 이부분 여러번 호출로 발생하는 문제
         "${MainDestinations.BOOK_DETAIL_ROOT}/{${MainDestinations.BOOK_ID_KEY}}",

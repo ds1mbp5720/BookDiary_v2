@@ -5,21 +5,22 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.BookListModel
-import com.example.domain.model.BookModel
+import com.example.domain.model.MyBookModel
 import com.example.domain.usecase.BookListUseCase
+import com.example.domain.usecase.MyBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BookDetailViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
+    private val myBookUseCase: MyBookUseCase,
     application: Application
 ): AndroidViewModel(application) {
     private val _bookDetail=  MutableStateFlow<BookListModel?>(null)
@@ -40,6 +41,11 @@ class BookDetailViewModel @Inject constructor(
                 Log.e("","책 상세정보 호출 성공")
                 _bookDetail.value = BookDetailState.Success(it)
             }*/
+        }
+    }
+    fun insertMyBook(book: MyBookModel){
+        viewModelScope.launch(Dispatchers.IO) {
+            myBookUseCase.insertMyBook(book)
         }
     }
 }

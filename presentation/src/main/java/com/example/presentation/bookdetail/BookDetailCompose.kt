@@ -59,6 +59,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
+import com.example.domain.model.MyBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicButton
 import com.example.presentation.components.BookCoverImage
@@ -97,10 +98,23 @@ fun BookDetail(
         val scroll = rememberScrollState(0)
         Header()
         if (bookDetailInfo != null) {
-            Body(book = bookDetailInfo.bookList[0], scroll = scroll)
-            Title(book =bookDetailInfo.bookList[0]) { scroll.value}
-            Image(imageUrl = bookDetailInfo.bookList[0].cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
-            detailBottomBar(modifier = Modifier.align(Alignment.BottomCenter), url = bookDetailInfo.bookList[0].link ?: "")
+            val bookDetail = bookDetailInfo.bookList[0]
+            Body(book = bookDetail, scroll = scroll)
+            Title(book = bookDetail) { scroll.value}
+            Image(imageUrl = bookDetail.cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
+            detailBottomBar(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                url = bookDetail.link ?: "",
+                insertMyBook = {
+                    bookDetailViewModel.insertMyBook(
+                    book = MyBookModel(
+                        itemId = (bookDetail.itemId ?: "0").toLong(),
+                        title = bookDetail.title ?: "제목 없음",
+                        link = bookDetail.link,
+                        myReview = "테스트 리뷰"
+                    )
+                )}
+            )
         }
         Up(upPress)
 
@@ -389,7 +403,11 @@ private fun Body(
 
 }
 @Composable
-private fun detailBottomBar(modifier: Modifier = Modifier, url: String) {
+private fun detailBottomBar(
+    modifier: Modifier = Modifier,
+    url: String,
+    insertMyBook: () -> Unit,
+) {
     val context = LocalContext.current
     BookDiarySurface(modifier) {
         Column {
@@ -435,6 +453,7 @@ private fun detailBottomBar(modifier: Modifier = Modifier, url: String) {
                 BasicButton(
                     onClick = {
                         // todo room db 에 추가
+                        insertMyBook.invoke()
                     },
                     modifier = Modifier.weight(1f),
                     border = BorderStroke(width = 1.dp, color = Color.Black)
