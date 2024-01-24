@@ -3,6 +3,7 @@ package com.example.presentation.bookdetail
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.RatingBar
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -28,11 +29,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,9 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -56,8 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.domain.model.MyBookModel
 import com.example.mylibrary.R
@@ -66,6 +65,7 @@ import com.example.presentation.components.BookCoverImage
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.GlideCard
+import com.example.presentation.components.RatingBar
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.theme.Neutral5
 import com.example.presentation.util.mirroringBackIcon
@@ -102,7 +102,7 @@ fun BookDetail(
             Body(book = bookDetail, scroll = scroll)
             Title(book = bookDetail) { scroll.value}
             Image(imageUrl = bookDetail.cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
-            detailBottomBar(
+            DetailBottomBar(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 url = bookDetail.link ?: "",
                 insertMyBook = {
@@ -263,6 +263,7 @@ private fun Body(
     book: BookModel,
     scroll: ScrollState
 ){
+    val context = LocalContext.current
     Column {
         Spacer(modifier = Modifier
             .fillMaxWidth()
@@ -361,13 +362,16 @@ private fun Body(
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
-                    val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo?.ratingInfo?.ratingCount
-                    Text(
-                        text = ratingText,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
-                    )
+                    Row {
+                        val ratingText = "별 평점 : " + book.subInfo.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo.ratingInfo?.ratingCount
+                        Text(
+                            text = ratingText,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = BookDiaryTheme.colors.textHelp,
+                            modifier = horizontalPadding
+                        )
+                    }
+                    RatingBar(context = context, rating = (book.subInfo.ratingInfo?.ratingScore ?: "0").toFloat())
                     Spacer(modifier = Modifier.height(6.dp))
                     BookDiaryDivider()
 
@@ -403,7 +407,7 @@ private fun Body(
 
 }
 @Composable
-private fun detailBottomBar(
+private fun DetailBottomBar(
     modifier: Modifier = Modifier,
     url: String,
     insertMyBook: () -> Unit,

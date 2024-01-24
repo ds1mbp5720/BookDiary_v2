@@ -57,7 +57,6 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     searchViewModel: SearchViewModel,
     bookDetailViewModel: BookDetailViewModel
 ) {
-    Log.e("","책 상세 호출 체크 그래프")
     navigation(
         route = MainDestinations.HOME_ROUTE,
         startDestination = MainSections.HOME.route,
@@ -71,7 +70,6 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
         val arguments = requireNotNull(backStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
         bookDetailViewModel.getBookDetail(itemId = bookId)
-        Log.e("","책 상세 호출 체크 composable")
         //val bookState = bookDetailViewModel.bookDetail.collectAsState()
         //if(bookState.value != BookDetailState.Loading && bookState.value != BookDetailState.Error()){
             //val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsState().value.data?.bookList!![0]

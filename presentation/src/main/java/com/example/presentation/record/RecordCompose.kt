@@ -1,6 +1,7 @@
 package com.example.presentation.record
 
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -39,7 +41,9 @@ import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.textChangeVertical
+import javax.annotation.meta.When
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 @Composable
 fun Record(
@@ -50,7 +54,6 @@ fun Record(
 ) {
     val myBookList = viewModel.myBookList.observeAsState()
     viewModel.getMyBookList()
-    Log.e("","room db 체크 ${myBookList.value}")
     val books = myBookList.value
     BookDiaryScaffold(
         bottomBar = {
@@ -143,11 +146,21 @@ fun BookDraw(
     modifier: Modifier = Modifier,
 
 ){
-    val color: Color = when((bookId % 4).toInt()){
+    val rotateYN: Boolean = when(Random.nextInt(5)){
+        0 -> false
+        else -> true
+    }
+    val bookColor: Color = when((bookId % 4).toInt()){
         0 -> Color(color = 0xFFA73933)
         1 -> Color(color = 0xFFDDAB88)
         2 -> Color(color = 0xFFFEFEFE)
         else -> Color(color = 0xFF3C7F23)
+    }
+    val labelColor: Color = when((bookId % 4).toInt()){
+        0 -> Color(color = 0xFFFECC00)
+        1 -> Color(color = 0xFFD5CEC9)
+        2 -> Color(color = 0xFF353333)
+        else -> Color(color = 0xFF80E4A4)
     }
     /*Canvas(
         modifier = modifier
@@ -158,21 +171,23 @@ fun BookDraw(
             cornerRadius = CornerRadius(8.dp.toPx(), 8.dp.toPx())
         )
     }*/
+
     Text(
         text = bookTitle.textChangeVertical(),
         maxLines = 20,
         color = BookDiaryTheme.colors.textPrimary,
         textAlign = TextAlign.Center,
         modifier = Modifier
-            .border(1.dp, Color.Black, RoundedCornerShape(20))
+            .rotate(degrees = if(rotateYN) 0f else -5f)
+            .border(1.dp, Color.Black, RoundedCornerShape(1))
             .width(90.dp)
             .height(400.dp)
-            .background(color = color, shape = RoundedCornerShape(20))
+            .background(color = bookColor, shape = RoundedCornerShape(10))
             .drawBehind {
                 drawRect(
-                    color = Color.Gray, // todo 책 저장시 라벨 색상도 랜덤하게 하는건?
+                    color = labelColor,
                     size = Size(width = 90.dp.toPx(), height = 20.dp.toPx()),
-                    topLeft = Offset(x = 0f, y=60f) // todo y 높이 변화에 라벨지 그림 높이도 조정하기
+                    topLeft = Offset(x = 0f, y = 60f) // todo y 높이 변화에 라벨지 그림 높이도 조정하기
                 )
             }
     )
