@@ -51,7 +51,7 @@ private val cardPadding = 16.dp
 
 @Composable
 fun BookListContent(
-    contentTile: String,
+    contentTitle: String,
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -65,7 +65,7 @@ fun BookListContent(
                 .padding(start = 24.dp)
         ){
             Text(
-                text = contentTile,
+                text = contentTitle,
                 style = MaterialTheme.typography.titleLarge,
                 color = BookDiaryTheme.colors.brand,
                 maxLines = 1,
@@ -127,15 +127,10 @@ fun BookItemsRow(
         }
         books.apply {
             when {
-                loadState.refresh is LoadState.Loading -> {
-                }
-                loadState.refresh is LoadState.Error -> {
-                }
-
-                loadState.append is LoadState.Loading -> {
-                }
-                loadState.append is LoadState.Error -> {
-                }
+                loadState.refresh is LoadState.Loading -> {}
+                loadState.refresh is LoadState.Error -> {}
+                loadState.append is LoadState.Loading -> {}
+                loadState.append is LoadState.Error -> {}
             }
         }
     }

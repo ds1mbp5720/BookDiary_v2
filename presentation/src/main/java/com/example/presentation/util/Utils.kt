@@ -16,3 +16,13 @@ fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
 fun mirroringBackIcon() = mirroringIcon(
     ltrIcon = Icons.Outlined.ArrowBack, rtlIcon = Icons.Outlined.ArrowForward
 )
+
+fun String.textChangeVertical(): String{
+    var newString = "\n\n"
+    this.forEach {
+        if(it == '-'){
+            newString = "$newString|\n"
+        } else newString = newString + it +"\n"
+    }
+    return newString
+}

@@ -90,25 +90,25 @@ private fun BookCollectionList(
                         WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
                     ))
                 BookListContent(
-                    contentTile = contentTitle1,
+                    contentTitle = contentTitle1,
                     books = bookListDataItemNewAll,
                     onBookClick = onBookClick,
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTile = contentTitle2,
+                    contentTitle = contentTitle2,
                     books = bookListDataItemNewSpecial,
                     onBookClick = onBookClick,
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTile = contentTitle3,
+                    contentTitle = contentTitle3,
                     books = bookListDataBestseller,
                     onBookClick = onBookClick,
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTile = contentTitle4,
+                    contentTitle = contentTitle4,
                     books = bookListDataBlogBest,
                     onBookClick = onBookClick,
                 )
