@@ -371,7 +371,7 @@ private fun Body(
                             modifier = horizontalPadding
                         )
                     }
-                    RatingBar(context = context, rating = (book.subInfo.ratingInfo?.ratingScore ?: "0").toFloat())
+                    RatingBar(modifier = horizontalPadding, context = context, rating = (book.subInfo.ratingInfo?.ratingScore ?: "0").toFloat(), totalCnt = 10)
                     Spacer(modifier = Modifier.height(6.dp))
                     BookDiaryDivider()
 

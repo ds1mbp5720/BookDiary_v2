@@ -27,16 +27,16 @@ fun RatingBar(
     modifier: Modifier = Modifier,
     context: Context,
     rating: Float,
+    totalCnt: Int,
     spaceBetween: Dp = 0.dp
 ) {
     val bitMapImage = getBitmapFromImage(context = context, drawable = R.drawable.baseline_star_outline_24)
     val bitMapImageFull = getBitmapFromImage(context = context, drawable = R.drawable.baseline_star_24)
-    val totalCount = 10
 
     val height = LocalDensity.current.run { bitMapImage.height.toDp() }
     val width = LocalDensity.current.run { bitMapImage.width.toDp() }
     val space = LocalDensity.current.run { spaceBetween.toPx() }
-    val totalWidth = width * totalCount + spaceBetween * (totalCount - 1)
+    val totalWidth = width * totalCnt + spaceBetween * (totalCnt - 1)
 
 
     Box(
@@ -44,7 +44,7 @@ fun RatingBar(
             .width(totalWidth)
             .height(height)
             .drawBehind {
-                drawRating(rating, bitMapImage, bitMapImageFull, space) // todo vector bitmap
+                drawRating(rating, bitMapImage, bitMapImageFull, space, totalCnt)
             })
 }
 
@@ -52,7 +52,8 @@ private fun DrawScope.drawRating(
     rating: Float,
     image: Bitmap,
     imageFull: Bitmap,
-    space: Float
+    space: Float,
+    totalCnt: Int,
 ) {
 
     val totalCount = 10
