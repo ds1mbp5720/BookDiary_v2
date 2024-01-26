@@ -35,12 +35,12 @@ class BookListRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = 1, prefetchDistance = size, maxSize = 300),
             pagingSourceFactory = {
-                BookListPagingSource(queryType,bookListDataSource)
+                BookListPagingSource(queryType,bookListDataSource,"Normal")
             }
         ).flow
     }
 
-    override fun searchBookList(): Flow<BookListModel> = flow {
+    override fun searchBookList(query: String): Flow<BookListModel> = flow {
         val response = bookListDataSource.searchBookList(
             Query = "셜록홈즈",
             start = 1,
@@ -52,6 +52,15 @@ class BookListRepositoryImpl @Inject constructor(
         if(e is HttpException)
             throw e
     }
+    override fun getSearchBookListPaging(query: String, size: Int): Flow<PagingData<BookModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = 1, prefetchDistance = size, maxSize = 300),
+            pagingSourceFactory = {
+                BookListPagingSource(query,bookListDataSource,"Search")
+            }
+        ).flow
+    }
+
 
     override fun getBookDetail(itemId: Long): Flow<BookListModel> = flow {
         val response = bookListDataSource.getBookDetail(

@@ -31,7 +31,7 @@ object BookMapper {
             adult = data.adult,
             fixedPrice = data.fixedPrice,
             customerReviewRank = data.customerReviewRank,
-            subInfo = data.subInfo.toDomain()
+            subInfo = data.subInfo?.toDomain()
         )
     }
 }

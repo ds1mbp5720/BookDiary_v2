@@ -90,7 +90,7 @@ fun NavGraphBuilder.addMainGraph(
         Home(onBookClick = { id -> onBookSelected(id, from)}, onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
     }
     composable(MainSections.SEARCH.route){ from ->
-        Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
+        Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = searchViewModel)
     }
     composable(MainSections.RECORD.route){ from ->
         Record(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = recordViewModel)

@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.viewpager2:viewpager2:1.0.0")

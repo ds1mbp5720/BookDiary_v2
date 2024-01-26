@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface BookListRepository {
     fun getBookList(queryType: String, start: Int): Flow<BookListModel>
     fun getBookListPaging(queryType: String, size: Int): Flow<PagingData<BookModel>>
-    fun searchBookList(): Flow<BookListModel>
+    fun searchBookList(query: String): Flow<BookListModel>
+    fun getSearchBookListPaging(query: String, size: Int) : Flow<PagingData<BookModel>>
     fun getBookDetail(itemId: Long): Flow<BookListModel>
 }

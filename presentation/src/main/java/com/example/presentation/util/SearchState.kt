@@ -1,9 +1,7 @@
 package com.example.presentation.util
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 
@@ -15,19 +13,15 @@ class SearchState(
     var query by mutableStateOf(query)
     var focused by mutableStateOf(focused)
     var searching by mutableStateOf(searching)
+    val searchDisplay: SearchDisplay
+        get() = when {
+            // 검색창의 현 상태값에 따른 보여줄 화면 정의를 위한 값 세팅부분
+            !focused && query.text.isEmpty() -> SearchDisplay.StandBy
+            focused && query.text.isEmpty() -> SearchDisplay.StandBy
+            else -> SearchDisplay.Results
+        }
 }
 
-@Composable
-fun rememberSearchState(
-    query: TextFieldValue = TextFieldValue(""),
-    focused: Boolean = false,
-    searching: Boolean = false
-): SearchState{
-    return remember{
-        SearchState(
-            query = query,
-            focused = focused,
-            searching = searching
-        )
-    }
+enum class SearchDisplay {
+    Results, StandBy
 }

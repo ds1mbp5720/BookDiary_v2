@@ -68,6 +68,7 @@ import com.example.presentation.components.GlideCard
 import com.example.presentation.components.RatingBar
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.theme.Neutral5
+import com.example.presentation.util.addCommaWon
 import com.example.presentation.util.mirroringBackIcon
 import java.lang.Integer.max
 import java.lang.Integer.min
@@ -190,7 +191,7 @@ private fun Title(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = (book/*?.get(0)?*/.priceSales ?: "0" ) + "원",
+            text = (book/*?.get(0)?*/.priceSales ?: "0" ).addCommaWon(),
             style = MaterialTheme.typography.displayMedium,
             color = BookDiaryTheme.colors.textPrimary,
             modifier = horizontalPadding
@@ -347,7 +348,7 @@ private fun Body(
                     )
 
                     Text(
-                        text = book.subInfo.bestSellerRank ?: "베스트셀러 순위 정보가 없습니다.",
+                        text = book.subInfo?.bestSellerRank ?: "베스트셀러 순위 정보가 없습니다.",
                         style = MaterialTheme.typography.bodyLarge,
                         color = BookDiaryTheme.colors.textHelp,
                         modifier = horizontalPadding
@@ -363,7 +364,7 @@ private fun Body(
 
                     Spacer(modifier = Modifier.height(4.dp))
                     Row {
-                        val ratingText = "별 평점 : " + book.subInfo.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo.ratingInfo?.ratingCount
+                        val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo?.ratingInfo?.ratingCount
                         Text(
                             text = ratingText,
                             style = MaterialTheme.typography.bodyLarge,
@@ -371,7 +372,7 @@ private fun Body(
                             modifier = horizontalPadding
                         )
                     }
-                    RatingBar(modifier = horizontalPadding, context = context, rating = (book.subInfo.ratingInfo?.ratingScore ?: "0").toFloat(), totalCnt = 10)
+                    RatingBar(modifier = horizontalPadding, context = context, rating = (book.subInfo?.ratingInfo?.ratingScore ?: "0").toFloat(), totalCnt = 10)
                     Spacer(modifier = Modifier.height(6.dp))
                     BookDiaryDivider()
 
@@ -385,12 +386,14 @@ private fun Body(
                     LazyRow(
                         modifier = horizontalPadding
                     ) {
-                         items(book.subInfo.cardReviewImgList){url ->
-                             GlideCard(
-                                 imageUrl = url,
-                                 modifier = Modifier.padding(start = 4.dp, end = 4.dp)
-                             )
-                         }
+                        book.subInfo?.let {
+                            items(it.cardReviewImgList){ url ->
+                                GlideCard(
+                                    imageUrl = url,
+                                    modifier = Modifier.padding(start = 4.dp, end = 4.dp)
+                                )
+                            }
+                        }
                     }
 
                     Spacer(modifier = Modifier
@@ -456,7 +459,6 @@ private fun DetailBottomBar(
                 Spacer(modifier = Modifier.width(12.dp))
                 BasicButton(
                     onClick = {
-                        // todo room db 에 추가
                         insertMyBook.invoke()
                     },
                     modifier = Modifier.weight(1f),

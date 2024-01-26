@@ -24,8 +24,14 @@ class BookListUseCaseImpl @Inject constructor(
         }
     }
 
-    override fun searchBookList(): Flow<BookListModel> = flow {
-        bookListRepository.searchBookList().collect{
+    override fun searchBookList(query: String): Flow<BookListModel> = flow {
+        bookListRepository.searchBookList(query = query).collect{
+            emit(it)
+        }
+    }
+
+    override fun getSearchBookListPaging(query: String, size: Int): Flow<PagingData<BookModel>> = flow {
+        bookListRepository.getSearchBookListPaging(query, size).collect{
             emit(it)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.presentation.search
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,11 +26,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
@@ -35,17 +46,17 @@ import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
-import com.example.presentation.util.SearchState
+import com.example.presentation.util.SearchDisplay
 import com.example.presentation.util.mirroringBackIcon
-import com.example.presentation.util.rememberSearchState
 
 @Composable
 fun Search(
     onBookClick: (Long) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
-    state: SearchState = rememberSearchState()
+    viewModel: SearchViewModel = viewModel()
 ) {
+    val searchBookList: LazyPagingItems<BookModel> = viewModel.searchBookList.collectAsLazyPagingItems()
     BookDiaryScaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -64,32 +75,59 @@ fun Search(
             Column {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 SearchBar(
-                    query = state.query,
-                    onQueryChange = {state.query = it},
-                    searchFocused = state.focused,
-                    onSearchFocusChange = {state.focused = it},
-                    onClearQuery = {state.query = TextFieldValue("")},
-                    searching = state.searching,
+                    query = viewModel.searchState.query,
+                    onQueryChange = { viewModel.searchState.query = it },
+                    onSearch = {
+                        viewModel.getSearchBookList(viewModel.searchState.query.text,100)
+                        viewModel.searchState.searching = true
+                               },
+                    searchFocused = viewModel.searchState.focused || viewModel.searchState.query.text != "",
+                    onSearchFocusChange = {viewModel.searchState.focused = it},
+                    onClearQuery = {viewModel.searchState.query = TextFieldValue("")},
+                    searching = viewModel.searchState.searching,
                 )
                 BookDiaryDivider()
+                searchBookList.apply {
+                    when{
+                        loadState.append is LoadState.Loading -> { viewModel.searchState.searching = false }
+                        loadState.append is LoadState.NotLoading -> {
+                            Log.e("","페이징 결과2 ${this.itemCount}")
+                        }
 
-                //todo 검색시 리스트 (메인화면 카테고리 리스트랑 동일한 lazyColum compose로)
-                //todo 검색어 미입력시 보여줄 부분 생각하기
+                        loadState.append is LoadState.Error -> {}
+                        loadState.refresh is LoadState.Loading -> {}
+                        loadState.refresh is LoadState.Error -> {}
+                    }
+                }
+                when (viewModel.searchState.searchDisplay) {
+                    SearchDisplay.StandBy -> {
+                        StandByScreen()
+                    }
+                    SearchDisplay.Results -> {
+                        ResultScreen(
+                            books = searchBookList,
+                            onBookClick = onBookClick
+                        )
+                    }
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
+    onSearch: () -> Unit,
     searchFocused: Boolean,
     onSearchFocusChange: (Boolean) -> Unit,
     onClearQuery: () -> Unit,
     searching: Boolean,
     modifier: Modifier = Modifier
 ){
+    val keyboardController = LocalSoftwareKeyboardController.current
     BookDiarySurface(
         color = BookDiaryTheme.colors.uiFloated,
         contentColor = BookDiaryTheme.colors.textSecondary,
@@ -119,12 +157,33 @@ fun SearchBar(
                 BasicTextField(
                     value = query,
                     onValueChange = onQueryChange,
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            onSearch.invoke()
+                            keyboardController?.hide()
+                        }
+                    ),
                     modifier = Modifier
                         .weight(1f)
                         .onFocusChanged {
                             onSearchFocusChange(it.isFocused)
                         }
                 )
+                if(searchFocused) {
+                    IconButton(
+                        onClick = {
+                            onSearch.invoke()
+                            keyboardController?.hide()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            tint = BookDiaryTheme.colors.iconPrimary,
+                            contentDescription = ""
+                        )
+                    }
+                }
                 if(searching){
                     CircularProgressIndicator(
                         color = BookDiaryTheme.colors.iconPrimary,

@@ -46,5 +46,5 @@ data class BookData (
     @SerializedName("customerReviewRank")
     val customerReviewRank: String?, //회원 리뷰 평점
     @SerializedName("subInfo")
-    val subInfo: SubInfo
+    val subInfo: SubInfo?
 )
