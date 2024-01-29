@@ -20,3 +20,16 @@ fun BookDiaryDivider(
         thickness = thickness,
     )
 }
+
+@Composable
+fun MyRecordDivider(
+    modifier: Modifier = Modifier,
+    color: Color = BookDiaryTheme.colors.brand,
+    thickness: Dp = 10.dp
+){
+    Divider(
+        modifier = modifier,
+        color = color,
+        thickness = thickness
+    )
+}

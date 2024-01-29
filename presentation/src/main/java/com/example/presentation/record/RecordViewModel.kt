@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecordViewModel  @Inject constructor(
+class RecordViewModel @Inject constructor(
     private val myBookUseCase: MyBookUseCase,
     application: Application
-):  AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     val myBookList = MutableLiveData<List<MyBookModel>>()
     fun getMyBookList() {
@@ -26,10 +26,24 @@ class RecordViewModel  @Inject constructor(
                     myBookList.value = it
                 },
                 onError = {
-                    Log.e("","room Error $it")
+                    Log.e("", "room Error $it")
                 }
             )
             myBookUseCase.getMyBookList()
+        }
+    }
+
+    fun deleteMyBook(bookId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            myBookUseCase.delete(bookId)
+            myBookUseCase.execute(
+                onSuccess = {
+                    myBookList.value = it
+                },
+                onError = {
+                    Log.e("", "room Error $it")
+                }
+            )
         }
     }
 }

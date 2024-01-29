@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.RatingBar
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -93,6 +94,7 @@ fun BookDetail(
     Box(
        modifier = Modifier.fillMaxSize()
     ){
+        val context = LocalContext.current
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
         val bookDetailState = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle()
         Log.e("","책 상세 recompose ${bookDetailState}")
@@ -113,8 +115,9 @@ fun BookDetail(
                         title = bookDetail.title ?: "제목 없음",
                         link = bookDetail.link,
                         myReview = "테스트 리뷰"
-                    )
-                )}
+                    ))
+                    Toast.makeText(context,context.getString(R.string.str_add_record),Toast.LENGTH_SHORT).show()
+                }
             )
         }
         Up(upPress)
@@ -458,9 +461,7 @@ private fun DetailBottomBar(
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 BasicButton(
-                    onClick = {
-                        insertMyBook.invoke()
-                    },
+                    onClick = insertMyBook,
                     modifier = Modifier.weight(1f),
                     border = BorderStroke(width = 1.dp, color = Color.Black)
                 ) {
