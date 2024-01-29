@@ -23,4 +23,9 @@
     <string name="str_add_record">서랍에 추가되었습니다!</string>
 
     <string name="str_search_hint">검색어 입력</string>
+
+    <string name="str_dialog_check_delete">정말로 삭제하시겠습니까?</string>
+
+    <string name="str_cancel">취소</string>
+    <string name="str_confirm">확인</string>
 </resources>
