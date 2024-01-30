@@ -14,10 +14,10 @@ import javax.inject.Inject
 class OffStoreRepositoryImpl @Inject constructor(
     private val offStoreDataSource: OffStoreDataSource
 ): OffStoreRepository{
-    override fun getOffStoreInfo(): Flow<OffStoreListModel> = flow{
+    override fun getOffStoreInfo(itemId: String): Flow<OffStoreListModel> = flow{
         val response = offStoreDataSource.getOffStoreInfo(
-            ItemId = "",
-            ItemIdType = "",
+            ItemId = itemId,
+            ItemIdType = "itemId",
         )
         emit(response.toDomain())
     }.retry {

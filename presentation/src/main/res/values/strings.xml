@@ -21,7 +21,7 @@
     <string name="str_btn_shop_inventory">재고 정보</string>
     <string name="str_btn_record">서랍에 저장</string>
     <string name="str_add_record">서랍에 추가되었습니다!</string>
-
+    <string name="str_dialog_offstore_title">책 보유 매장 정보</string>
     <string name="str_search_hint">검색어 입력</string>
 
     <string name="str_dialog_check_delete">정말로 삭제하시겠습니까?</string>

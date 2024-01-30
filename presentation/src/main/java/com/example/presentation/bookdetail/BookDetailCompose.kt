@@ -5,6 +5,13 @@ import android.net.Uri
 import android.util.Log
 import android.widget.RatingBar
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -41,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,7 +103,9 @@ fun BookDetail(
        modifier = Modifier.fillMaxSize()
     ){
         val context = LocalContext.current
+        var offStoreDialogVisible by rememberSaveable { mutableStateOf(false) }
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
+        val offStoreInfo = bookDetailViewModel.offStoreInfo.collectAsStateWithLifecycle().value
         val bookDetailState = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle()
         val scroll = rememberScrollState(0)
         Header()
@@ -116,11 +126,27 @@ fun BookDetail(
                         myReview = "테스트 리뷰"
                     ))
                     Toast.makeText(context,context.getString(R.string.str_add_record),Toast.LENGTH_SHORT).show()
+                },
+                offStoreInfo = {
+                    bookDetailViewModel.getOffStoreInfo(bookId.toString())
+                    offStoreDialogVisible = true
                 }
             )
         }
         Up(upPress)
 
+        AnimatedVisibility(
+            visible = offStoreDialogVisible,
+            enter = slideInVertically() + expandVertically( expandFrom = Alignment.Top) + fadeIn(initialAlpha = 0.3f),
+            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        ) {
+            if(offStoreInfo != null){
+                OffStoreDialog(
+                    offStoreInfo = offStoreInfo,
+                    onDismiss = { offStoreDialogVisible = false }
+                )
+            }
+        }
     }
 }
 
@@ -416,6 +442,7 @@ private fun DetailBottomBar(
     modifier: Modifier = Modifier,
     url: String,
     insertMyBook: () -> Unit,
+    offStoreInfo: () -> Unit
 ) {
     val context = LocalContext.current
     BookDiarySurface(modifier) {
@@ -429,9 +456,7 @@ private fun DetailBottomBar(
                     .heightIn(min = 56.dp)
             ){
                 BasicButton(
-                    onClick = {
-                        // todo 재고 정보 다이얼로그
-                    },
+                    onClick = offStoreInfo,
                     modifier = Modifier.weight(1f),
                     border = BorderStroke(width = 1.dp, color = Color.Black)
                 ) {

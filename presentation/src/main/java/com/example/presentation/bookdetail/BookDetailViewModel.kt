@@ -6,8 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.BookListModel
 import com.example.domain.model.MyBookModel
+import com.example.domain.model.OffStoreListModel
 import com.example.domain.usecase.BookListUseCase
 import com.example.domain.usecase.MyBookUseCase
+import com.example.domain.usecase.OffStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +23,13 @@ import javax.inject.Inject
 class BookDetailViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
     private val myBookUseCase: MyBookUseCase,
+    private val offStoreUseCase: OffStoreUseCase,
     application: Application
 ): AndroidViewModel(application) {
     private val _bookDetail=  MutableStateFlow<BookListModel?>(null)
     val bookDetail: StateFlow<BookListModel?> = _bookDetail.asStateFlow()
-
+    private val _offStoreInfo=  MutableStateFlow<OffStoreListModel?>(null)
+    val offStoreInfo: StateFlow<OffStoreListModel?> = _offStoreInfo.asStateFlow()
     fun getBookDetail(itemId: Long){
         viewModelScope.launch {
             bookListUseCase.getBookDetail(itemId = itemId).collectLatest {
@@ -38,6 +42,14 @@ class BookDetailViewModel @Inject constructor(
             }.collect{
                 _bookDetail.value = BookDetailState.Success(it)
             }*/
+        }
+    }
+
+    fun getOffStoreInfo(itemId: String){
+        viewModelScope.launch {
+            offStoreUseCase.getOffStoreInfo(itemId = itemId).collectLatest{
+                _offStoreInfo.value = it
+            }
         }
     }
     fun insertMyBook(book: MyBookModel){

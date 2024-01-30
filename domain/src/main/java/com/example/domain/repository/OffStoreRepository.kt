@@ -4,5 +4,5 @@ import com.example.domain.model.OffStoreListModel
 import kotlinx.coroutines.flow.Flow
 
 interface OffStoreRepository {
-    fun getOffStoreInfo(): Flow<OffStoreListModel>
+    fun getOffStoreInfo(itemId: String): Flow<OffStoreListModel>
 }

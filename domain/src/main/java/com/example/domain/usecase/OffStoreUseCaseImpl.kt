@@ -10,8 +10,8 @@ import javax.inject.Inject
 class OffStoreUseCaseImpl @Inject constructor(
     private val offStoreRepository: OffStoreRepository
 ):OffStoreUseCase {
-    override fun getOffStoreInfo(): Flow<OffStoreListModel> = flow{
-        offStoreRepository.getOffStoreInfo().collect{
+    override fun getOffStoreInfo(itemId: String): Flow<OffStoreListModel> = flow{
+        offStoreRepository.getOffStoreInfo(itemId = itemId).collect{
             emit(it)
         }
     }
