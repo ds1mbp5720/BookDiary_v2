@@ -75,6 +75,7 @@ fun BookListContent(
     contentTitle: String,
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
+    onListClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     index: Int = 0
 ){
@@ -96,7 +97,15 @@ fun BookListContent(
                     .wrapContentWidth(Alignment.Start)
             )
             IconButton(
-                onClick = { /*TODO 가로형 혹은 그리드 리스트로 해당 카테고리만 보여지게 하기*/ },
+                onClick = {
+                          // TODO 가로형 혹은 그리드 리스트로 해당 카테고리만 보여지게 하기
+                    when(contentTitle) {
+                        "신간 전체" -> onListClick("ItemNewAll")
+                        "주목할 만한 신간" -> onListClick("ItemNewSpecial")
+                        "베스트셀러" -> onListClick("Bestseller")
+                        "블로거 베스트셀러(국내 도서)" -> onListClick("BlogBest")
+                    }
+                          },
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Icon(

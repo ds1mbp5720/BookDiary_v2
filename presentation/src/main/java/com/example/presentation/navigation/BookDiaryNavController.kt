@@ -17,6 +17,8 @@ object MainDestinations {
     const val MY_PAGE_ROOT = "myPage"
     const val BOOK_DETAIL_ROOT = "detail"
     const val BOOK_ID_KEY = "bookId"
+    const val BOOK_LIST_ROOT = "book_list"
+    const val BOOK_LIST_TYPE = "list_type"
 }
 
 @Composable
@@ -49,6 +51,12 @@ class BookDiaryNavController(
     fun navigateToBookDetail(bookId: Long, from: NavBackStackEntry) {
         if(from.lifeCycleIsResume()){
             navController.navigate("${MainDestinations.BOOK_DETAIL_ROOT}/$bookId")
+        }
+    }
+
+    fun navigateToRecommendList(listType: String, from: NavBackStackEntry) {
+        if(from.lifeCycleIsResume()){
+            navController.navigate("${MainDestinations.BOOK_LIST_ROOT}/$listType")
         }
     }
 }

@@ -97,7 +97,6 @@ fun BookDetail(
         val context = LocalContext.current
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
         val bookDetailState = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle()
-        Log.e("","책 상세 recompose ${bookDetailState}")
         val scroll = rememberScrollState(0)
         Header()
         if (bookDetailInfo != null) {

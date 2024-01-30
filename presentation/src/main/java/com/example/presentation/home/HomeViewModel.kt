@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
     val bookListDataBestseller: StateFlow<PagingData<BookModel>> = _bookListDataBestseller.asStateFlow()
     private val _bookListDataBlogBest: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val bookListDataBlogBest: StateFlow<PagingData<BookModel>> = _bookListDataBlogBest.asStateFlow()
-    fun getBookListToItemNewAll1(queryType: String, size: Int){
+    fun getBookListToItemNewAll(queryType: String, size: Int){
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-    fun getBookListToItemNewAll2(queryType: String, size: Int){
+    fun getBookListToItemNewSpecial(queryType: String, size: Int){
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
-    fun getBookListToItemNewAll3(queryType: String, size: Int){
+    fun getBookListToItemBestseller(queryType: String, size: Int){
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
@@ -64,13 +64,27 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
-    fun getBookListToItemNewAll4(queryType: String, size: Int){
+    fun getBookListToItemBlogBest(queryType: String, size: Int){
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .collect{
                     _bookListDataBlogBest.emit(it)
+                }
+        }
+    }
+
+    private val _singleCategoryBookList: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
+    val singleCategoryBookList: StateFlow<PagingData<BookModel>> = _singleCategoryBookList.asStateFlow()
+
+    fun getSingleCategoryBookList(queryType: String, size: Int){
+        viewModelScope.launch {
+            bookListUseCase.getBookListPaging(queryType, size)
+                .distinctUntilChanged()
+                .cachedIn(viewModelScope)
+                .collect{
+                    _singleCategoryBookList.emit(it)
                 }
         }
     }

@@ -30,10 +30,10 @@ class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeUiState()
-        homeViewModel.getBookListToItemNewAll1("ItemNewAll",20)
-        homeViewModel.getBookListToItemNewAll2("ItemNewSpecial",20)
-        homeViewModel.getBookListToItemNewAll3("Bestseller",20)
-        homeViewModel.getBookListToItemNewAll4("BlogBest",20)
+        homeViewModel.getBookListToItemNewAll("ItemNewAll",20)
+        homeViewModel.getBookListToItemNewSpecial("ItemNewSpecial",20)
+        homeViewModel.getBookListToItemBestseller("Bestseller",20)
+        homeViewModel.getBookListToItemBlogBest("BlogBest",20)
         setContent {
             BookDiaryApp()
         }

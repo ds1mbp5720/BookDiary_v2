@@ -1,6 +1,5 @@
 package com.example.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.data.datasource.BookListDataSource
@@ -42,7 +41,6 @@ class BookListPagingSource(
                     nextKey = if(bookList.bookList.isEmpty()) null else currentPage + 1
                 )
             } else {
-                Log.e("","페이징 결과 null")
                 LoadResult.Page(
                     data = emptyList(),
                     prevKey = null,

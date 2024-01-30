@@ -32,13 +32,10 @@ class BookDetailViewModel @Inject constructor(
                 _bookDetail.value = it
             }
                 /*.onStart {
-                Log.e("","책 상세정보 호출 로딩")
                 _bookDetail.value = BookDetailState.Loading
             }.catch {
-                Log.e("","책 상세정보 호출 에러")
                 _bookDetail.value = BookDetailState.Error()
             }.collect{
-                Log.e("","책 상세정보 호출 성공")
                 _bookDetail.value = BookDetailState.Success(it)
             }*/
         }

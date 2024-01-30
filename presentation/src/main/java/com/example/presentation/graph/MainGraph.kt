@@ -80,6 +80,7 @@ enum class MainSections(
 }
 fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
+    onListSelected: (String, NavBackStackEntry) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel,
@@ -87,7 +88,7 @@ fun NavGraphBuilder.addMainGraph(
     searchViewModel: SearchViewModel
 ) {
     composable(MainSections.HOME.route){ from ->
-        Home(onBookClick = { id -> onBookSelected(id, from)}, onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
+        Home(onBookClick = { id -> onBookSelected(id, from)}, onListClick = {type -> onListSelected(type, from)} ,onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
     }
     composable(MainSections.SEARCH.route){ from ->
         Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = searchViewModel)
