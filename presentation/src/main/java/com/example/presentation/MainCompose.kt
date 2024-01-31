@@ -1,8 +1,6 @@
 package com.example.presentation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -11,14 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.domain.model.BookModel
 import com.example.presentation.bookdetail.BookDetail
-import com.example.presentation.bookdetail.BookDetailState
 import com.example.presentation.bookdetail.BookDetailViewModel
 import com.example.presentation.graph.MainSections
 import com.example.presentation.graph.addMainGraph
+import com.example.presentation.home.HomeListType
 import com.example.presentation.home.HomeViewModel
 import com.example.presentation.home.SingleCategoryListScreen
 import com.example.presentation.navigation.MainDestinations
@@ -70,7 +65,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
         addMainGraph(onBookSelected = onBookSelected, onListSelected = onListSelected, onNavigateToRoute =  onNavigateToRoute, homeViewModel = homeViewModel, recordViewModel = recordViewModel, searchViewModel = searchViewModel)
     }
     // 책 상세보기 화면
-    composable( // todo 이부분 여러번 호출로 발생하는 문제
+    composable(
         "${MainDestinations.BOOK_DETAIL_ROOT}/{${MainDestinations.BOOK_ID_KEY}}",
         arguments = listOf(navArgument(MainDestinations.BOOK_ID_KEY) { type = NavType.LongType })
     ) {backStackEntry ->
@@ -86,22 +81,16 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     ) {backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val listType = arguments.getString(MainDestinations.BOOK_LIST_TYPE)
-        val bookListAll: LazyPagingItems<BookModel> = homeViewModel.singleCategoryBookList.collectAsLazyPagingItems()
-        when(listType) {
-            "ItemNewAll" -> homeViewModel.getSingleCategoryBookList("ItemNewAll",100)
-            "ItemNewSpecial" -> homeViewModel.getSingleCategoryBookList("ItemNewSpecial",100)
-            "Bestseller" -> homeViewModel.getSingleCategoryBookList("Bestseller",100)
-            "BlogBest" -> homeViewModel.getSingleCategoryBookList("BlogBest",100)
-        }
         SingleCategoryListScreen(
             listType = when(listType){
-                "ItemNewAll" -> "신간 전체"
-                "ItemNewSpecial" -> "주목할 만한 신간"
-                "Bestseller" -> "베스트셀러"
-                "BlogBest" -> "블로거 베스트셀러(국내 도서)"
-                else -> "" },
-            books = bookListAll,
-            onBookClick = { id -> onBookSelected(id, backStackEntry) }
+                HomeListType.ItemNewAll.toString() -> HomeListType.ItemNewAll
+                HomeListType.ItemNewSpecial.toString() -> HomeListType.ItemNewSpecial
+                HomeListType.Bestseller.toString() -> HomeListType.Bestseller
+                HomeListType.BlogBest.toString() -> HomeListType.BlogBest
+                else -> HomeListType.ItemNewAll },
+            viewModel = homeViewModel,
+            onBookClick = { id -> onBookSelected(id, backStackEntry) },
+            upPress = upPress
         )
     }
 }

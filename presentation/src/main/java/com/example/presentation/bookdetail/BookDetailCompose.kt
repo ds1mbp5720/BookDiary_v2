@@ -2,8 +2,6 @@ package com.example.presentation.bookdetail
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import android.widget.RatingBar
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -28,20 +26,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.twotone.Star
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,15 +60,14 @@ import com.example.domain.model.BookModel
 import com.example.domain.model.MyBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicButton
+import com.example.presentation.components.BasicUpButton
 import com.example.presentation.components.BookCoverImage
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.GlideCard
 import com.example.presentation.components.RatingBar
 import com.example.presentation.theme.BookDiaryTheme
-import com.example.presentation.theme.Neutral5
 import com.example.presentation.util.addCommaWon
-import com.example.presentation.util.mirroringBackIcon
 import java.lang.Integer.max
 import java.lang.Integer.min
 
@@ -133,7 +122,7 @@ fun BookDetail(
                 }
             )
         }
-        Up(upPress)
+        BasicUpButton(upPress)
 
         AnimatedVisibility(
             visible = offStoreDialogVisible,
@@ -158,28 +147,6 @@ fun Header(){
             .fillMaxWidth()
             .background(Brush.horizontalGradient(BookDiaryTheme.colors.tornado1))
     )
-}
-
-
-@Composable
-private fun Up(upPress: () -> Unit){
-    IconButton(
-        onClick = upPress,
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-            .size(36.dp)
-            .background(
-                color = Neutral5,
-                shape = CircleShape
-            )
-    ) {
-           Icon(
-               imageVector = mirroringBackIcon(),
-               tint = BookDiaryTheme.colors.iconInteractive,
-               contentDescription = stringResource(id = R.string.str_back)
-           )
-    }
 }
 
 @Composable

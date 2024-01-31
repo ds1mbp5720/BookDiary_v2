@@ -12,9 +12,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
@@ -25,9 +30,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
+import com.example.presentation.theme.Neutral5
+import com.example.presentation.util.mirroringBackIcon
 
 @Composable
 fun BasicButton(
@@ -78,5 +88,26 @@ fun BasicButton(
                 content = content
             )
         }
+    }
+}
+
+@Composable
+fun BasicUpButton(upPress: () -> Unit, size: Dp = 36.dp, padding: Dp = 10.dp){
+    IconButton(
+        onClick = upPress,
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(horizontal = padding + 4.dp, vertical = padding)
+            .size(size)
+            .background(
+                color = Neutral5,
+                shape = CircleShape
+            )
+    ) {
+        Icon(
+            imageVector = mirroringBackIcon(),
+            tint = BookDiaryTheme.colors.iconInteractive,
+            contentDescription = stringResource(id = R.string.str_back)
+        )
     }
 }

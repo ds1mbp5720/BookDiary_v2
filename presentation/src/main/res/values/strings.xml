@@ -17,6 +17,11 @@
     <string name="str_see_more">더보기</string>
     <string name="str_see_less">접기</string>
 
+    <string name="str_new_all_title">신간 전체</string>
+    <string name="str_new_special_title">주목할 만한 신간</string>
+    <string name="str_bestseller_title">베스트셀러</string>
+    <string name="str_bolg_best_title">블로거 베스트셀러(국내 도서)</string>
+
     <string name="str_btn_link">알라딘 화면 이동</string>
     <string name="str_btn_shop_inventory">재고 정보</string>
     <string name="str_btn_record">서랍에 저장</string>

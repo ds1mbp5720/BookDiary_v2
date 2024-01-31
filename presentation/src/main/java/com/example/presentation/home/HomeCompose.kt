@@ -1,8 +1,10 @@
 package com.example.presentation.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
@@ -18,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.domain.model.BookModel
+import com.example.mylibrary.R
+import com.example.presentation.components.BasicUpButton
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
@@ -34,6 +39,9 @@ import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
 
+enum class HomeListType{
+    ItemNewAll, ItemNewSpecial, Bestseller, BlogBest
+}
 @Composable
 fun Home(
     onBookClick: (Long) -> Unit,
@@ -71,10 +79,6 @@ private fun HomeScreen(
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
         Box{
             BookCollectionList(
-                contentTitle1 = "신간 전체",
-                contentTitle2 = "주목할 만한 신간",
-                contentTitle3 = "베스트셀러",
-                contentTitle4 = "블로거 베스트셀러(국내 도서)",
                 viewModel = viewModel,
                 onBookClick =  onBookClick,
                 onListClick = onListClick)
@@ -84,10 +88,6 @@ private fun HomeScreen(
 
 @Composable
 private fun BookCollectionList(
-    contentTitle1: String,
-    contentTitle2: String,
-    contentTitle3: String,
-    contentTitle4: String,
     viewModel: HomeViewModel,
     onBookClick: (Long) -> Unit,
     onListClick: (String) -> Unit,
@@ -105,31 +105,35 @@ private fun BookCollectionList(
                         WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
                     ))
                 BookListContent(
-                    contentTitle = contentTitle1,
+                    contentTitle = HomeListType.ItemNewAll,
                     books = bookListDataItemNewAll,
                     onBookClick = onBookClick,
-                    onListClick = onListClick
+                    onListClick = onListClick,
+                    viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTitle = contentTitle2,
+                    contentTitle = HomeListType.ItemNewSpecial,
                     books = bookListDataItemNewSpecial,
                     onBookClick = onBookClick,
-                    onListClick = onListClick
+                    onListClick = onListClick,
+                    viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTitle = contentTitle3,
+                    contentTitle = HomeListType.Bestseller,
                     books = bookListDataBestseller,
                     onBookClick = onBookClick,
-                    onListClick = onListClick
+                    onListClick = onListClick,
+                    viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
                 BookListContent(
-                    contentTitle = contentTitle4,
+                    contentTitle = HomeListType.BlogBest,
                     books = bookListDataBlogBest,
                     onBookClick = onBookClick,
-                    onListClick = onListClick
+                    onListClick = onListClick,
+                    viewModel = viewModel
                 )
             }
 
@@ -140,24 +144,43 @@ private fun BookCollectionList(
 
 @Composable
 fun SingleCategoryListScreen(
-    listType: String,
-    books: LazyPagingItems<BookModel>,
+    listType: HomeListType,
     onBookClick: (Long) -> Unit,
-    modifier: Modifier = Modifier,
+    upPress: () -> Unit,
+    viewModel: HomeViewModel = viewModel(),
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
+    val books = viewModel.singleCategoryBookList.collectAsLazyPagingItems()
     Column{
         Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = listType,
-            style = MaterialTheme.typography.titleLarge,
-            color = BookDiaryTheme.colors.brand,
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .wrapContentWidth(Alignment.Start)
-        )
+        Row(){
+            BasicUpButton(upPress, padding = 2.dp)
+            Text(
+                text = stringResource(id = when(listType){
+                    HomeListType.ItemNewAll-> {
+                        R.string.str_new_all_title
+                    }
+                    HomeListType.ItemNewSpecial -> {
+                        R.string.str_new_special_title
+                    }
+                    HomeListType.Bestseller -> {
+                        R.string.str_bestseller_rank
+                    }
+                    HomeListType.BlogBest -> {
+                        R.string.str_bolg_best_title
+                    }
+                }),
+                style = MaterialTheme.typography.headlineLarge,
+                color = BookDiaryTheme.colors.brand,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .wrapContentWidth(Alignment.Start)
+            )
+        }
+        
         Spacer(modifier = Modifier.height(10.dp))
         BookDiaryDivider()
         LazyColumn(

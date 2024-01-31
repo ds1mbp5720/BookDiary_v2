@@ -1,5 +1,6 @@
 package com.example.presentation.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -26,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -35,6 +35,7 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -58,12 +60,15 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
+import com.example.presentation.home.HomeListType
+import com.example.presentation.home.HomeViewModel
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.mirroringIcon
 
@@ -72,11 +77,12 @@ private val cardPadding = 16.dp
 
 @Composable
 fun BookListContent(
-    contentTitle: String,
+    contentTitle: HomeListType,
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     onListClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel(),
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     index: Int = 0
 ){
     Column(modifier = modifier) {
@@ -87,7 +93,20 @@ fun BookListContent(
                 .padding(start = 24.dp)
         ){
             Text(
-                text = contentTitle,
+                text = stringResource(id = when(contentTitle){
+                    HomeListType.ItemNewAll-> {
+                        R.string.str_new_all_title
+                    }
+                    HomeListType.ItemNewSpecial -> {
+                        R.string.str_new_special_title
+                    }
+                    HomeListType.Bestseller -> {
+                        R.string.str_bestseller_rank
+                    }
+                    HomeListType.BlogBest -> {
+                        R.string.str_bolg_best_title
+                    }
+                }),
                 style = MaterialTheme.typography.titleLarge,
                 color = BookDiaryTheme.colors.brand,
                 maxLines = 1,
@@ -98,12 +117,23 @@ fun BookListContent(
             )
             IconButton(
                 onClick = {
-                          // TODO 가로형 혹은 그리드 리스트로 해당 카테고리만 보여지게 하기
                     when(contentTitle) {
-                        "신간 전체" -> onListClick("ItemNewAll")
-                        "주목할 만한 신간" -> onListClick("ItemNewSpecial")
-                        "베스트셀러" -> onListClick("Bestseller")
-                        "블로거 베스트셀러(국내 도서)" -> onListClick("BlogBest")
+                        HomeListType.ItemNewAll-> {
+                            viewModel.getSingleCategoryBookList("ItemNewAll",100)
+                            onListClick(HomeListType.ItemNewAll.toString())
+                        }
+                        HomeListType.ItemNewSpecial -> {
+                            viewModel.getSingleCategoryBookList("ItemNewSpecial",100)
+                            onListClick(HomeListType.ItemNewSpecial.toString())
+                        }
+                        HomeListType.Bestseller -> {
+                            viewModel.getSingleCategoryBookList("Bestseller",100)
+                            onListClick(HomeListType.Bestseller.toString())
+                        }
+                        HomeListType.BlogBest -> {
+                            viewModel.getSingleCategoryBookList("BlogBest",100)
+                            onListClick(HomeListType.BlogBest.toString())
+                        }
                     }
                           },
                 modifier = Modifier.align(Alignment.CenterVertically)
