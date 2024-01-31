@@ -22,7 +22,7 @@
     <string name="str_bestseller_title">베스트셀러</string>
     <string name="str_bolg_best_title">블로거 베스트셀러(국내 도서)</string>
 
-    <string name="str_btn_link">알라딘 화면 이동</string>
+    <string name="str_btn_link">자세히 보기</string>
     <string name="str_btn_shop_inventory">재고 정보</string>
     <string name="str_btn_record">서랍에 저장</string>
     <string name="str_add_record">서랍에 추가되었습니다!</string>
