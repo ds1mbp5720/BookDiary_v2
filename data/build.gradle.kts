@@ -49,7 +49,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
     //rx
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("io.reactivex.rxjava2:rxjava:2.2.20")
@@ -58,12 +57,11 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
-
+    //preference
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     //paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")
-
-
     // network
     implementation("com.squareup.retrofit2:retrofit:2.9.0") {
         exclude(module = "okhttp")
@@ -72,9 +70,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:2.5.0")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-
     //hilt
     implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-compiler:2.46")

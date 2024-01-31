@@ -1,6 +1,5 @@
 package com.example.presentation.search
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -56,6 +56,7 @@ fun Search(
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val searchBookList: LazyPagingItems<BookModel> = viewModel.searchBookList.collectAsLazyPagingItems()
     BookDiaryScaffold(
         bottomBar = {
@@ -77,8 +78,12 @@ fun Search(
                 SearchBar(
                     query = viewModel.searchState.query,
                     onQueryChange = { viewModel.searchState.query = it },
-                    onSearch = {
+                    onSearch = { // todo 검색어 동작
                         viewModel.getSearchBookList(viewModel.searchState.query.text,100)
+                        val searchHistory: MutableSet<String> = mutableSetOf()
+                        searchHistory.addAll(viewModel.searchHistory.value)
+                        searchHistory.add(viewModel.searchState.query.text)
+                        viewModel.addSearchHistory(context,searchHistory)
                         viewModel.searchState.searching = true
                                },
                     searchFocused = viewModel.searchState.focused || viewModel.searchState.query.text != "",
@@ -90,10 +95,7 @@ fun Search(
                 searchBookList.apply {
                     when{
                         loadState.append is LoadState.Loading -> { viewModel.searchState.searching = false }
-                        loadState.append is LoadState.NotLoading -> {
-                            Log.e("","페이징 결과2 ${this.itemCount}")
-                        }
-
+                        loadState.append is LoadState.NotLoading -> {}
                         loadState.append is LoadState.Error -> {}
                         loadState.refresh is LoadState.Loading -> {}
                         loadState.refresh is LoadState.Error -> {}
@@ -101,7 +103,9 @@ fun Search(
                 }
                 when (viewModel.searchState.searchDisplay) {
                     SearchDisplay.StandBy -> {
-                        StandByScreen()
+                        // todo 검색 기록 출력
+                        viewModel.getSearchHistory(context)
+                        StandByScreen(viewModel)
                     }
                     SearchDisplay.Results -> {
                         ResultScreen(

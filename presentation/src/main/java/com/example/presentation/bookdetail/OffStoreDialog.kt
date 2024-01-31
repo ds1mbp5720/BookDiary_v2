@@ -2,7 +2,6 @@ package com.example.presentation.bookdetail
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,7 +39,6 @@ fun OffStoreDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    Log.e("","중고상점 정보 체크 ${offStoreInfo}")
     Dialog(onDismissRequest = onDismiss){
         BookDiaryScaffold(
             topBar = {
