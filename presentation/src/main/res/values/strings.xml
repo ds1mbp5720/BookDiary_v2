@@ -29,7 +29,7 @@
     <string name="str_dialog_offstore_title">책 보유 매장 정보</string>
     <string name="str_search_hint">검색어 입력</string>
 
-    <string name="str_dialog_check_delete">정말로 삭제하시겠습니까?</string>
+    <string name="str_dialog_exit_app">앱을 종료 하시겠습니까?</string>
 
     <string name="str_cancel">취소</string>
     <string name="str_confirm">확인</string>

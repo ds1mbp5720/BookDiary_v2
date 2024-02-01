@@ -87,8 +87,6 @@ fun Record(
     viewModel: RecordViewModel = viewModel()
 ) {
     val myBookList = viewModel.myBookList.observeAsState()
-    val showDialog = remember { mutableStateOf(false) }
-    val deleteBookId = remember { mutableLongStateOf(0L) }
     viewModel.getMyBookList()
     val books = myBookList.value
     BookDiaryScaffold(
@@ -111,22 +109,10 @@ fun Record(
                     contentTitle = "내 책 목록" + " ${books?.size ?: "0"} 권",
                     books = books,
                     onBookClick = onBookClick,
-                    onBookDeleteSwipe = {id -> deleteBookId.longValue = id //viewModel.deleteMyBook(id)
-                        showDialog.value = true
+                    onBookDeleteSwipe = {id ->
+                        viewModel.deleteMyBook(id)
                     }
                 )
-                if(showDialog.value){
-                    BookDiaryBasicDialog(
-                        title = stringResource(id = R.string.str_dialog_check_delete),
-                        dismissAction = {
-                            showDialog.value = false
-                        },
-                        confirmAction = {
-                            viewModel.deleteMyBook(deleteBookId.longValue)
-                            showDialog.value = false
-                        }
-                    )
-                }
             }
         }
     }

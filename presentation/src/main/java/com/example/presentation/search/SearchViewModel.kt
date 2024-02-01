@@ -41,7 +41,7 @@ class SearchViewModel @Inject constructor(
     }
     private val _searchHistory = MutableStateFlow(listOf(""))
     val searchHistory = _searchHistory.asStateFlow()
-    fun addSearchHistory(context: Context, search: MutableSet<String>)  {
+    private fun setSearchHistory(context: Context, search: MutableSet<String>){
         viewModelScope.launch{
             searchHistoryRepository.setSearchHistory(context, search.toList())
         }
@@ -52,4 +52,24 @@ class SearchViewModel @Inject constructor(
             _searchHistory.value = searchHistoryRepository.getSearchHistory(context)
         }
     }
+    fun addSearchHistory(context: Context, search: String){
+        viewModelScope.launch {
+            val copySearchHistory: MutableSet<String> = mutableSetOf()
+            copySearchHistory.addAll(searchHistoryRepository.getSearchHistory(context))
+            copySearchHistory.add(search)
+            setSearchHistory(context, copySearchHistory)
+            _searchHistory.value = copySearchHistory.toList()
+        }
+    }
+    fun removeSearchHistory(context: Context, search: String){
+        viewModelScope.launch{
+            val copySearchHistory: MutableSet<String> = mutableSetOf()
+            copySearchHistory.addAll(searchHistoryRepository.getSearchHistory(context))
+            copySearchHistory.remove(search)
+            setSearchHistory(context, copySearchHistory)
+            _searchHistory.value = copySearchHistory.toList()
+        }
+    }
+
+
 }

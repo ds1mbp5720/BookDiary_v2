@@ -78,12 +78,9 @@ fun Search(
                 SearchBar(
                     query = viewModel.searchState.query,
                     onQueryChange = { viewModel.searchState.query = it },
-                    onSearch = { // todo 검색어 동작
+                    onSearch = {
                         viewModel.getSearchBookList(viewModel.searchState.query.text,100)
-                        val searchHistory: MutableSet<String> = mutableSetOf()
-                        searchHistory.addAll(viewModel.searchHistory.value)
-                        searchHistory.add(viewModel.searchState.query.text)
-                        viewModel.addSearchHistory(context,searchHistory)
+                        viewModel.addSearchHistory(context,viewModel.searchState.query.text)
                         viewModel.searchState.searching = true
                                },
                     searchFocused = viewModel.searchState.focused || viewModel.searchState.query.text != "",
@@ -103,7 +100,6 @@ fun Search(
                 }
                 when (viewModel.searchState.searchDisplay) {
                     SearchDisplay.StandBy -> {
-                        // todo 검색 기록 출력
                         viewModel.getSearchHistory(context)
                         StandByScreen(viewModel)
                     }

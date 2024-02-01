@@ -1,8 +1,10 @@
 package com.example.presentation.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +25,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -39,6 +44,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicUpButton
+import com.example.presentation.components.BookDiaryBasicDialog
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
@@ -59,6 +65,8 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
+    val showDialog = remember { mutableStateOf(false) }
+    val activity = LocalContext.current as Activity
     BookDiaryScaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -75,6 +83,23 @@ fun Home(
             modifier = Modifier.padding(paddingValues),
             viewModel = viewModel
         )
+        BackHandler(
+            enabled = true
+        ) {
+            showDialog.value = true
+        }
+        if(showDialog.value){
+            BookDiaryBasicDialog(
+                title = stringResource(id = R.string.str_dialog_exit_app),
+                dismissAction = {
+                    showDialog.value = false
+                },
+                confirmAction = {
+                    showDialog.value = false
+                    activity.finish()
+                }
+            )
+        }
     }
 }
 
