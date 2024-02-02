@@ -4,7 +4,9 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
+    //id("com.google.android.gms.oss-licenses-plugin")
 }
+
 
 android {
     namespace = "com.example.mylibrary"
@@ -90,10 +92,12 @@ dependencies {
 
     //ImagePicker
     implementation("com.github.Drjacky:ImagePicker:2.1.12")
-//EventBus
+    //EventBus
     implementation("com.squareup:otto:1.3.7")
     implementation("org.greenrobot:eventbus:3.2.0")
     //hilt
     implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-compiler:2.46")
+    //oss
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
 }

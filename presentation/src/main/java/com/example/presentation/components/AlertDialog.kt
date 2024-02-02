@@ -28,7 +28,7 @@ fun BookDiaryBasicDialog(
     confirmAction: () -> Unit
 ){
     AlertDialog(
-        containerColor = BookDiaryTheme.colors.brand,
+        containerColor = BookDiaryTheme.colors.uiBackground,
         onDismissRequest = dismissAction,
         title = {
             Text(
