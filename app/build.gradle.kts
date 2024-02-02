@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.jetbrains.kotlin.utils.keysToMap
 
 plugins {
     id("com.android.application")
@@ -16,7 +17,14 @@ fun getTTBKey(propertyKey: String): String {
 android {
     namespace = "com.example.bookdiary_v2"
     compileSdk = 34
-
+    /*signingConfigs {
+        create("release"){
+            storeFile = file("..\\bookDiary.jks")
+            storePassword = "book123!"
+            keyAlias = "bookDiary.aos"
+            keyPassword = "book123!"
+        }
+    }*/
     defaultConfig {
         applicationId = "com.example.bookdiary_v2"
         minSdk = 24
@@ -31,9 +39,13 @@ android {
         }
     }
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("release") {
+            isMinifyEnabled = false // 난독화 proguard 설정 테스트 목적 임시 false -> 해당 부분 빌드 전 조정하기
+            isDebuggable = false
+            //isShrinkResources = true
+            //signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
