@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "445716650585",
+    "project_id": "bookdiary-f15b3",
+    "storage_bucket": "bookdiary-f15b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445716650585:android:b0a7dcd06b01346330ef48",
+        "android_client_info": {
+          "package_name": "com.example.bookdiary_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuS7wcdnueeGVprnqTnTj0RWE9ycBcgNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

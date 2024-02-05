@@ -8,6 +8,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 fun getTTBKey(propertyKey: String): String {
@@ -136,4 +137,7 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.46")
     //oss
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-analytics")
 }
