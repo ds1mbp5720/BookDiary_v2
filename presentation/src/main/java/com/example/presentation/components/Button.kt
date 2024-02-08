@@ -11,17 +11,21 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +39,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mylibrary.R
+import com.example.presentation.theme.BookDiaryColors
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.theme.Neutral5
 import com.example.presentation.util.mirroringBackIcon
@@ -110,4 +115,66 @@ fun BasicUpButton(upPress: () -> Unit, size: Dp = 36.dp, padding: Dp = 10.dp){
             contentDescription = stringResource(id = R.string.str_back)
         )
     }
+}
+
+@Composable
+fun SettingButton(
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = RoundedCornerShape(30.dp),
+    border: BorderStroke? = null,
+    backgroundGradient: List<Color> = listOf(BookDiaryTheme.colors.uiBackground, BookDiaryTheme.colors.uiBackground),
+    disableBackgroundGradient: List<Color> = listOf(BookDiaryTheme.colors.uiBackground, BookDiaryTheme.colors.uiBackground),
+    contentColor: Color = BookDiaryTheme.colors.textInteractive,
+    disabledContentColor: Color = BookDiaryTheme.colors.textHelp,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    text: String
+){
+    BookDiarySurface(
+        shape = shape,
+        color = Color.Transparent,
+        contentColor = if(enabled) contentColor else disabledContentColor,
+        border = border,
+        modifier = modifier
+            .clip(shape)
+            .background(
+                Brush.horizontalGradient(
+                    colors = if (enabled) backgroundGradient else disableBackgroundGradient
+                )
+            )
+            .clickable(
+                onClick = onClick,
+                enabled = enabled,
+                role = Role.Button,
+                interactionSource = interactionSource,
+                indication = null
+            )
+    ) {
+        ProvideTextStyle(value = androidx.compose.material.MaterialTheme.typography.button) {
+            Row(
+                Modifier
+                    .defaultMinSize(
+                        minWidth = ButtonDefaults.MinWidth,
+                        minHeight = ButtonDefaults.MinHeight
+                    )
+                    .indication(interactionSource, rememberRipple())
+                    .padding(contentPadding),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ){
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = BookDiaryTheme.colors.textLink
+                )
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowRight,
+                    contentDescription = "setting_arrow"
+                )
+            }
+        }
+    }
+
 }

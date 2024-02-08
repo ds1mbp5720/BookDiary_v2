@@ -9,6 +9,7 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 fun getTTBKey(propertyKey: String): String {
@@ -31,7 +32,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         buildConfigField("String", "TTB_KEY", getTTBKey("TTB_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -140,4 +141,5 @@ dependencies {
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
 }
