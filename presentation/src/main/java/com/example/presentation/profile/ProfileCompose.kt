@@ -19,7 +19,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 @Composable
 fun Profile(
-    onBookClick: (Long) -> Unit,
+    onManualClick: () -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -34,7 +34,7 @@ fun Profile(
         modifier = modifier
     ) {paddingValues ->
         ProfileScreen(
-            onBookClick = onBookClick,
+            onManualClick = onManualClick,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -42,13 +42,15 @@ fun Profile(
 
 @Composable
 private fun ProfileScreen(
-    onBookClick: (Long) -> Unit,
+    onManualClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
     BookDiarySurface {
         Column(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 20.dp, start = 12.dp, end = 12.dp)
         ){
             SettingButton(
                 onClick = {
@@ -60,7 +62,7 @@ private fun ProfileScreen(
             Spacer(modifier = Modifier.height(7.dp))
             SettingButton(
                 onClick = {
-                    //todo: 앱 사용방법 (가로 스크롤 방식, 하단 점들로 표시)
+                    onManualClick()
                 },
                 text = "앱 사용 방법"
             )

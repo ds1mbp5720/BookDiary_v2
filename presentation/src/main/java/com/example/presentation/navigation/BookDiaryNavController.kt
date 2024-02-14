@@ -19,6 +19,7 @@ object MainDestinations {
     const val BOOK_ID_KEY = "bookId"
     const val BOOK_LIST_ROOT = "book_list"
     const val BOOK_LIST_TYPE = "list_type"
+    const val MANUAL = "manual"
 }
 
 @Composable
@@ -53,10 +54,14 @@ class BookDiaryNavController(
             navController.navigate("${MainDestinations.BOOK_DETAIL_ROOT}/$bookId")
         }
     }
-
     fun navigateToRecommendList(listType: String, from: NavBackStackEntry) {
         if(from.lifeCycleIsResume()){
             navController.navigate("${MainDestinations.BOOK_LIST_ROOT}/$listType")
+        }
+    }
+    fun navigateToManual(from: NavBackStackEntry) {
+        if(from.lifeCycleIsResume()){
+            navController.navigate(MainDestinations.MANUAL)
         }
     }
 }

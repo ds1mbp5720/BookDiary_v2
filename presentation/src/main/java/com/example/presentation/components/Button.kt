@@ -138,6 +138,7 @@ fun SettingButton(
         contentColor = if(enabled) contentColor else disabledContentColor,
         border = border,
         modifier = modifier
+            .fillMaxWidth()
             .clip(shape)
             .background(
                 Brush.horizontalGradient(
@@ -155,10 +156,7 @@ fun SettingButton(
         ProvideTextStyle(value = androidx.compose.material.MaterialTheme.typography.button) {
             Row(
                 Modifier
-                    .defaultMinSize(
-                        minWidth = ButtonDefaults.MinWidth,
-                        minHeight = ButtonDefaults.MinHeight
-                    )
+                    .fillMaxWidth()
                     .indication(interactionSource, rememberRipple())
                     .padding(contentPadding),
                 horizontalArrangement = Arrangement.SpaceBetween,

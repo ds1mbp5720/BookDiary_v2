@@ -33,4 +33,10 @@
 
     <string name="str_cancel">취소</string>
     <string name="str_confirm">확인</string>
+    <string name="str_next">다음</string>
+    <string name="str_prev">이전</string>
+
+    <string name="str_manual_desc1">첫번째 설명 스크립트</string>
+    <string name="str_manual_desc2">두번째 설명 스크립트</string>
+    <string name="str_manual_desc3">세번째 설명 스크립트</string>
 </resources>

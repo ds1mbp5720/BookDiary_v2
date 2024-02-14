@@ -18,6 +18,7 @@ import com.example.presentation.home.HomeViewModel
 import com.example.presentation.home.SingleCategoryListScreen
 import com.example.presentation.navigation.MainDestinations
 import com.example.presentation.navigation.rememberBookDiaryNavController
+import com.example.presentation.profile.ManualViewPager
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
@@ -37,6 +38,7 @@ fun BookDiaryApp() {
             bookDiaryNavGraph(
                 onBookSelected = bookDiaryNavController::navigateToBookDetail,
                 onListSelected = bookDiaryNavController::navigateToRecommendList,
+                onManualClick = bookDiaryNavController::navigateToManual,
                 upPress = bookDiaryNavController::upPress,
                 onNavigateToRoute = bookDiaryNavController::navigateToBottomBarRoute,
                 homeViewModel = homeViewModel,
@@ -51,6 +53,7 @@ fun BookDiaryApp() {
 private fun NavGraphBuilder.bookDiaryNavGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
+    onManualClick: (NavBackStackEntry) -> Unit,
     upPress: () -> Unit,
     onNavigateToRoute: (String) -> Unit,
     homeViewModel: HomeViewModel,
@@ -62,7 +65,14 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
         route = MainDestinations.HOME_ROUTE,
         startDestination = MainSections.HOME.route,
     ){
-        addMainGraph(onBookSelected = onBookSelected, onListSelected = onListSelected, onNavigateToRoute =  onNavigateToRoute, homeViewModel = homeViewModel, recordViewModel = recordViewModel, searchViewModel = searchViewModel)
+        addMainGraph(
+            onBookSelected = onBookSelected,
+            onListSelected = onListSelected,
+            onManualClick = onManualClick,
+            onNavigateToRoute =  onNavigateToRoute,
+            homeViewModel = homeViewModel,
+            recordViewModel = recordViewModel,
+            searchViewModel = searchViewModel)
     }
     // 책 상세보기 화면
     composable(
@@ -92,5 +102,11 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
             onBookClick = { id -> onBookSelected(id, backStackEntry) },
             upPress = upPress
         )
+    }
+    // 앱 설명화면
+    composable(
+        MainDestinations.MANUAL
+    ){
+        ManualViewPager()
     }
 }
