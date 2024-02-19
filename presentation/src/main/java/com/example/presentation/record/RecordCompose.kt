@@ -152,7 +152,7 @@ fun BookRecordContent(
                 onBookClick = onBookClick,
                 onBookDeleteSwipe = onBookDeleteSwipe
             )
-        } else Spacer(modifier = Modifier.height(460.dp))
+        } else Spacer(modifier = Modifier.height(420.dp))
         MyRecordDivider(modifier = Modifier.fillMaxWidth())
     }
 }
@@ -168,7 +168,7 @@ fun BookRecordRow(
 ){
     val scroll = rememberScrollState(0)
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.height(420.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Bottom,
         userScrollEnabled = true
