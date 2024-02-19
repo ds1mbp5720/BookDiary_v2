@@ -159,6 +159,11 @@ private fun Title(
     val maxOffset = with(LocalDensity.current) { maxTitleOffset.toPx() }
     val minOffset = with(LocalDensity.current) { minTitleOffset.toPx() }
 
+    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx()}
+    val collapseFractionProvider = {
+        (scrollProvider() / collapseRange).coerceIn(0f, 1f)
+    }
+
     Column(
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier
@@ -172,18 +177,40 @@ private fun Title(
             .background(color = BookDiaryTheme.colors.uiBackground)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = book/*?.get(0)?*/.title?.replace("알라딘 상품정보 - ","") ?: "No Title",
-            style = MaterialTheme.typography.titleLarge,
-            color = BookDiaryTheme.colors.textPrimary,
-            modifier = horizontalPadding
-        )
-        Text(
-            text = book/*?.get(0)?*/.author ?: "지은이 미확인",
-            style = MaterialTheme.typography.bodyMedium,
-            color = BookDiaryTheme.colors.textPrimary,
-            modifier = horizontalPadding
-        )
+        Layout(
+            content = {
+                Column{
+                    Text(
+                        text = book/*?.get(0)?*/.title?.replace("알라딘 상품정보 - ","") ?: "No Title",
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 2,
+                        color = BookDiaryTheme.colors.textPrimary,
+                        modifier = horizontalPadding
+                    )
+                    Text(
+                        text = book/*?.get(0)?*/.author ?: "지은이 미확인",
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        color = BookDiaryTheme.colors.textPrimary,
+                        modifier = horizontalPadding
+                    )
+                }
+            }
+        ) { measurables, constraints ->
+            val collapseFraction = collapseFractionProvider()
+            val titleMaxSize =
+                if(collapseFraction < 0.5f) min(expandedImageSize.roundToPx(), constraints.maxWidth)
+                else constraints.maxWidth - min(expandedImageSize.roundToPx(), constraints.maxWidth)
+            val titleMinSize = constraints.maxWidth -  max(collapsedImageSize.roundToPx(), constraints.minWidth)
+            val titleWidth = lerp(titleMaxSize, titleMinSize, collapseFraction)
+            val titlePlaceable = measurables[0].measure(Constraints.fixed(titleWidth, 90.dp.toPx().toInt()))
+            layout(
+                width = constraints.maxWidth,
+                height = 56.dp.toPx().toInt()
+            ){
+                titlePlaceable.placeRelative(0, 0)
+            }
+        }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = (book/*?.get(0)?*/.priceSales ?: "0" ).addCommaWon(),
