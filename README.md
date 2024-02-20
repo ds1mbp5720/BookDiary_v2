@@ -30,8 +30,20 @@
 + 원하는 책 기록 및 메모
 ------------
 ### 실행사진(업데이트 예정)
-1. 
+1. 홈 화면 및 상세보기
 
+https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/68114381-f795-4660-871a-1df993391e01.mp4  
 
+2. 책 검색
+
+https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/16629aa4-f32a-494d-a7f9-1334d1730ec0.mp4
+
+3. 저장한 책 리스트  
+
+[https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/7127694b-5541-4882-8032-90576efb71c6](https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/f8825e55-2e78-4630-9068-983bb072d173)
+
+4. 앱 정보화면
+
+https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/7127694b-5541-4882-8032-90576efb71c6
 
 
