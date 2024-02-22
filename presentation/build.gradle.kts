@@ -15,7 +15,8 @@ android {
     defaultConfig {
         minSdk = 24
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.presentation.TestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -81,6 +82,16 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
+    //test
+    testImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.46")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.46")
+
+    implementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("androidx.compose.ui:ui-test-junit4:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.1")
 
     //rx
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")

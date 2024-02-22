@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.kotlin.utils.keysToMap
 
 plugins {
     id("com.android.application")
@@ -119,7 +118,12 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
-
+    //test
+    testImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.46")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.46")
     //rx
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("io.reactivex.rxjava2:rxjava:2.2.20")
