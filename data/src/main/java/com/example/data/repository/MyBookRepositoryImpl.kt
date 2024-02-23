@@ -2,14 +2,14 @@ package com.example.data.repository
 
 import com.example.data.mapper.MyBookEntityMapper
 import com.example.data.mapper.toEntity
-import com.example.data.room.AppDataBase
+import com.example.data.room.database.MyBookDataBase
 import com.example.domain.model.MyBookModel
 import com.example.domain.repository.MyBookRepository
 import io.reactivex.Single
 import javax.inject.Inject
 
 class MyBookRepositoryImpl @Inject constructor(
-    private val database: AppDataBase,
+    private val database: MyBookDataBase,
 ): MyBookRepository{
     override fun getMyBookList(): Single<List<MyBookModel>> {
         return database.getMyBookDao().getMyBookList()

@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.MyBookModel
+import com.example.domain.model.WishBookModel
 import com.example.domain.usecase.MyBookUseCase
+import com.example.domain.usecase.WishBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,10 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordViewModel @Inject constructor(
     private val myBookUseCase: MyBookUseCase,
+    private val wishBookUseCase: WishBookUseCase,
     application: Application
 ) : AndroidViewModel(application) {
 
     val myBookList = MutableLiveData<List<MyBookModel>>()
+    val wishBookList = MutableLiveData<List<WishBookModel>>()
     fun getMyBookList() {
         viewModelScope.launch(Dispatchers.IO) {
             myBookUseCase.execute(
@@ -26,10 +30,23 @@ class RecordViewModel @Inject constructor(
                     myBookList.value = it
                 },
                 onError = {
-                    Log.e("", "room Error $it")
+                    Log.e("", "room Error (MyBook) $it")
                 }
             )
             myBookUseCase.getMyBookList()
+        }
+    }
+    fun getWishBookList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            wishBookUseCase.execute(
+                onSuccess = {
+                    wishBookList.value = it
+                },
+                onError = {
+                    Log.e("", "room Error (WishBook) $it")
+                }
+            )
+            wishBookUseCase.getWishBookList()
         }
     }
 
@@ -41,7 +58,21 @@ class RecordViewModel @Inject constructor(
                     myBookList.value = it
                 },
                 onError = {
-                    Log.e("", "room Error $it")
+                    Log.e("", "room Error (MyBook) $it")
+                }
+            )
+        }
+    }
+
+    fun deleteWishBook(bookId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            wishBookUseCase.delete(bookId)
+            wishBookUseCase.execute(
+                onSuccess = {
+                    wishBookList.value = it
+                },
+                onError = {
+                    Log.e("", "room Error (WishBook) $it")
                 }
             )
         }

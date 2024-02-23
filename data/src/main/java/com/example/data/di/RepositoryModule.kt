@@ -4,15 +4,16 @@ import com.example.data.repository.BookListRepositoryImpl
 import com.example.data.repository.MyBookRepositoryImpl
 import com.example.data.repository.OffStoreRepositoryImpl
 import com.example.data.repository.SearchHistoryRepositoryImpl
+import com.example.data.repository.WishBookRepositoryImpl
 import com.example.domain.repository.BookListRepository
 import com.example.domain.repository.MyBookRepository
 import com.example.domain.repository.OffStoreRepository
 import com.example.domain.repository.SearchHistoryRepository
+import com.example.domain.repository.WishBookRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,7 +34,11 @@ abstract class RepositoryModule {
     ): MyBookRepository
 
     @Binds
-    @Singleton
+    abstract fun bindsWishBookRepository(
+        wishBookRepositoryImpl: WishBookRepositoryImpl
+    ): WishBookRepository
+
+    @Binds
     abstract fun bindSearchHistoryRepository(
         searchHistoryRepositoryImpl: SearchHistoryRepositoryImpl
     ): SearchHistoryRepository

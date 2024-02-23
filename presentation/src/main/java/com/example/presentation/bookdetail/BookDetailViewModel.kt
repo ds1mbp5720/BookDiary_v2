@@ -1,15 +1,16 @@
 package com.example.presentation.bookdetail
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.BookListModel
 import com.example.domain.model.MyBookModel
 import com.example.domain.model.OffStoreListModel
+import com.example.domain.model.WishBookModel
 import com.example.domain.usecase.BookListUseCase
 import com.example.domain.usecase.MyBookUseCase
 import com.example.domain.usecase.OffStoreUseCase
+import com.example.domain.usecase.WishBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class BookDetailViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
     private val myBookUseCase: MyBookUseCase,
+    private val wishBookUseCase: WishBookUseCase,
     private val offStoreUseCase: OffStoreUseCase,
     application: Application
 ): AndroidViewModel(application) {
@@ -55,6 +57,12 @@ class BookDetailViewModel @Inject constructor(
     fun insertMyBook(book: MyBookModel){
         viewModelScope.launch(Dispatchers.IO) {
             myBookUseCase.insertMyBook(book)
+        }
+    }
+
+    fun insertWishBook(book: WishBookModel){
+        viewModelScope.launch(Dispatchers.IO) {
+            wishBookUseCase.insertWishBook(book)
         }
     }
 }

@@ -110,9 +110,12 @@ fun BookDetail(
                     bookDetailViewModel.insertMyBook(
                     book = MyBookModel(
                         itemId = (bookDetail.itemId ?: "0").toLong(),
+                        imageUrl = bookDetail.cover ?: "",
                         title = bookDetail.title ?: "제목 없음",
+                        author = bookDetail.author ?: "저자 미확인",
                         link = bookDetail.link,
-                        myReview = "테스트 리뷰"
+                        myReview = "테스트 리뷰",
+                        period = "테스트 기간"
                     ))
                     Toast.makeText(context,context.getString(R.string.str_add_record),Toast.LENGTH_SHORT).show()
                 },
