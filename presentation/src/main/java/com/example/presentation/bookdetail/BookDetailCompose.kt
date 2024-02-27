@@ -58,6 +58,7 @@ import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.domain.model.BookModel
 import com.example.domain.model.MyBookModel
+import com.example.domain.model.WishBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicButton
 import com.example.presentation.components.BasicUpButton
@@ -101,11 +102,19 @@ fun BookDetail(
         if (bookDetailInfo != null) {
             val bookDetail = bookDetailInfo.bookList[0]
             Body(book = bookDetail, scroll = scroll)
-            Title(book = bookDetail) { scroll.value}
+            Title(
+                book = bookDetail,
+                url = bookDetail.link ?: "",
+                offStoreInfo = {
+                    bookDetailViewModel.getOffStoreInfo(bookId.toString())
+                    offStoreDialogVisible = true
+                }
+                ) {
+                scroll.value
+            }
             Image(imageUrl = bookDetail.cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
             DetailBottomBar(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                url = bookDetail.link ?: "",
                 insertMyBook = {
                     bookDetailViewModel.insertMyBook(
                     book = MyBookModel(
@@ -119,9 +128,14 @@ fun BookDetail(
                     ))
                     Toast.makeText(context,context.getString(R.string.str_add_record),Toast.LENGTH_SHORT).show()
                 },
-                offStoreInfo = {
-                    bookDetailViewModel.getOffStoreInfo(bookId.toString())
-                    offStoreDialogVisible = true
+                insertWishBook = {
+                    bookDetailViewModel.insertWishBook(
+                        book = WishBookModel(
+                            itemId = (bookDetail.itemId ?: "0").toLong(),
+                            imageUrl = bookDetail.cover ?: "",
+                            title = bookDetail.title ?: "제목 없음"
+                        )
+                    )
                 }
             )
         }
@@ -155,13 +169,15 @@ fun Header(){
 @Composable
 private fun Title(
     book: BookModel,
+    url: String,
     //bookDetailViewModel: BookDetailViewModel,
-    scrollProvider: () -> Int
+    offStoreInfo: () -> Unit,
+    scrollProvider: () -> Int,
 ){
     //val book = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value.data?.bookList
     val maxOffset = with(LocalDensity.current) { maxTitleOffset.toPx() }
     val minOffset = with(LocalDensity.current) { minTitleOffset.toPx() }
-
+    val context = LocalContext.current
     val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx()}
     val collapseFractionProvider = {
         (scrollProvider() / collapseRange).coerceIn(0f, 1f)
@@ -221,6 +237,37 @@ private fun Title(
             color = BookDiaryTheme.colors.textPrimary,
             modifier = horizontalPadding
         )
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(){
+            BasicButton(
+                onClick = offStoreInfo,
+                modifier = Modifier.weight(1f),
+                border = BorderStroke(width = 1.dp, color = Color.Black)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.str_btn_shop_inventory),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            BasicButton(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.weight(1f),
+                border = BorderStroke(width = 1.dp, color = Color.Black)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.str_btn_link),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(8.dp))
         BookDiaryDivider()
     }
@@ -437,11 +484,9 @@ private fun Body(
 @Composable
 private fun DetailBottomBar(
     modifier: Modifier = Modifier,
-    url: String,
     insertMyBook: () -> Unit,
-    offStoreInfo: () -> Unit
+    insertWishBook: () -> Unit
 ) {
-    val context = LocalContext.current
     BookDiarySurface(modifier) {
         Column {
             BookDiaryDivider()
@@ -453,28 +498,12 @@ private fun DetailBottomBar(
                     .heightIn(min = 56.dp)
             ){
                 BasicButton(
-                    onClick = offStoreInfo,
+                    onClick = insertWishBook,
                     modifier = Modifier.weight(1f),
                     border = BorderStroke(width = 1.dp, color = Color.Black)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.str_btn_shop_inventory),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        maxLines = 1
-                    )
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                BasicButton(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier.weight(1f),
-                    border = BorderStroke(width = 1.dp, color = Color.Black)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.str_btn_link),
+                        text = stringResource(id = R.string.str_btn_wish),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         maxLines = 1

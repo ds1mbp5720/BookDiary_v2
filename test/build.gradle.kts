@@ -36,6 +36,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
 dependencies {
@@ -84,4 +87,10 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("app.cash.turbine:turbine:0.12.1")
+    testImplementation ("androidx.room:room-testing:2.4.1")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    testImplementation("io.reactivex.rxjava2:rxjava:2.2.20")
+    testImplementation("androidx.room:room-rxjava2:2.6.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -48,7 +49,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.domain.model.MyBookModel
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.MyRecordDivider
@@ -61,7 +61,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 @Composable
 fun Record(
     onBookClick: (Long) -> Unit,
@@ -73,7 +72,9 @@ fun Record(
     val wishBookList = viewModel.wishBookList.observeAsState()
     viewModel.getMyBookList()
     viewModel.getWishBookList()
-    val books = myBookList.value
+    val myBooks = myBookList.value
+    val wishBooks = wishBookList.value
+    val scrollState = rememberScrollState()
     BookDiaryScaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -89,13 +90,23 @@ fun Record(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column {
+            Column(
+                Modifier.verticalScroll(scrollState)
+            ) {
                 BookRecordContent(
-                    contentTitle = "내 책 목록" + " ${books?.size ?: "0"} 권",
-                    books = books,
+                    contentTitle = "내 책 목록" + " ${myBooks?.size ?: "0"} 권",
+                    books = myBooks?.mapperMyBookToBasicBookRecordList(),
                     onBookClick = onBookClick,
                     onBookDeleteSwipe = {id ->
                         viewModel.deleteMyBook(id)
+                    }
+                )
+                BookRecordContent(
+                    contentTitle = "찜 목록" + " ${wishBooks?.size ?: "0"} 권",
+                    books = wishBooks?.mapperWishBookToBasicBookRecordList(),
+                    onBookClick = onBookClick,
+                    onBookDeleteSwipe = {id ->
+                        viewModel.deleteWishBook(id)
                     }
                 )
             }
@@ -106,7 +117,7 @@ fun Record(
 @Composable
 fun BookRecordContent(
     contentTitle: String,
-    books: List<MyBookModel>?,
+    books: List<BasicBookRecord>?,
     onBookClick: (Long) -> Unit,
     onBookDeleteSwipe: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -142,11 +153,11 @@ fun BookRecordContent(
     }
 }
 
-//random 으로 책 그림 다양하게
+//random 으로 책 그림 다양하게 -> 스크롤간 재생성으로 id값의 % 로 지정
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun BookRecordRow(
-    books: List<MyBookModel>,
+    books: List<BasicBookRecord>,
     onBookClick: (Long) -> Unit,
     onBookDeleteSwipe: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -219,9 +230,15 @@ fun BookRecordRow(
                     onBookClick = onBookClick
                 )
             }
-
         }
     }
+}
+
+@Composable
+fun SwipeBookContent(
+
+){
+
 }
 
 @Composable
