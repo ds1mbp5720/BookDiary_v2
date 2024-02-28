@@ -136,6 +136,7 @@ fun BookDetail(
                             title = bookDetail.title ?: "제목 없음"
                         )
                     )
+                    Toast.makeText(context,context.getString(R.string.str_add_wish),Toast.LENGTH_SHORT).show()
                 }
             )
         }

@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -122,25 +120,7 @@ fun BookRecordContent(
     onBookDeleteSwipe: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ){
-    Column(modifier = modifier) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .heightIn(min = 56.dp)
-                .padding(start = 24.dp)
-        ) {
-            Text(
-                text = contentTitle,
-                style = MaterialTheme.typography.titleLarge,
-                color = BookDiaryTheme.colors.brand,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentWidth(Alignment.Start)
-            )
-        }
-        Spacer(modifier = Modifier.height(15.dp))
+    Box(modifier = modifier) {
         MyRecordDivider(modifier = Modifier.fillMaxWidth())
         if (books != null) {
             BookRecordRow(
@@ -150,6 +130,25 @@ fun BookRecordContent(
             )
         } else Spacer(modifier = Modifier.height(420.dp))
         MyRecordDivider(modifier = Modifier.fillMaxWidth())
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 24.dp)
+                .background(color = Color.White)
+                .border(width = 1.dp, color = BookDiaryTheme.colors.brand)
+        ) {
+            Text(
+                text = contentTitle,
+                style = MaterialTheme.typography.titleLarge,
+                color = BookDiaryTheme.colors.brand,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .width(130.dp)
+                    .padding(start = 16.dp)
+                    //.wrapContentWidth(Alignment.Start)
+            )
+        }
     }
 }
 
