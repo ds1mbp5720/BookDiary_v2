@@ -28,7 +28,7 @@ import androidx.core.view.WindowCompat
 
 private val LightColorPalette = BookDiaryColors(
     brand = Brown2,
-    brandSecondary = Ocean3,
+    brandSecondary = Brown0,
     uiBackground = Neutral0,
     uiBorder = Neutral4,
     uiFloated = FunctionalGrey,

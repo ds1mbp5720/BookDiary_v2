@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -50,7 +50,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.MyRecordDivider
+import com.example.presentation.components.ScrollBarConfig
 import com.example.presentation.components.SwipeToDismissVertical
+import com.example.presentation.components.verticalScrollWithScrollbar
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
@@ -59,6 +61,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 @Composable
 fun Record(
     onBookClick: (Long) -> Unit,
@@ -89,7 +92,13 @@ fun Record(
                 .padding(paddingValues)
         ) {
             Column(
-                Modifier.verticalScroll(scrollState)
+                Modifier//.verticalScroll(scrollState)
+                    .verticalScrollWithScrollbar(
+                        scrollState,
+                        scrollbarConfig = ScrollBarConfig(
+                            padding = PaddingValues(4.dp)
+                        )
+                    )
             ) {
                 BookRecordContent(
                     contentTitle = "내 책 목록" + " ${myBooks?.size ?: "0"} 권",
@@ -97,7 +106,8 @@ fun Record(
                     onBookClick = onBookClick,
                     onBookDeleteSwipe = {id ->
                         viewModel.deleteMyBook(id)
-                    }
+                    },
+                    modifier = modifier.background(BookDiaryTheme.colors.brandSecondary)
                 )
                 BookRecordContent(
                     contentTitle = "찜 목록" + " ${wishBooks?.size ?: "0"} 권",
@@ -105,7 +115,8 @@ fun Record(
                     onBookClick = onBookClick,
                     onBookDeleteSwipe = {id ->
                         viewModel.deleteWishBook(id)
-                    }
+                    },
+                    modifier = modifier.background(BookDiaryTheme.colors.brandSecondary)
                 )
             }
         }
@@ -128,7 +139,7 @@ fun BookRecordContent(
                 onBookClick = onBookClick,
                 onBookDeleteSwipe = onBookDeleteSwipe
             )
-        } else Spacer(modifier = Modifier.height(420.dp))
+        } else Spacer(modifier = Modifier.height(440.dp))
         MyRecordDivider(modifier = Modifier.fillMaxWidth())
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -163,7 +174,7 @@ fun BookRecordRow(
 ){
     val scroll = rememberScrollState(0)
     LazyRow(
-        modifier = modifier.height(420.dp),
+        modifier = modifier.height(440.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Bottom,
         userScrollEnabled = true
