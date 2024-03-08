@@ -28,7 +28,7 @@ android {
     }*/
     defaultConfig {
         applicationId = "com.example.bookdiary_v2"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
