@@ -8,11 +8,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 class SearchState(
     query: TextFieldValue,
     focused: Boolean,
-    searching: Boolean
+    searching: Boolean,
+    noResult: Boolean
 ) {
     var query by mutableStateOf(query)
     var focused by mutableStateOf(focused)
     var searching by mutableStateOf(searching)
+    var noResult by mutableStateOf(noResult) // 검색결과 체크
     val searchDisplay: SearchDisplay
         get() = when {
             // 검색창의 현 상태값에 따른 보여줄 화면 정의를 위한 값 세팅부분

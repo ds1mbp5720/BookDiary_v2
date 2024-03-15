@@ -1,5 +1,6 @@
 package com.example.presentation.search
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -58,6 +60,29 @@ fun Search(
 ) {
     val context = LocalContext.current
     val searchBookList: LazyPagingItems<BookModel> = viewModel.searchBookList.collectAsLazyPagingItems()
+    LaunchedEffect(key1 = searchBookList.loadState){
+        searchBookList.apply {
+            when{
+                loadState.append is LoadState.Loading -> {
+                    viewModel.searchState.searching = false
+                    viewModel.searchState.noResult = false
+                }
+                loadState.append is LoadState.NotLoading -> {
+                    if(this.loadState.append.endOfPaginationReached){
+                        viewModel.searchState.searching = false
+                        viewModel.searchState.noResult = true
+                    }
+                }
+                loadState.append is LoadState.Error -> {
+                    Toast.makeText(context, "Error:" + (loadState.append as LoadState.Error).error.message, Toast.LENGTH_SHORT).show()
+                }
+                loadState.refresh is LoadState.Loading -> {}
+                loadState.refresh is LoadState.Error -> {
+                    Toast.makeText(context, "Error:" + (loadState.refresh as LoadState.Error).error.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
     BookDiaryScaffold(
         bottomBar = {
             BookDiaryBottomBar(
@@ -89,15 +114,6 @@ fun Search(
                     searching = viewModel.searchState.searching,
                 )
                 BookDiaryDivider()
-                searchBookList.apply {
-                    when{
-                        loadState.append is LoadState.Loading -> { viewModel.searchState.searching = false }
-                        loadState.append is LoadState.NotLoading -> {}
-                        loadState.append is LoadState.Error -> {}
-                        loadState.refresh is LoadState.Loading -> {}
-                        loadState.refresh is LoadState.Error -> {}
-                    }
-                }
                 when (viewModel.searchState.searchDisplay) {
                     SearchDisplay.StandBy -> {
                         viewModel.getSearchHistory(context)
@@ -106,7 +122,8 @@ fun Search(
                     SearchDisplay.Results -> {
                         ResultScreen(
                             books = searchBookList,
-                            onBookClick = onBookClick
+                            onBookClick = onBookClick,
+                            searchResult = viewModel.searchState.noResult
                         )
                     }
                 }
@@ -115,7 +132,6 @@ fun Search(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     query: TextFieldValue,

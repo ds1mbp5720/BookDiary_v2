@@ -25,7 +25,7 @@ class SearchViewModel @Inject constructor(
     private val searchHistoryRepository: SearchHistoryRepository,
     application: Application
 ):  AndroidViewModel(application){
-    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false) // 상태에 맞춰 상단 검색 바 갱신
+    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false, noResult = false) // 상태에 맞춰 상단 검색 바 갱신
     private val _searchBookList: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val searchBookList: StateFlow<PagingData<BookModel>> = _searchBookList.asStateFlow()
 
