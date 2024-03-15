@@ -21,8 +21,8 @@ import com.example.presentation.theme.BookDiaryTheme
 fun ResultScreen(
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
-    modifier: Modifier = Modifier,
-    searchResult: Boolean
+    searchResult: Boolean,
+    modifier: Modifier = Modifier
 ){
     if(searchResult){
         Text(

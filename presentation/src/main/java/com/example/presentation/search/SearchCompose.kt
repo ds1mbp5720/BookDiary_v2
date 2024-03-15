@@ -1,6 +1,8 @@
 package com.example.presentation.search
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +19,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +31,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -36,6 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -50,7 +62,10 @@ import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.SearchDisplay
 import com.example.presentation.util.mirroringBackIcon
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Search(
     onBookClick: (Long) -> Unit,
@@ -59,16 +74,40 @@ fun Search(
     viewModel: SearchViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    val coroutine = rememberCoroutineScope()
     val searchBookList: LazyPagingItems<BookModel> = viewModel.searchBookList.collectAsLazyPagingItems()
+    val loadingState = viewModel.loading.collectAsStateWithLifecycle()
+    var refreshing by remember { mutableStateOf(false) }
+    var refreshingAction by remember { mutableStateOf(true) } // 새로고침 스크롤 간격는 변수
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = refreshing,
+        onRefresh = {
+            if(viewModel.searchState.searchDisplay == SearchDisplay.Results){
+                refreshing = true
+                viewModel.getSearchBookList(viewModel.searchState.query.text,100)
+            }
+            coroutine.launch {//스크롤 갱신 1.5초 delay
+                refreshingAction = false
+                delay(1500)
+                refreshingAction = true
+            }
+        }
+    )
+    LaunchedEffect(key1 = loadingState.value){
+        refreshing = loadingState.value
+    }
     LaunchedEffect(key1 = searchBookList.loadState){
         searchBookList.apply {
             when{
                 loadState.append is LoadState.Loading -> {
                     viewModel.searchState.searching = false
                     viewModel.searchState.noResult = false
+                    Log.e("","갱신 상태1 ${viewModel.searchState.noResult}")
+                    refreshing = false
                 }
                 loadState.append is LoadState.NotLoading -> {
-                    if(this.loadState.append.endOfPaginationReached){
+                    Log.e("","갱신 상태3 ${searchBookList.itemCount}")
+                    if(this.loadState.append.endOfPaginationReached && searchBookList.itemCount == 0){
                         viewModel.searchState.searching = false
                         viewModel.searchState.noResult = true
                     }
@@ -114,6 +153,25 @@ fun Search(
                     searching = viewModel.searchState.searching,
                 )
                 BookDiaryDivider()
+                Box(
+                    modifier = Modifier
+                        .background(BookDiaryTheme.colors.uiBackground)
+                        .fillMaxWidth()
+                        .height(
+                            if (refreshing) 90.dp
+                            else lerp(0.dp, 90.dp, pullRefreshState.progress.coerceIn(0f..1f))
+                        )
+                ){
+                    if(refreshing){
+                        CircularProgressIndicator(
+                            color = BookDiaryTheme.colors.brand,
+                            modifier = Modifier
+                                .padding(horizontal = 6.dp)
+                                .align(Alignment.Center)
+                                .size(70.dp)
+                        )
+                    }
+                }
                 when (viewModel.searchState.searchDisplay) {
                     SearchDisplay.StandBy -> {
                         viewModel.getSearchHistory(context)
@@ -123,7 +181,12 @@ fun Search(
                         ResultScreen(
                             books = searchBookList,
                             onBookClick = onBookClick,
-                            searchResult = viewModel.searchState.noResult
+                            searchResult = viewModel.searchState.noResult,
+                            modifier = Modifier
+                                .pullRefresh(
+                                    state = pullRefreshState,
+                                    enabled = refreshingAction
+                                )
                         )
                     }
                 }
