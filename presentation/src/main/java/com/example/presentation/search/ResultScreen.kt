@@ -42,7 +42,7 @@ fun ResultScreen(
         ) {
             items(books.itemCount){
                 BookItemList(
-                    book = books.itemSnapshotList[it],
+                    book = books[it],
                     onBookClick = onBookClick,
                     showDivider = it != 0)
             }
