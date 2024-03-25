@@ -4,7 +4,6 @@
     <string name="str_search">SEARCH</string>
     <string name="str_record">RECORD</string>
     <string name="str_profile">MY PAGE</string>
-
     <string name="str_back">BACK</string>
 
     <string name="str_detail_title">상세 정보</string>
@@ -30,6 +29,8 @@
     <string name="str_add_wish">찜목록에 추가되었습니다!</string>
     <string name="str_dialog_offstore_title">책 보유 매장 정보</string>
     <string name="str_search_hint">검색어 입력</string>
+    <string name="str_change_record">책 기록 보기</string>
+    <string name="str_change_wish">찜 목록 보기</string>
 
     <string name="str_dialog_exit_app">앱을 종료 하시겠습니까?</string>
 
