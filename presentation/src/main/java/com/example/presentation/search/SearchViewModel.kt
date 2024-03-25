@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,16 +26,21 @@ class SearchViewModel @Inject constructor(
     private val searchHistoryRepository: SearchHistoryRepository,
     application: Application
 ):  AndroidViewModel(application){
-    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false) // 상태에 맞춰 상단 검색 바 갱신
+    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false, noResult = false) // 상태에 맞춰 상단 검색 바 갱신
     private val _searchBookList: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val searchBookList: StateFlow<PagingData<BookModel>> = _searchBookList.asStateFlow()
+
+    private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
+    val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
     fun getSearchBookList(queryType: String, size: Int){
         viewModelScope.launch {
             bookListUseCase.getSearchBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
+                .onStart { _loading.emit(true) }
                 .collect{
+                    _loading.emit(false)
                     _searchBookList.emit(it)
                 }
         }
