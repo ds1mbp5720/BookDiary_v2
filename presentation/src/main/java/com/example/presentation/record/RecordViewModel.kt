@@ -22,7 +22,7 @@ class RecordViewModel @Inject constructor(
     private val wishBookUseCase: WishBookUseCase,
     application: Application
 ) : AndroidViewModel(application) {
-    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false) // 상태에 맞춰 상단 검색 바 갱신
+    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false, noResult = true) // 상태에 맞춰 상단 검색 바 갱신
     val myBookList = MutableLiveData<List<MyBookModel>>()
     val wishBookList = MutableLiveData<List<WishBookModel>>()
     fun getMyBookList() {
