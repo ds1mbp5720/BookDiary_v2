@@ -9,7 +9,7 @@ fun WishBookModel.toEntity() = WishBookEntity(
     title = title
 )
 
-class WishBookEntityMapper: ListMapper<WishBookEntity, WishBookModel>{
+class WishBookEntityMapper : ListMapper<WishBookEntity, WishBookModel> {
     override fun map(input: List<WishBookEntity>): List<WishBookModel> {
         return input.map {
             WishBookModel(it.itemId, it.imageUrl, it.title)

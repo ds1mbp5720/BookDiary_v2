@@ -8,37 +8,42 @@ import com.example.domain.model.BookModel
 import okio.IOException
 import retrofit2.HttpException
 
+enum class ApiType{
+    SEARCH, NORMAL
+}
+
 class BookListPagingSource(
     private val query: String = "",
     private val bookListDataSource: BookListDataSource,
-    private val apiType: String
+    private val apiType: ApiType
 ) : PagingSource<Int, BookModel>() {
     override fun getRefreshKey(state: PagingState<Int, BookModel>): Int? {
-        return state.anchorPosition/*?.let { anchorPosition ->
+        return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
-        }*/
+        }
     }
 
+    //검색, 일반 책 리스트 두 종류 Case 분류를 통해 load 함수 안에 구현
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BookModel> {
         return try {
             val currentPage = params.key ?: 1
-            val bookList = if(apiType == "Search") {
+            val bookList = if (apiType == ApiType.SEARCH) {
                 bookListDataSource.searchBookList(
-                    Query = query,
+                    query = query,
                     start = currentPage
                 ).toDomain()
             } else {
                 bookListDataSource.getBookList(
-                    QueryType = query,
+                    queryType = query,
                     start = currentPage
                 ).toDomain()
             }
-            if(bookList.bookList.isNotEmpty()){
+            if (bookList.bookList.isNotEmpty()) {
                 LoadResult.Page(
                     data = bookList.bookList,
-                    prevKey = if(currentPage == 1) null else currentPage - 1,
-                    nextKey = if(bookList.bookList.isEmpty()) null else currentPage + 1
+                    prevKey = if (currentPage == 1) null else currentPage - 1,
+                    nextKey = if (bookList.bookList.isEmpty()) null else currentPage + 1
                 )
             } else {
                 LoadResult.Page(

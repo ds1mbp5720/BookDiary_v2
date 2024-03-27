@@ -29,6 +29,7 @@ object BookListMapper {
         )
     }
 }
-fun BookListData.toDomain() : BookListModel {
+
+fun BookListData.toDomain(): BookListModel {
     return BookListMapper.toDomain(this)
 }

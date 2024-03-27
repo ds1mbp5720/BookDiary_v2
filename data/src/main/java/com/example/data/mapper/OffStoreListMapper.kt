@@ -5,9 +5,9 @@ import com.example.domain.model.OffStoreListModel
 import com.example.domain.model.OffStoreModel
 
 object OffStoreListMapper {
-    fun toDomain(data: OffStoreListData): OffStoreListModel{
+    fun toDomain(data: OffStoreListData): OffStoreListModel {
         val offStoreList = mutableListOf<OffStoreModel>()
-        data.itemOffStoreList.forEach{
+        data.itemOffStoreList.forEach {
             offStoreList.add(it.toDomain())
         }
         return OffStoreListModel(
@@ -19,6 +19,7 @@ object OffStoreListMapper {
         )
     }
 }
-fun OffStoreListData.toDomain(): OffStoreListModel{
+
+fun OffStoreListData.toDomain(): OffStoreListModel {
     return OffStoreListMapper.toDomain(this)
 }

@@ -4,7 +4,7 @@ import com.example.data.dto.OffStoreData
 import com.example.domain.model.OffStoreModel
 
 object OffStoreMapper {
-    fun toDomain(data: OffStoreData) : OffStoreModel {
+    fun toDomain(data: OffStoreData): OffStoreModel {
         return OffStoreModel(
             offCode = data.offCode,
             offName = data.offName,

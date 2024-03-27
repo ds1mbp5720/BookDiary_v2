@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "WishBookInfo")
-data class WishBookEntity (
+data class WishBookEntity(
     @PrimaryKey
     val itemId: Long,
     val imageUrl: String, // 표지 이미지

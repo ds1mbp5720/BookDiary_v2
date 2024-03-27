@@ -8,7 +8,7 @@ import com.example.data.room.dao.WishBookDao
 import com.example.data.room.entity.WishBookEntity
 
 @Database(entities = [WishBookEntity::class], version = 1, exportSchema = false)
-abstract class WishBookDataBase: RoomDatabase() {
+abstract class WishBookDataBase : RoomDatabase() {
     abstract fun getWishBookDao(): WishBookDao
 
     companion object {

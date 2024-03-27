@@ -13,17 +13,17 @@ import javax.inject.Inject
 
 class OffStoreRepositoryImpl @Inject constructor(
     private val offStoreDataSource: OffStoreDataSource
-): OffStoreRepository{
-    override fun getOffStoreInfo(itemId: String): Flow<OffStoreListModel> = flow{
+) : OffStoreRepository {
+    override fun getOffStoreInfo(itemId: String): Flow<OffStoreListModel> = flow {
         val response = offStoreDataSource.getOffStoreInfo(
-            ItemId = itemId,
-            ItemIdType = "itemId",
+            itemId = itemId,
+            itemIdType = "itemId",
         )
         emit(response.toDomain())
     }.retry {
         it is IllegalAccessException
-    }.catch {e->
-        if(e is HttpException)
+    }.catch { e ->
+        if (e is HttpException)
             throw e
     }
 }

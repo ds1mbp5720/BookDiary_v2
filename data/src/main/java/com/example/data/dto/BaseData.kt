@@ -2,6 +2,9 @@ package com.example.data.dto
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * api response 기본 틀
+ */
 open class BaseData(
     @SerializedName("title")
     val title: String = "",

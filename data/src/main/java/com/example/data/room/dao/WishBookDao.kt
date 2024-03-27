@@ -7,12 +7,17 @@ import androidx.room.Query
 import com.example.data.room.entity.WishBookEntity
 import io.reactivex.Single
 
+/**
+ * 찜 리스트 관리 Dao
+ */
 @Dao
 interface WishBookDao {
     @Query("SELECT * FROM WishBookInfo")
     fun getWishBookList(): Single<List<WishBookEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWishBook(book : WishBookEntity)
+    fun insertWishBook(book: WishBookEntity)
+
     @Query("DELETE FROM WishBookInfo WHERE itemId = :bookId")
     fun delete(bookId: Long)
 }

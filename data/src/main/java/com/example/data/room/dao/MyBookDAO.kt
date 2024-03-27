@@ -6,15 +6,19 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.data.room.entity.MyBookEntity
-import com.example.domain.model.MyBookModel
 import io.reactivex.Single
 
+/**
+ * 저장한 책 관리 Dao
+ */
 @Dao
 interface MyBookDAO {
     @Query("SELECT * FROM BookInfo")
     fun getMyBookList(): Single<List<MyBookEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMyBook(book : MyBookEntity)
+    fun insertMyBook(book: MyBookEntity)
+
     @Update
     fun update(book: MyBookEntity)
 

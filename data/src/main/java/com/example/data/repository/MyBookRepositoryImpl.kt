@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class MyBookRepositoryImpl @Inject constructor(
     private val database: MyBookDataBase,
-): MyBookRepository{
+) : MyBookRepository {
     override fun getMyBookList(): Single<List<MyBookModel>> {
         return database.getMyBookDao().getMyBookList()
             .map {

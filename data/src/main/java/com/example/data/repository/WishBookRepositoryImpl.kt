@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class WishBookRepositoryImpl @Inject constructor(
     private val database: WishBookDataBase
-):WishBookRepository{
+) : WishBookRepository {
     override fun getWishBookList(): Single<List<WishBookModel>> {
         return database.getWishBookDao().getWishBookList()
             .map {

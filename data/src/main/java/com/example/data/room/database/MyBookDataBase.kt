@@ -8,7 +8,7 @@ import com.example.data.room.dao.MyBookDAO
 import com.example.data.room.entity.MyBookEntity
 
 @Database(entities = [MyBookEntity::class], version = 2, exportSchema = false)
-abstract class MyBookDataBase: RoomDatabase() {
+abstract class MyBookDataBase : RoomDatabase() {
     abstract fun getMyBookDao(): MyBookDAO
 
     companion object {

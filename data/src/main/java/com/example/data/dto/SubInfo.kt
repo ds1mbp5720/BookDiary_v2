@@ -2,6 +2,10 @@ package com.example.data.dto
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * BookData 의 추가 상세 정보
+ * 일부 정보는 알라딘 측에 추가 요청 및 인증이 필요하여 사용 가능 변수만 추가 상태
+ */
 data class SubInfo(
     @SerializedName("subTitle")
     val subTitle: String?, //부제

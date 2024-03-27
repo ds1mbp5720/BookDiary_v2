@@ -14,7 +14,7 @@ object BookMapper {
             title = data.title,
             link = data.link,
             author = data.author,
-            pubDate =  data.pubDate,
+            pubDate = data.pubDate,
             description = data.description,
             isbn = data.isbn,
             isbn13 = data.isbn13,
@@ -35,12 +35,13 @@ object BookMapper {
         )
     }
 }
+
 fun BookData.toDomain(): BookModel {
     return BookMapper.toDomain(this)
 }
 
-object SubInfoMapper{
-    fun toDomain(data: SubInfo): SubInfoModel{
+object SubInfoMapper {
+    fun toDomain(data: SubInfo): SubInfoModel {
         return SubInfoModel(
             subTitle = data.subTitle,
             originalTitle = data.originalTitle,
@@ -53,11 +54,11 @@ object SubInfoMapper{
     }
 }
 
-fun SubInfo.toDomain(): SubInfoModel{
+fun SubInfo.toDomain(): SubInfoModel {
     return SubInfoMapper.toDomain(this)
 }
 
-object RatingInfoMapper{
+object RatingInfoMapper {
     fun toDomain(data: RatingInfo): RatingInfoModel {
         return RatingInfoModel(
             ratingScore = data.ratingScore,
@@ -68,6 +69,6 @@ object RatingInfoMapper{
     }
 }
 
-fun RatingInfo.toDomain(): RatingInfoModel{
+fun RatingInfo.toDomain(): RatingInfoModel {
     return RatingInfoMapper.toDomain(this)
 }

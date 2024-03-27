@@ -2,7 +2,7 @@ package com.example.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class BookData (
+data class BookData(
     @SerializedName("itemId")
     val itemId: String,
     @SerializedName("title")
