@@ -1,14 +1,8 @@
 package com.example.presentation.components
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +20,7 @@ fun BookDiaryBasicDialog(
     body: String = "",
     dismissAction: () -> Unit,
     confirmAction: () -> Unit
-){
+) {
     AlertDialog(
         containerColor = BookDiaryTheme.colors.uiBackground,
         onDismissRequest = dismissAction,
@@ -34,7 +28,8 @@ fun BookDiaryBasicDialog(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                color = BookDiaryTheme.colors.textLink,)
+                color = BookDiaryTheme.colors.textLink,
+            )
         },
         text = {
             Text(
@@ -47,7 +42,7 @@ fun BookDiaryBasicDialog(
             BasicButton(
                 onClick = dismissAction,
                 modifier = Modifier,
-               // colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                // colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 border = BorderStroke(width = 1.dp, color = Color.Black)
             ) {
                 Text(

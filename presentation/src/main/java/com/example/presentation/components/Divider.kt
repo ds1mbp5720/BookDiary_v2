@@ -13,7 +13,7 @@ fun BookDiaryDivider(
     modifier: Modifier = Modifier,
     color: Color = BookDiaryTheme.colors.uiBorder.copy(alpha = 0.12f),
     thickness: Dp = 1.dp
-){
+) {
     Divider(
         modifier = modifier,
         color = color,
@@ -26,7 +26,7 @@ fun MyRecordDivider(
     modifier: Modifier = Modifier,
     color: Color = BookDiaryTheme.colors.brand,
     thickness: Dp = 10.dp
-){
+) {
     Divider(
         modifier = modifier,
         color = color,

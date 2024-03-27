@@ -88,10 +88,10 @@ fun BookDetail(
     bookId: Long,
     upPress: () -> Unit,
     bookDetailViewModel: BookDetailViewModel
-){
+) {
     Box(
-       modifier = Modifier.fillMaxSize()
-    ){
+        modifier = Modifier.fillMaxSize()
+    ) {
         val context = LocalContext.current
         var offStoreDialogVisible by rememberSaveable { mutableStateOf(false) }
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
@@ -109,7 +109,7 @@ fun BookDetail(
                     bookDetailViewModel.getOffStoreInfo(bookId.toString())
                     offStoreDialogVisible = true
                 }
-                ) {
+            ) {
                 scroll.value
             }
             Image(imageUrl = bookDetail.cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
@@ -117,16 +117,17 @@ fun BookDetail(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 insertMyBook = {
                     bookDetailViewModel.insertMyBook(
-                    book = MyBookModel(
-                        itemId = (bookDetail.itemId ?: "0").toLong(),
-                        imageUrl = bookDetail.cover ?: "",
-                        title = bookDetail.title ?: "제목 없음",
-                        author = bookDetail.author ?: "저자 미확인",
-                        link = bookDetail.link,
-                        myReview = "테스트 리뷰",
-                        period = "테스트 기간"
-                    ))
-                    Toast.makeText(context,context.getString(R.string.str_add_record),Toast.LENGTH_SHORT).show()
+                        book = MyBookModel(
+                            itemId = (bookDetail.itemId ?: "0").toLong(),
+                            imageUrl = bookDetail.cover ?: "",
+                            title = bookDetail.title ?: "제목 없음",
+                            author = bookDetail.author ?: "저자 미확인",
+                            link = bookDetail.link,
+                            myReview = "테스트 리뷰",
+                            period = "테스트 기간"
+                        )
+                    )
+                    Toast.makeText(context, context.getString(R.string.str_add_record), Toast.LENGTH_SHORT).show()
                 },
                 insertWishBook = {
                     bookDetailViewModel.insertWishBook(
@@ -136,7 +137,7 @@ fun BookDetail(
                             title = bookDetail.title ?: "제목 없음"
                         )
                     )
-                    Toast.makeText(context,context.getString(R.string.str_add_wish),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.str_add_wish), Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -144,10 +145,10 @@ fun BookDetail(
 
         AnimatedVisibility(
             visible = offStoreDialogVisible,
-            enter = slideInVertically() + expandVertically( expandFrom = Alignment.Top) + fadeIn(initialAlpha = 0.3f),
+            enter = slideInVertically() + expandVertically(expandFrom = Alignment.Top) + fadeIn(initialAlpha = 0.3f),
             exit = slideOutVertically() + shrinkVertically() + fadeOut()
         ) {
-            if(offStoreInfo != null){
+            if (offStoreInfo != null) {
                 OffStoreDialog(
                     offStoreInfo = offStoreInfo,
                     onDismiss = { offStoreDialogVisible = false }
@@ -158,7 +159,7 @@ fun BookDetail(
 }
 
 @Composable
-fun Header(){
+fun Header() {
     Spacer(
         modifier = Modifier
             .height(280.dp)
@@ -174,12 +175,12 @@ private fun Title(
     //bookDetailViewModel: BookDetailViewModel,
     offStoreInfo: () -> Unit,
     scrollProvider: () -> Int,
-){
+) {
     //val book = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value.data?.bookList
     val maxOffset = with(LocalDensity.current) { maxTitleOffset.toPx() }
     val minOffset = with(LocalDensity.current) { minTitleOffset.toPx() }
     val context = LocalContext.current
-    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx()}
+    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
     val collapseFractionProvider = {
         (scrollProvider() / collapseRange).coerceIn(0f, 1f)
     }
@@ -199,9 +200,9 @@ private fun Title(
         Spacer(modifier = Modifier.height(16.dp))
         Layout(
             content = {
-                Column{
+                Column {
                     Text(
-                        text = book/*?.get(0)?*/.title?.replace("알라딘 상품정보 - ","") ?: "No Title",
+                        text = book/*?.get(0)?*/.title?.replace("알라딘 상품정보 - ", "") ?: "No Title",
                         style = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
                         color = BookDiaryTheme.colors.textPrimary,
@@ -219,27 +220,27 @@ private fun Title(
         ) { measurables, constraints ->
             val collapseFraction = collapseFractionProvider()
             val titleMaxSize =
-                if(collapseFraction < 0.5f) min(expandedImageSize.roundToPx(), constraints.maxWidth)
+                if (collapseFraction < 0.5f) min(expandedImageSize.roundToPx(), constraints.maxWidth)
                 else constraints.maxWidth - min(expandedImageSize.roundToPx(), constraints.maxWidth)
-            val titleMinSize = constraints.maxWidth -  max(collapsedImageSize.roundToPx(), constraints.minWidth)
+            val titleMinSize = constraints.maxWidth - max(collapsedImageSize.roundToPx(), constraints.minWidth)
             val titleWidth = lerp(titleMaxSize, titleMinSize, collapseFraction)
             val titlePlaceable = measurables[0].measure(Constraints.fixed(titleWidth, 90.dp.toPx().toInt()))
             layout(
                 width = constraints.maxWidth,
                 height = 56.dp.toPx().toInt()
-            ){
+            ) {
                 titlePlaceable.placeRelative(0, 0)
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = (book/*?.get(0)?*/.priceSales ?: "0" ).addCommaWon(),
+            text = (book/*?.get(0)?*/.priceSales ?: "0").addCommaWon(),
             style = MaterialTheme.typography.displayMedium,
             color = BookDiaryTheme.colors.textPrimary,
             modifier = horizontalPadding
         )
         Spacer(modifier = Modifier.height(6.dp))
-        Row(){
+        Row() {
             BasicButton(
                 onClick = offStoreInfo,
                 modifier = Modifier.weight(1f),
@@ -273,26 +274,28 @@ private fun Title(
         BookDiaryDivider()
     }
 }
+
 @Composable
 private fun Image(
     imageUrl: String,
     //bookDetailViewModel: BookDetailViewModel,
     scrollProvider: () -> Int
-){
+) {
     //val book = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value.data?.bookList
-    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx()}
+    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
     val collapseFractionProvider = {
         (scrollProvider() / collapseRange).coerceIn(0f, 1f)
     }
     CollapsingImageLayout(
         collapseFractionProvider = collapseFractionProvider,
         modifier = horizontalPadding.then(Modifier.statusBarsPadding())
-    ){
+    ) {
         BookCoverImage(
             //imageUrl = book?.get(0)?.cover ?: "",
             imageUrl = imageUrl,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize())
+            modifier = Modifier.fillMaxSize()
+        )
     }
 
 }
@@ -303,11 +306,11 @@ private fun CollapsingImageLayout(
     collapseFractionProvider: () -> Float,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
-){
+) {
     Layout(
         modifier = modifier,
         content = content
-    ){ measurables, constraints ->
+    ) { measurables, constraints ->
         check(measurables.size == 1)
 
         val collapseFraction = collapseFractionProvider()
@@ -326,7 +329,7 @@ private fun CollapsingImageLayout(
         layout(
             width = constraints.maxWidth,
             height = imageY + imageWidth
-        ){
+        ) {
             imagePlaceable.placeRelative(imageX, imageY)
         }
     }
@@ -336,13 +339,15 @@ private fun CollapsingImageLayout(
 private fun Body(
     book: BookModel,
     scroll: ScrollState
-){
+) {
     val context = LocalContext.current
     Column {
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .height(minTitleOffset))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .height(minTitleOffset)
+        )
         Column(
             modifier = Modifier.verticalScroll(scroll)
         ) {
@@ -351,7 +356,7 @@ private fun Body(
                 Column {
                     Spacer(modifier = Modifier.height(imageOverlap))
                     Spacer(modifier = Modifier.height(titleHeight))
-                    
+
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = stringResource(id = R.string.str_detail_title),
@@ -363,15 +368,15 @@ private fun Body(
                     var seeMore by remember { mutableStateOf(true) }
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = if(book.description != "") book.description ?: "상세정보가 없습니다."
-                              else "상세정보가 없습니다.",
+                        text = if (book.description != "") book.description ?: "상세정보가 없습니다."
+                        else "상세정보가 없습니다.",
                         color = BookDiaryTheme.colors.textPrimary,
-                        maxLines = if(seeMore) 2 else Int.MAX_VALUE,
+                        maxLines = if (seeMore) 2 else Int.MAX_VALUE,
                         overflow = TextOverflow.Ellipsis,
                         modifier = horizontalPadding
                     )
                     val textButton =
-                        if(seeMore) stringResource(id = R.string.str_see_more)
+                        if (seeMore) stringResource(id = R.string.str_see_more)
                         else stringResource(id = R.string.str_see_less)
                     Text(
                         text = textButton,
@@ -437,7 +442,7 @@ private fun Body(
 
                     Spacer(modifier = Modifier.height(4.dp))
                     Row {
-                        val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " +  book.subInfo?.ratingInfo?.ratingCount
+                        val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " + book.subInfo?.ratingInfo?.ratingCount
                         Text(
                             text = ratingText,
                             style = MaterialTheme.typography.bodyLarge,
@@ -445,7 +450,12 @@ private fun Body(
                             modifier = horizontalPadding
                         )
                     }
-                    RatingBar(modifier = horizontalPadding, context = context, rating = (book.subInfo?.ratingInfo?.ratingScore ?: "0").toFloat(), totalCnt = 10)
+                    RatingBar(
+                        modifier = horizontalPadding,
+                        context = context,
+                        rating = (book.subInfo?.ratingInfo?.ratingScore ?: "0").toFloat(),
+                        totalCnt = 10
+                    )
                     Spacer(modifier = Modifier.height(6.dp))
                     BookDiaryDivider()
 
@@ -460,19 +470,28 @@ private fun Body(
                         modifier = horizontalPadding
                     ) {
                         book.subInfo?.let {
-                            items(it.cardReviewImgList){ url ->
+                            items(it.cardReviewImgList) { url ->
                                 GlideCard(
                                     imageUrl = url,
-                                    modifier = Modifier.padding(start = 4.dp, end = 4.dp)
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 4.dp,
+                                            end = 4.dp
+                                        ),
+                                    glideModifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(360.dp)
                                 )
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier
-                        .padding(bottom = bottomBarHeight)
-                        .navigationBarsPadding()
-                        .height(8.dp))
+                    Spacer(
+                        modifier = Modifier
+                            .padding(bottom = bottomBarHeight)
+                            .navigationBarsPadding()
+                            .height(8.dp)
+                    )
 
 
                     //todo 다른 책 리스트 가져와서 BookCollectoin 사용해서 뿌리기
@@ -482,6 +501,7 @@ private fun Body(
     }
 
 }
+
 @Composable
 private fun DetailBottomBar(
     modifier: Modifier = Modifier,
@@ -497,7 +517,7 @@ private fun DetailBottomBar(
                     .navigationBarsPadding()
                     .then(horizontalPadding)
                     .heightIn(min = 56.dp)
-            ){
+            ) {
                 BasicButton(
                     onClick = insertWishBook,
                     modifier = Modifier.weight(1f),

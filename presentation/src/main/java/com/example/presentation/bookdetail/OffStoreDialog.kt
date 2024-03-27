@@ -39,13 +39,13 @@ fun OffStoreDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    Dialog(onDismissRequest = onDismiss){
+    Dialog(onDismissRequest = onDismiss) {
         BookDiaryScaffold(
             topBar = {
                 TopAppBar(
                     title = {
                         Text(
-                           text = stringResource(id = R.string.str_dialog_offstore_title),
+                            text = stringResource(id = R.string.str_dialog_offstore_title),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge,
                             color = BookDiaryTheme.colors.brand,
@@ -64,10 +64,10 @@ fun OffStoreDialog(
                 )
             }
         ) {
-            if(offStoreInfo?.itemOffStoreList?.isEmpty() == true){
+            if (offStoreInfo?.itemOffStoreList?.isEmpty() == true) {
                 Text(
                     modifier = Modifier.fillMaxSize(),
-                    text = "해당 책 보유 매장이 없습니다.",
+                    text = stringResource(id = R.string.str_no_off_store_result),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
                 )
@@ -76,8 +76,8 @@ fun OffStoreDialog(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(top = 20.dp, bottom = 20.dp),
                 userScrollEnabled = true
-            ){
-                items(offStoreInfo?.itemOffStoreList?.size ?: 0){
+            ) {
+                items(offStoreInfo?.itemOffStoreList?.size ?: 0) {
                     val offStore = offStoreInfo?.itemOffStoreList!![it]
                     Card(
                         modifier = Modifier
@@ -90,7 +90,7 @@ fun OffStoreDialog(
                         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                         colors = CardDefaults.cardColors(containerColor = BookDiaryTheme.colors.uiBackground),
                         shape = RoundedCornerShape(corner = CornerSize(16.dp))
-                    ){
+                    ) {
                         Row(
                             modifier = Modifier
                                 .padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp)

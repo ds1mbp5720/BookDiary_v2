@@ -13,28 +13,35 @@ data class BasicBookRecord(
  * record compose 에서 사용하는 공통 양식 부분 추출목적
  * compose 함수의 재사용성을 위한 가공부분
  */
-fun toBasicBookRecord(data: Any): BasicBookRecord?{
-    return when(data){
+fun toBasicBookRecord(data: Any): BasicBookRecord? {
+    return when (data) {
         is MyBookModel -> {
             BasicBookRecord(
                 itemId = data.itemId,
                 imageUrl = data.imageUrl,
-                title = data.title)
+                title = data.title
+            )
         }
+
         is WishBookModel -> {
             BasicBookRecord(
                 itemId = data.itemId,
                 imageUrl = data.imageUrl,
-                title = data.title)
+                title = data.title
+            )
         }
-        else -> { null }
+
+        else -> {
+            null
+        }
     }
 
 }
 
-fun MyBookModel.mapperMyBookToBasicBook(): BasicBookRecord?{
+fun MyBookModel.mapperMyBookToBasicBook(): BasicBookRecord? {
     return toBasicBookRecord(this)
 }
+
 fun List<MyBookModel>.mapperMyBookToBasicBookRecordList(): List<BasicBookRecord> {
     val basicBookRecordList = mutableListOf<BasicBookRecord>()
     this.forEach {
@@ -42,9 +49,11 @@ fun List<MyBookModel>.mapperMyBookToBasicBookRecordList(): List<BasicBookRecord>
     }
     return basicBookRecordList
 }
-fun WishBookModel.mapperWishBookToBasicBookRecord(): BasicBookRecord?{
+
+fun WishBookModel.mapperWishBookToBasicBookRecord(): BasicBookRecord? {
     return toBasicBookRecord(this)
 }
+
 fun List<WishBookModel>.mapperWishBookToBasicBookRecordList(): List<BasicBookRecord> {
     val basicBookRecordList = mutableListOf<BasicBookRecord>()
     this.forEach {

@@ -18,7 +18,7 @@ import com.example.presentation.home.HomeViewModel
 import com.example.presentation.home.SingleCategoryListScreen
 import com.example.presentation.navigation.MainDestinations
 import com.example.presentation.navigation.rememberBookDiaryNavController
-import com.example.presentation.profile.ManualViewPager
+import com.example.presentation.appinfo.ManualViewPager
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme

@@ -55,7 +55,7 @@ import com.example.mylibrary.R
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.home.Home
 import com.example.presentation.home.HomeViewModel
-import com.example.presentation.profile.AppInfo
+import com.example.presentation.appinfo.AppInfo
 import com.example.presentation.record.Record
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.Search

@@ -27,48 +27,49 @@ class BookDetailViewModel @Inject constructor(
     private val wishBookUseCase: WishBookUseCase,
     private val offStoreUseCase: OffStoreUseCase,
     application: Application
-): AndroidViewModel(application) {
-    private val _bookDetail=  MutableStateFlow<BookListModel?>(null)
+) : AndroidViewModel(application) {
+    private val _bookDetail = MutableStateFlow<BookListModel?>(null)
     val bookDetail: StateFlow<BookListModel?> = _bookDetail.asStateFlow()
-    private val _offStoreInfo=  MutableStateFlow<OffStoreListModel?>(null)
+    private val _offStoreInfo = MutableStateFlow<OffStoreListModel?>(null)
     val offStoreInfo: StateFlow<OffStoreListModel?> = _offStoreInfo.asStateFlow()
-    fun getBookDetail(itemId: Long){
+    fun getBookDetail(itemId: Long) {
         viewModelScope.launch {
             bookListUseCase.getBookDetail(itemId = itemId).collectLatest {
                 _bookDetail.value = it
             }
-                /*.onStart {
-                _bookDetail.value = BookDetailState.Loading
-            }.catch {
-                _bookDetail.value = BookDetailState.Error()
-            }.collect{
-                _bookDetail.value = BookDetailState.Success(it)
-            }*/
+            /*.onStart {
+            _bookDetail.value = BookDetailState.Loading
+        }.catch {
+            _bookDetail.value = BookDetailState.Error()
+        }.collect{
+            _bookDetail.value = BookDetailState.Success(it)
+        }*/
         }
     }
 
-    fun getOffStoreInfo(itemId: String){
+    fun getOffStoreInfo(itemId: String) {
         viewModelScope.launch {
-            offStoreUseCase.getOffStoreInfo(itemId = itemId).collectLatest{
+            offStoreUseCase.getOffStoreInfo(itemId = itemId).collectLatest {
                 _offStoreInfo.value = it
             }
         }
     }
-    fun insertMyBook(book: MyBookModel){
+
+    fun insertMyBook(book: MyBookModel) {
         viewModelScope.launch(Dispatchers.IO) {
             myBookUseCase.insertMyBook(book)
         }
     }
 
-    fun insertWishBook(book: WishBookModel){
+    fun insertWishBook(book: WishBookModel) {
         viewModelScope.launch(Dispatchers.IO) {
             wishBookUseCase.insertWishBook(book)
         }
     }
 }
 
-sealed class BookDetailState(val data: BookListModel? = null, val errorMessage: String? = ""){
-    object Loading: BookDetailState()
-    data class Error(val message: String? = ""): BookDetailState(errorMessage = message)
-    data class Success(val book: BookListModel): BookDetailState(data = book)
+sealed class BookDetailState(val data: BookListModel? = null, val errorMessage: String? = "") {
+    object Loading : BookDetailState()
+    data class Error(val message: String? = "") : BookDetailState(errorMessage = message)
+    data class Success(val book: BookListModel) : BookDetailState(data = book)
 }

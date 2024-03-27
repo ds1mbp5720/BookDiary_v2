@@ -25,7 +25,7 @@ class SearchViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
     private val searchHistoryRepository: SearchHistoryRepository,
     application: Application
-):  AndroidViewModel(application){
+) : AndroidViewModel(application) {
     val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false, noResult = false) // 상태에 맞춰 상단 검색 바 갱신
     private val _searchBookList: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val searchBookList: StateFlow<PagingData<BookModel>> = _searchBookList.asStateFlow()
@@ -33,32 +33,34 @@ class SearchViewModel @Inject constructor(
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
-    fun getSearchBookList(queryType: String, size: Int){
+    fun getSearchBookList(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getSearchBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
                 .onStart { _loading.emit(true) }
-                .collect{
+                .collect {
                     _loading.emit(false)
                     _searchBookList.emit(it)
                 }
         }
     }
+
     private val _searchHistory = MutableStateFlow(listOf(""))
     val searchHistory = _searchHistory.asStateFlow()
-    private fun setSearchHistory(context: Context, search: MutableSet<String>){
-        viewModelScope.launch{
+    private fun setSearchHistory(context: Context, search: MutableSet<String>) {
+        viewModelScope.launch {
             searchHistoryRepository.setSearchHistory(context, search.toList())
         }
     }
 
-    fun getSearchHistory(context: Context){
-        viewModelScope.launch{
+    fun getSearchHistory(context: Context) {
+        viewModelScope.launch {
             _searchHistory.value = searchHistoryRepository.getSearchHistory(context)
         }
     }
-    fun addSearchHistory(context: Context, search: String){
+
+    fun addSearchHistory(context: Context, search: String) {
         viewModelScope.launch {
             val copySearchHistory: MutableSet<String> = mutableSetOf()
             copySearchHistory.addAll(searchHistoryRepository.getSearchHistory(context))
@@ -67,8 +69,9 @@ class SearchViewModel @Inject constructor(
             _searchHistory.value = copySearchHistory.toList()
         }
     }
-    fun removeSearchHistory(context: Context, search: String){
-        viewModelScope.launch{
+
+    fun removeSearchHistory(context: Context, search: String) {
+        viewModelScope.launch {
             val copySearchHistory: MutableSet<String> = mutableSetOf()
             copySearchHistory.addAll(searchHistoryRepository.getSearchHistory(context))
             copySearchHistory.remove(search)

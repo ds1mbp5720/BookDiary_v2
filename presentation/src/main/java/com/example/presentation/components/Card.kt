@@ -1,9 +1,6 @@
 package com.example.presentation.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +15,9 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 
+/**
+ * 리스트 내부 책 정보 UI 포장 목적 View
+ */
 @Composable
 fun BookCard(
     modifier: Modifier = Modifier,
@@ -44,23 +44,25 @@ fun BookCard(
 fun GlideCard(
     imageUrl: String,
     contentDescription: String = "",
+    contentScale: ContentScale = ContentScale.FillHeight,
     elevation: Dp = 0.dp,
+    border: BorderStroke? = null,
     modifier: Modifier = Modifier,
-){
+    glideModifier: Modifier = Modifier,
+) {
     BookDiarySurface(
         color = Color.LightGray,
         elevation = elevation,
         shape = RectangleShape,
-        modifier = modifier
-    ){
+        modifier = modifier,
+        border = border
+    ) {
         GlideImage(
             model = imageUrl,
             contentDescription = contentDescription,
-            contentScale = ContentScale.FillHeight ,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(360.dp),
-        ){
+            contentScale = contentScale,
+            modifier = glideModifier,
+        ) {
             it.error(R.drawable.book_24)
                 .placeholder(R.drawable.book_24)
                 .load(imageUrl)

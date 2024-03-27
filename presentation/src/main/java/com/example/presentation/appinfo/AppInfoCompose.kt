@@ -1,4 +1,4 @@
-package com.example.presentation.profile
+package com.example.presentation.appinfo
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mylibrary.R
+import com.example.presentation.components.AppInfoButton
 import com.example.presentation.components.BookDiarySurface
-import com.example.presentation.components.SettingButton
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -54,7 +54,7 @@ private fun ProfileScreen(
                 .fillMaxSize()
                 .padding(top = 20.dp, start = 12.dp, end = 12.dp)
         ) {
-            SettingButton(
+            AppInfoButton(
                 onClick = {
                     val intent = Intent(context, OssLicensesMenuActivity::class.java)
                     context.startActivity(intent)
@@ -62,14 +62,14 @@ private fun ProfileScreen(
                 text = stringResource(id = R.string.str_opensource_license)
             )
             Spacer(modifier = Modifier.height(7.dp))
-            SettingButton(
+            AppInfoButton(
                 onClick = {
                     onManualClick()
                 },
                 text = stringResource(id = R.string.str_app_manual)
             )
             Spacer(modifier = Modifier.height(7.dp))
-            SettingButton(
+            AppInfoButton(
                 onClick = {
                     //todo: 이전 버전 기록들
                 },

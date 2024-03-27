@@ -70,10 +70,11 @@ fun SwipeToDismissVertical(
         )
         Row(
             content = dismissContent,
-            modifier = Modifier.offset { IntOffset(0, state.offset.value.roundToInt(), ) }
+            modifier = Modifier.offset { IntOffset(0, state.offset.value.roundToInt()) }
         )
     }
 }
+
 private fun getDismissDirection(from: DismissValue, to: DismissValue): DismissDirection? {
     return when {
         // settled at the default state

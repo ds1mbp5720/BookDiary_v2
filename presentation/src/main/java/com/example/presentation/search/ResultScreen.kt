@@ -23,8 +23,8 @@ fun ResultScreen(
     onBookClick: (Long) -> Unit,
     searchResult: Boolean,
     modifier: Modifier = Modifier
-){
-    if(searchResult){
+) {
+    if (searchResult) {
         Text(
             text = stringResource(id = R.string.str_no_result),
             style = MaterialTheme.typography.titleLarge,
@@ -40,11 +40,12 @@ fun ResultScreen(
             contentPadding = PaddingValues(top = 6.dp, bottom = 6.dp),
             userScrollEnabled = true
         ) {
-            items(books.itemCount){
+            items(books.itemCount) {
                 BookItemList(
                     book = books[it],
                     onBookClick = onBookClick,
-                    showDivider = it != 0)
+                    showDivider = it != 0
+                )
             }
         }
     }

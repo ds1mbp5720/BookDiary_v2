@@ -57,11 +57,11 @@ fun BasicButton(
     disabledContentColor: Color = BookDiaryTheme.colors.textHelp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
-){
+) {
     BookDiarySurface(
         shape = shape,
         color = Color.Transparent,
-        contentColor = if(enabled) contentColor else disabledContentColor,
+        contentColor = if (enabled) contentColor else disabledContentColor,
         border = border,
         modifier = modifier
             .clip(shape)
@@ -95,8 +95,11 @@ fun BasicButton(
     }
 }
 
+/**
+ * 상단 Back Button
+ */
 @Composable
-fun BasicUpButton(upPress: () -> Unit, size: Dp = 36.dp, padding: Dp = 10.dp){
+fun BasicUpButton(upPress: () -> Unit, size: Dp = 36.dp, padding: Dp = 10.dp) {
     IconButton(
         onClick = upPress,
         modifier = Modifier
@@ -116,8 +119,12 @@ fun BasicUpButton(upPress: () -> Unit, size: Dp = 36.dp, padding: Dp = 10.dp){
     }
 }
 
+/**
+ * Text, 이동 Icon 표시된 버튼
+ * 앱 정보에서 사용 중
+ */
 @Composable
-fun SettingButton(
+fun AppInfoButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
@@ -130,11 +137,11 @@ fun SettingButton(
     disabledContentColor: Color = BookDiaryTheme.colors.textHelp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     text: String
-){
+) {
     BookDiarySurface(
         shape = shape,
         color = Color.Transparent,
-        contentColor = if(enabled) contentColor else disabledContentColor,
+        contentColor = if (enabled) contentColor else disabledContentColor,
         border = border,
         modifier = modifier
             .fillMaxWidth()
@@ -160,7 +167,7 @@ fun SettingButton(
                     .padding(contentPadding),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-            ){
+            ) {
                 Text(
                     text = text,
                     style = MaterialTheme.typography.titleLarge,

@@ -1,18 +1,15 @@
 package com.example.presentation.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
@@ -22,6 +19,9 @@ import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.addCommaWon
 
+/**
+ * 세로형 책 List
+ */
 @Composable
 fun BookItemList(
     book: BookModel?,
@@ -61,7 +61,7 @@ fun BookItemList(
                 }
         )
         Text(
-            text = book?.title ?: "NoneTitle",
+            text = book?.title ?: stringResource(id = R.string.str_no_title),
             style = MaterialTheme.typography.titleLarge,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
@@ -69,34 +69,34 @@ fun BookItemList(
             modifier = Modifier
                 .width(250.dp)
                 .constrainAs(title) {
-                linkTo(
-                    start = image.end,
-                    startMargin = 16.dp,
-                    end = parent.end,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-            }
+                    linkTo(
+                        start = image.end,
+                        startMargin = 16.dp,
+                        end = parent.end,
+                        endMargin = 16.dp,
+                        bias = 0f
+                    )
+                }
         )
         Text(
-            text = book?.author ?: "저자 미확인",
+            text = book?.author ?: stringResource(id = R.string.str_no_author),
             style = MaterialTheme.typography.titleMedium,
             color = BookDiaryTheme.colors.textPrimary,
             maxLines = 2,
             modifier = Modifier
                 .width(250.dp)
                 .constrainAs(author) {
-                linkTo(
-                    start = image.end,
-                    startMargin = 16.dp,
-                    end = parent.end,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-            }
+                    linkTo(
+                        start = image.end,
+                        startMargin = 16.dp,
+                        end = parent.end,
+                        endMargin = 16.dp,
+                        bias = 0f
+                    )
+                }
         )
         Text(
-            text = book?.priceSales?.addCommaWon() ?: "가격정보 없음",
+            text = book?.priceSales?.addCommaWon() ?: stringResource(id = R.string.str_no_price),
             style = MaterialTheme.typography.bodyLarge,
             color = BookDiaryTheme.colors.textLink,
             modifier = Modifier.constrainAs(price) {

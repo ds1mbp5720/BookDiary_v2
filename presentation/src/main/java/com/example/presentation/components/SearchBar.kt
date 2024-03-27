@@ -50,7 +50,7 @@ fun SearchBar(
     onClearQuery: () -> Unit,
     searching: Boolean,
     modifier: Modifier = Modifier
-){
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
     BookDiarySurface(
         color = BookDiaryTheme.colors.uiFloated,
@@ -61,15 +61,15 @@ fun SearchBar(
             .height(56.dp)
             .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
-        Box(modifier = Modifier.fillMaxSize()){
-            if(query.text.isEmpty()) SearchHint()
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (query.text.isEmpty()) SearchHint()
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentHeight()
-            ){
-                if(searchFocused) {
+            ) {
+                if (searchFocused) {
                     IconButton(onClick = onClearQuery) {
                         Icon(
                             imageVector = mirroringBackIcon(),
@@ -94,7 +94,7 @@ fun SearchBar(
                             onSearchFocusChange(it.isFocused)
                         }
                 )
-                if(searchFocused) {
+                if (searchFocused) {
                     IconButton(
                         onClick = {
                             onSearch.invoke()
@@ -108,14 +108,14 @@ fun SearchBar(
                         )
                     }
                 }
-                if(searching){
+                if (searching) {
                     CircularProgressIndicator(
                         color = BookDiaryTheme.colors.iconPrimary,
                         modifier = Modifier
                             .padding(horizontal = 6.dp)
                             .size(36.dp)
                     )
-                } else{
+                } else {
                     Spacer(modifier = Modifier.width(48.dp))
                 }
             }
@@ -124,13 +124,13 @@ fun SearchBar(
 }
 
 @Composable
-fun SearchHint(){
+fun SearchHint() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize()
-    ){
+    ) {
         Icon(
             imageVector = Icons.Outlined.Search,
             tint = BookDiaryTheme.colors.textHelp,

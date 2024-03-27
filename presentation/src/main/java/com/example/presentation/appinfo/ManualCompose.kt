@@ -1,4 +1,4 @@
-package com.example.presentation.profile
+package com.example.presentation.appinfo
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke

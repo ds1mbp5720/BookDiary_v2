@@ -48,7 +48,7 @@ import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.BookItemList
-import com.example.presentation.components.BookListContent
+import com.example.presentation.components.BookRowContent
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
@@ -138,7 +138,7 @@ private fun BookCollectionList(
                 Spacer(modifier = Modifier.height(8.dp))
                 AladinLogo()
                 BookDiaryDivider(thickness = 2.dp)
-                BookListContent(
+                BookRowContent(
                     contentTitle = HomeListType.ItemNewAll,
                     books = bookListDataItemNewAll,
                     onBookClick = onBookClick,
@@ -146,7 +146,7 @@ private fun BookCollectionList(
                     viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
-                BookListContent(
+                BookRowContent(
                     contentTitle = HomeListType.ItemNewSpecial,
                     books = bookListDataItemNewSpecial,
                     onBookClick = onBookClick,
@@ -154,7 +154,7 @@ private fun BookCollectionList(
                     viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
-                BookListContent(
+                BookRowContent(
                     contentTitle = HomeListType.Bestseller,
                     books = bookListDataBestseller,
                     onBookClick = onBookClick,
@@ -162,7 +162,7 @@ private fun BookCollectionList(
                     viewModel = viewModel
                 )
                 BookDiaryDivider(thickness = 2.dp)
-                BookListContent(
+                BookRowContent(
                     contentTitle = HomeListType.BlogBest,
                     books = bookListDataBlogBest,
                     onBookClick = onBookClick,

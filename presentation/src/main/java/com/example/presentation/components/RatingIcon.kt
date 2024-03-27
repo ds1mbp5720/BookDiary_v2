@@ -106,6 +106,7 @@ private fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
     }
 
 }
+
 private fun getBitmapFromImage(context: Context, drawable: Int): Bitmap {
     val db = ContextCompat.getDrawable(context, drawable)
     val bit = Bitmap.createBitmap(

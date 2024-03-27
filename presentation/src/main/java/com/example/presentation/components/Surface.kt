@@ -24,8 +24,8 @@ import kotlin.math.ln
 fun BookDiarySurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    color : Color = BookDiaryTheme.colors.uiBackground,
-    contentColor : Color = BookDiaryTheme.colors.textSecondary,
+    color: Color = BookDiaryTheme.colors.uiBackground,
+    contentColor: Color = BookDiaryTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
@@ -40,15 +40,15 @@ fun BookDiarySurface(
                 shape = shape
             )
             .clip(shape)
-    ){
-        CompositionLocalProvider(LocalContentColor provides contentColor, content= content)
+    ) {
+        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
     }
 }
 
 @Composable
 private fun getBackgroundColorForElevation(color: Color, elevation: Dp): Color {
     return if (elevation > 0.dp) color.withElevation(elevation = elevation)
-        else color
+    else color
 }
 
 private fun Color.withElevation(elevation: Dp): Color {
@@ -57,6 +57,6 @@ private fun Color.withElevation(elevation: Dp): Color {
 }
 
 private fun calculateForeground(elevation: Dp): Color {
-    val alpha = ((4.5f * ln(elevation.value +1)) + 2f) / 100f
+    val alpha = ((4.5f * ln(elevation.value + 1)) + 2f) / 100f
     return Color.White.copy(alpha = alpha)
 }

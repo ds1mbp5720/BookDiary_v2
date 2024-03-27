@@ -1,6 +1,5 @@
 package com.example.presentation.search
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -38,24 +37,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mylibrary.R
 import com.example.presentation.theme.BookDiaryTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandByScreen(
-   searchViewModel: SearchViewModel = viewModel()
-){
+    searchViewModel: SearchViewModel = viewModel()
+) {
     val context = LocalContext.current
     val searchHistory = searchViewModel.searchHistory.collectAsState().value
-    if(searchHistory.isEmpty()){
+    if (searchHistory.isEmpty()) {
         Text(
             modifier = Modifier.fillMaxSize(),
-            text = "검색기록이 없습니다.",
+            text = stringResource(id = R.string.str_no_search_record),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
@@ -64,26 +65,32 @@ fun StandByScreen(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(top = 20.dp, bottom = 20.dp),
         userScrollEnabled = true
-    ){
+    ) {
         item {
             Text(
                 modifier = Modifier.fillMaxSize(),
-                text = "검색기록",
+                text = stringResource(id = R.string.str_search_record),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
         }
-        items(searchHistory, key = {it}){search ->
+        items(searchHistory, key = { it }) { search ->
             val dismissState = rememberDismissState(
                 positionalThreshold = { it * 0.4f },
-                confirmValueChange = {dismissValue ->
-                    when(dismissValue){
-                        DismissValue.Default -> {false}
+                confirmValueChange = { dismissValue ->
+                    when (dismissValue) {
+                        DismissValue.Default -> {
+                            false
+                        }
+
                         DismissValue.DismissedToStart -> {
                             searchViewModel.removeSearchHistory(context, search)
                             true
                         }
-                        DismissValue.DismissedToEnd -> {false}
+
+                        DismissValue.DismissedToEnd -> {
+                            false
+                        }
                     }
                 }
             )
@@ -143,8 +150,9 @@ fun StandByScreen(
                             search = search,
                             onClickEvent = {
                                 searchViewModel.searchState.query = TextFieldValue(search)
-                                searchViewModel.getSearchBookList(search,100)
-                                searchViewModel.searchState.searching = true}
+                                searchViewModel.getSearchBookList(search, 100)
+                                searchViewModel.searchState.searching = true
+                            }
                         )
                     }
                 }
@@ -157,7 +165,7 @@ fun StandByScreen(
 fun SearchHistoryCard(
     search: String,
     onClickEvent: () -> Unit
-){
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 6.dp, vertical = 6.dp)
@@ -166,7 +174,7 @@ fun SearchHistoryCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         colors = CardDefaults.cardColors(containerColor = BookDiaryTheme.colors.uiBackground),
         shape = RoundedCornerShape(corner = CornerSize(16.dp))
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp)
