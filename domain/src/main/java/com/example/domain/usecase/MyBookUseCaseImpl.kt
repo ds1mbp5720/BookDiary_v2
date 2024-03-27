@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class MyBookUseCaseImpl @Inject constructor(
     private val myBookRepository: MyBookRepository
-): MyBookUseCase {
+) : MyBookUseCase {
     override fun getMyBookList(): Single<List<MyBookModel>> {
         return myBookRepository.getMyBookList()
     }
@@ -31,7 +31,8 @@ class MyBookUseCaseImpl @Inject constructor(
     override fun execute(
         onSuccess: (t: List<MyBookModel>) -> Unit,
         onError: (t: Throwable) -> Unit,
-        onFinished: () -> Unit) {
+        onFinished: () -> Unit
+    ) {
         getMyBookList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

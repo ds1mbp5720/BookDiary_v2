@@ -7,7 +7,7 @@ interface MyBookRepository {
 
     fun getMyBookList(): Single<List<MyBookModel>>
 
-    fun insertMyBook(book : MyBookModel)
+    fun insertMyBook(book: MyBookModel)
 
     fun update(book: MyBookModel)
 

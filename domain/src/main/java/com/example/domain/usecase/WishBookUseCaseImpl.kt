@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class WishBookUseCaseImpl @Inject constructor(
     private val wishBookRepository: WishBookRepository
-): WishBookUseCase{
+) : WishBookUseCase {
     override fun getWishBookList(): Single<List<WishBookModel>> {
         return wishBookRepository.getWishBookList()
     }
@@ -27,7 +27,8 @@ class WishBookUseCaseImpl @Inject constructor(
     override fun execute(
         onSuccess: (t: List<WishBookModel>) -> Unit,
         onError: (t: Throwable) -> Unit,
-        onFinished: () -> Unit) {
+        onFinished: () -> Unit
+    ) {
         getWishBookList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

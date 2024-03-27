@@ -6,6 +6,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
+/**
+ * Single 방식 통신 시 execute 기본 양식
+ */
 abstract class SingleUseCase<T> {
     protected var lastDisposable: Disposable? = null
     protected val compositeDisposable = CompositeDisposable()

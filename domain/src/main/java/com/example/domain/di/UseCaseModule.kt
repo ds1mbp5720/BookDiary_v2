@@ -23,24 +23,25 @@ import javax.inject.Singleton
 object UseCaseModule {
     @Singleton
     @Provides
-    fun provideBookListUseCase(repository: BookListRepository) : BookListUseCase {
+    fun provideBookListUseCase(repository: BookListRepository): BookListUseCase {
         return BookListUseCaseImpl(repository)
     }
+
     @Singleton
     @Provides
-    fun provideOffStoreUseCase(repository: OffStoreRepository) : OffStoreUseCase {
+    fun provideOffStoreUseCase(repository: OffStoreRepository): OffStoreUseCase {
         return OffStoreUseCaseImpl(repository)
     }
 
     @Singleton
     @Provides
-    fun provideMyBookUseCase(repository: MyBookRepository) : MyBookUseCase {
+    fun provideMyBookUseCase(repository: MyBookRepository): MyBookUseCase {
         return MyBookUseCaseImpl(repository)
     }
 
     @Singleton
     @Provides
-    fun provideWishBookUseCase(repository: WishBookRepository) : WishBookUseCase {
+    fun provideWishBookUseCase(repository: WishBookRepository): WishBookUseCase {
         return WishBookUseCaseImpl(repository)
     }
 }

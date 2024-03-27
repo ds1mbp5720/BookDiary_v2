@@ -4,8 +4,8 @@ import com.example.domain.model.MyBookModel
 import io.reactivex.Single
 
 interface MyBookUseCase {
-    fun getMyBookList() : Single<List<MyBookModel>>
-    fun insertMyBook(book : MyBookModel)
+    fun getMyBookList(): Single<List<MyBookModel>>
+    fun insertMyBook(book: MyBookModel)
     fun update(book: MyBookModel)
     fun delete(bookId: Long)
     fun execute(
