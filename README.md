@@ -40,7 +40,7 @@ https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/16629aa4-f32a-494d-a7
 
 3. 저장한 책 리스트  
 
-[https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/7127694b-5541-4882-8032-90576efb71c6](https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/f8825e55-2e78-4630-9068-983bb072d173)
+https://github.com/ds1mbp5720/BookDiary_v2/assets/37658906/c092bd12-4e80-4cae-a9e6-5d09f1a8d63c.mp4
 
 4. 앱 정보화면
 
