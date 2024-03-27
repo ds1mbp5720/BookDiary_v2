@@ -45,19 +45,19 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ManualViewPager() {
-    val pageCount by remember { mutableIntStateOf(3) }
+    val pageCount by remember { mutableIntStateOf(3) } // 설명 페이지에 따라 수 조정
     Column {
         val pagerState = rememberPagerState(
             initialPage = 0,
             initialPageOffsetFraction = 0f
-        ){
+        ) {
             pageCount
         }
         HorizontalPager(
             modifier = Modifier,
             state = pagerState
         ) {
-            when (pagerState.currentPage){ // todo 이미지 넣기
+            when (pagerState.currentPage) { // todo 이미지 넣기
                 0 -> ManualImageItem(imgResId = R.drawable.book_24)
                 1 -> ManualImageItem(imgResId = R.drawable.book_24)
                 2 -> ManualImageItem(imgResId = R.drawable.book_24)
@@ -67,7 +67,7 @@ fun ManualViewPager() {
         ShiftDotIndicators(pageCount = pageCount, pagerState = pagerState, modifier = Modifier.padding(top = 24.dp))
         Spacer(modifier = Modifier.height(15.dp))
         var desc = ""
-        when(pagerState.currentPage){
+        when (pagerState.currentPage) { // todo 이미지에 맞춰 text 수정
             0 -> desc = stringResource(id = R.string.str_manual_desc1)
             1 -> desc = stringResource(id = R.string.str_manual_desc2)
             2 -> desc = stringResource(id = R.string.str_manual_desc3)
@@ -84,20 +84,20 @@ fun ManualViewPager() {
         ManualPageMoveButton(
             modifier = Modifier.padding(horizontal = 28.dp),
             prevListener = {
-                if(pagerState.currentPage == 0){
+                if (pagerState.currentPage == 0) {
                     return@ManualPageMoveButton
                 }
                 val prevPage = pagerState.currentPage - 1
-                buttonScope.launch{
+                buttonScope.launch {
                     pagerState.animateScrollToPage(prevPage)
                 }
             },
             nextListener = {
-                if(pagerState.currentPage == pagerState.pageCount - 1){
+                if (pagerState.currentPage == pagerState.pageCount - 1) {
                     return@ManualPageMoveButton
                 }
                 val nextPage = pagerState.currentPage + 1
-                buttonScope.launch{
+                buttonScope.launch {
                     pagerState.animateScrollToPage(nextPage)
                 }
             }
@@ -107,11 +107,11 @@ fun ManualViewPager() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShiftDotIndicators(pageCount: Int, pagerState: PagerState, modifier: Modifier){
+private fun ShiftDotIndicators(pageCount: Int, pagerState: PagerState, modifier: Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    ) {
         DotsIndicator(
             dotCount = pageCount,
             type = ShiftIndicatorType(
@@ -121,13 +121,15 @@ private fun ShiftDotIndicators(pageCount: Int, pagerState: PagerState, modifier:
                     size = 6.dp
                 )
             ),
-            pagerState = pagerState)
+            pagerState = pagerState
+        )
     }
 }
+
 @Composable
 private fun ManualImageItem(
     @DrawableRes imgResId: Int = R.drawable.book_24 // todo 임시 text 이미지
-){
+) {
     Image(
         modifier = Modifier
             .height(400.dp),
@@ -136,17 +138,18 @@ private fun ManualImageItem(
         contentDescription = "manual_image",
     )
 }
+
 @Composable
 private fun ManualPageMoveButton(
     modifier: Modifier = Modifier,
     prevListener: () -> Unit = {},
     nextListener: () -> Unit = {}
-){
+) {
     Row(
-       modifier = modifier
-           .fillMaxWidth()
-           .wrapContentHeight(Alignment.CenterVertically)
-    ){
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(Alignment.CenterVertically)
+    ) {
         BasicButton(
             onClick = prevListener,
             modifier = Modifier.weight(1f),
@@ -155,7 +158,8 @@ private fun ManualPageMoveButton(
             Icon(
                 modifier = Modifier.weight(1f),
                 imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "manual_prev")
+                contentDescription = "manual_prev"
+            )
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.str_prev),
@@ -180,8 +184,8 @@ private fun ManualPageMoveButton(
             Icon(
                 modifier = Modifier.weight(1f),
                 imageVector = Icons.Filled.ArrowForward,
-                contentDescription = "manual_next")
+                contentDescription = "manual_next"
+            )
         }
-
     }
 }

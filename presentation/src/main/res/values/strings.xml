@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">BookDiary_v2</string>
-    <string name="str_home">HOME</string>
-    <string name="str_search">SEARCH</string>
-    <string name="str_record">RECORD</string>
-    <string name="str_profile">MY PAGE</string>
+    <string name="str_home">홈</string>
+    <string name="str_search">검색</string>
+    <string name="str_record">기록</string>
+    <string name="str_app_info">앱 정보</string>
     <string name="str_back">BACK</string>
 
     <string name="str_detail_title">상세 정보</string>
@@ -40,6 +40,10 @@
     <string name="str_confirm">확인</string>
     <string name="str_next">다음</string>
     <string name="str_prev">이전</string>
+
+    <string name="str_opensource_license">오픈소스 라이센스</string>
+    <string name="str_app_manual">앱 사용 방법</string>
+    <string name="str_app_version">앱 버전 %s</string>
 
     <string name="str_manual_desc1">첫번째 설명 스크립트</string>
     <string name="str_manual_desc2">두번째 설명 스크립트</string>

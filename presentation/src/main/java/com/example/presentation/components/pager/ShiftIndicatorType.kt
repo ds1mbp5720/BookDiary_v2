@@ -21,7 +21,7 @@ import kotlin.math.absoluteValue
 class ShiftIndicatorType(
     private val dotGraphic: DotGraphic = DotGraphic(),
     private val shiftSizeFactor: Float = 3f
-): IndicatorType() {
+) : IndicatorType() {
     @Composable
     override fun IndicatorTypeComposable(
         globalOffsetProvider: () -> Float,
@@ -30,7 +30,7 @@ class ShiftIndicatorType(
         dotSpacing: Dp,
         onDotClicked: ((Int) -> Unit)?
     ) {
-        Box(modifier = modifier){
+        Box(modifier = modifier) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(
@@ -38,12 +38,13 @@ class ShiftIndicatorType(
                     alignment = Alignment.CenterHorizontally
                 ),
                 contentPadding = PaddingValues(start = dotSpacing, end = dotSpacing)
-            ){
-                items(dotCount){dotIndex ->
+            ) {
+                items(dotCount) { dotIndex ->
+                    // 스크롤 값을 가져와서 modifier width 확장 및 원복
                     val dotWidth by remember(globalOffsetProvider()) {
-                        derivedStateOf{ computeDotWidth(dotIndex, globalOffsetProvider()) }
+                        derivedStateOf { computeDotWidth(dotIndex, globalOffsetProvider()) }
                     }
-                    val dotModifier by remember( dotWidth ) {
+                    val dotModifier by remember(dotWidth) {
                         mutableStateOf(
                             Modifier
                                 .width(dotWidth)
@@ -56,7 +57,8 @@ class ShiftIndicatorType(
         }
     }
 
-    private fun computeDotWidth(currentDotIndex: Int, globalOffset: Float): Dp{
+    // 현재 화면 position dot 폭 확장 함수
+    private fun computeDotWidth(currentDotIndex: Int, globalOffset: Float): Dp {
         val diffFactor = 1f - (currentDotIndex - globalOffset).absoluteValue.coerceAtMost(1f)
         val widthToAdd = ((shiftSizeFactor - 1f).coerceAtLeast(0f) * dotGraphic.size * diffFactor)
         return dotGraphic.size + widthToAdd

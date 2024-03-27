@@ -17,7 +17,7 @@ class SearchState(
     var noResult by mutableStateOf(noResult) // 검색결과 체크
     val searchDisplay: SearchDisplay
         get() = when {
-            // 검색창의 현 상태값에 따른 보여줄 화면 정의를 위한 값 세팅부분
+            // 검색창 현 상태값에 따른 보여줄 화면 정의를 위한 값 세팅 부분
             !focused && query.text.isEmpty() -> SearchDisplay.StandBy
             focused && query.text.isEmpty() -> SearchDisplay.StandBy
             else -> SearchDisplay.Results

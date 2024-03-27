@@ -55,7 +55,7 @@ import com.example.mylibrary.R
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.home.Home
 import com.example.presentation.home.HomeViewModel
-import com.example.presentation.profile.Profile
+import com.example.presentation.profile.AppInfo
 import com.example.presentation.record.Record
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.Search
@@ -63,21 +63,23 @@ import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
 import java.util.Locale
 
-private val TextIconSpacing = 2.dp
-private val BottomNavHeight = 56.dp
-private val BottomNavLabelTransformOrigin = TransformOrigin(0f, 0.5f)
-private val BottomNavIndicatorShape = RoundedCornerShape(percent = 50)
-private val BottomNavigationItemPadding = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+private val textIconSpacing = 2.dp
+private val bottomNavHeight = 56.dp
+private val bottomNavLabelTransformOrigin = TransformOrigin(0f, 0.5f)
+private val bottomNavIndicatorShape = RoundedCornerShape(percent = 50)
+private val bottomNavigationItemPadding = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+
 enum class MainSections(
     @StringRes val title: Int,
     val icon: ImageVector,
     val route: String
 ) {
-    HOME(R.string.str_home, Icons.Outlined.Home ,"main/home"),
-    SEARCH(R.string.str_search, Icons.Outlined.Search ,"main/search"),
-    RECORD(R.string.str_record, Icons.Outlined.Create ,"main/record"),
-    PROFILE(R.string.str_profile, Icons.Outlined.AccountCircle ,"main/profile")
+    HOME(R.string.str_home, Icons.Outlined.Home, "main/home"),
+    SEARCH(R.string.str_search, Icons.Outlined.Search, "main/search"),
+    RECORD(R.string.str_record, Icons.Outlined.Create, "main/record"),
+    AppInfo(R.string.str_app_info, Icons.Outlined.AccountCircle, "main/appInfo")
 }
+
 fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
@@ -88,17 +90,37 @@ fun NavGraphBuilder.addMainGraph(
     recordViewModel: RecordViewModel,
     searchViewModel: SearchViewModel
 ) {
-    composable(MainSections.HOME.route){ from ->
-        Home(onBookClick = { id -> onBookSelected(id, from)}, onListClick = {type -> onListSelected(type, from)} ,onNavigateToRoute = onNavigateToRoute, modifier =  modifier , viewModel = homeViewModel)
+    composable(MainSections.HOME.route) { from ->
+        Home(
+            onBookClick = { id -> onBookSelected(id, from) },
+            onListClick = { type -> onListSelected(type, from) },
+            onNavigateToRoute = onNavigateToRoute,
+            modifier = modifier,
+            viewModel = homeViewModel
+        )
     }
-    composable(MainSections.SEARCH.route){ from ->
-        Search(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = searchViewModel)
+    composable(MainSections.SEARCH.route) { from ->
+        Search(
+            onBookClick = { id -> onBookSelected(id, from) },
+            onNavigateToRoute = onNavigateToRoute,
+            modifier = modifier,
+            viewModel = searchViewModel
+        )
     }
-    composable(MainSections.RECORD.route){ from ->
-        Record(onBookClick = { id -> onBookSelected(id, from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier, viewModel = recordViewModel)
+    composable(MainSections.RECORD.route) { from ->
+        Record(
+            onBookClick = { id -> onBookSelected(id, from) },
+            onNavigateToRoute = onNavigateToRoute,
+            modifier = modifier,
+            viewModel = recordViewModel
+        )
     }
-    composable(MainSections.PROFILE.route){ from ->
-        Profile(onManualClick = { onManualClick(from) }, onNavigateToRoute = onNavigateToRoute, modifier =  modifier)
+    composable(MainSections.AppInfo.route) { from ->
+        AppInfo(
+            onManualClick = { onManualClick(from) },
+            onNavigateToRoute = onNavigateToRoute,
+            modifier = modifier
+        )
     }
 }
 
@@ -108,7 +130,7 @@ fun BookDiaryBottomBar(
     currentRoute: String,
     navigateToRoute: (String) -> Unit,
     color: Color = BookDiaryTheme.colors.iconPrimary,
-    contentColor : Color = BookDiaryTheme.colors.iconInteractive
+    contentColor: Color = BookDiaryTheme.colors.iconInteractive
 ) {
     val routes = remember { tabs.map { it.route } }
     val currentSection = tabs.first { it.route == currentRoute }
@@ -116,8 +138,11 @@ fun BookDiaryBottomBar(
     BookDiarySurface(
         color = color,
         contentColor = contentColor
-    ){
-        val springSpec = SpringSpec<Float>( stiffness = 800f, dampingRatio = 0.8f)
+    ) {
+        val springSpec = SpringSpec<Float>(
+            stiffness = 800f,
+            dampingRatio = 0.8f
+        )
         BookDiaryBottomNavLayout(
             selectedIndex = currentSection.ordinal,
             itemCount = routes.size,
@@ -132,9 +157,10 @@ fun BookDiaryBottomBar(
             tabs.forEach { section ->
                 val selected = section == currentSection
                 val tint by animateColorAsState(
-                    targetValue = if(selected) BookDiaryTheme.colors.iconInteractive else BookDiaryTheme.colors.iconInteractiveInactive,
+                    targetValue = if (selected) BookDiaryTheme.colors.iconInteractive else BookDiaryTheme.colors.iconInteractiveInactive,
                     label = ""
                 )
+                // 하단 메뉴 영문 항목일때 uppercase 사용
                 val text = stringResource(id = section.title).uppercase(currentLocale)
 
                 BookDiaryBottomNavigationItem(
@@ -156,8 +182,8 @@ fun BookDiaryBottomBar(
                     selected = selected,
                     onSelected = { navigateToRoute(section.route) },
                     animSpec = springSpec,
-                    modifier = BottomNavigationItemPadding
-                        .clip(BottomNavIndicatorShape)
+                    modifier = bottomNavigationItemPadding
+                        .clip(bottomNavIndicatorShape)
                 )
             }
         }
@@ -173,13 +199,20 @@ fun BookDiaryBottomNavigationItem(
     animSpec: AnimationSpec<Float>,
     modifier: Modifier = Modifier
 ) {
-    val animationProgress by animateFloatAsState(targetValue = if (selected) 1f else 0f, animationSpec = animSpec, label = "")
+    val animationProgress by animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = animSpec,
+        label = ""
+    )
     BookDiaryBottomNavItemLayout(
         icon = icon,
         text = text,
         animateProgress = animationProgress,
         modifier = modifier
-            .selectable(selected = selected, onClick = onSelected)
+            .selectable(
+                selected = selected,
+                onClick = onSelected
+            )
             .wrapContentSize()
     )
 }
@@ -190,37 +223,37 @@ private fun BookDiaryBottomNavItemLayout(
     text: @Composable BoxScope.() -> Unit,
     @FloatRange(from = 0.0, to = 1.0) animateProgress: Float,
     modifier: Modifier = Modifier
-){
+) {
     Layout(
         modifier = modifier,
         content = {
             Box(
-               modifier = Modifier
-                   .layoutId("icon")
-                   .padding(horizontal = TextIconSpacing),
+                modifier = Modifier
+                    .layoutId("icon")
+                    .padding(horizontal = textIconSpacing),
                 content = icon
             )
             val scale = lerp(0.6f, 1f, animateProgress)
             Box(
                 modifier = Modifier
                     .layoutId("text")
-                    .padding(horizontal = TextIconSpacing)
+                    .padding(horizontal = textIconSpacing)
                     .graphicsLayer {
                         alpha = animateProgress
                         scaleX = scale
                         scaleY = scale
-                        transformOrigin = BottomNavLabelTransformOrigin
+                        transformOrigin = bottomNavLabelTransformOrigin
                     },
                 content = text
             )
         }
-    ){measurables, constraints ->
-        val iconPlacealbe = measurables.first { it.layoutId == "icon" }.measure(constraints)
-        val textPlacealbe = measurables.first { it.layoutId == "text" }.measure(constraints)
+    ) { measurables, constraints ->
+        val iconPlaceable = measurables.first { it.layoutId == "icon" }.measure(constraints)
+        val textPlaceable = measurables.first { it.layoutId == "text" }.measure(constraints)
 
         placeTextAndIcon(
-            textPlaceable = textPlacealbe,
-            iconPlaceable = iconPlacealbe,
+            textPlaceable = textPlaceable,
+            iconPlaceable = iconPlaceable,
             width = constraints.maxWidth,
             height = constraints.maxHeight,
             animateProgress = animateProgress
@@ -234,7 +267,7 @@ private fun MeasureScope.placeTextAndIcon(
     width: Int,
     height: Int,
     @FloatRange(from = 0.0, to = 1.0) animateProgress: Float
-): MeasureResult{
+): MeasureResult {
     val iconY = (height - iconPlaceable.height) / 2
     val textY = (height - iconPlaceable.height) / 2
 
@@ -252,7 +285,7 @@ private fun MeasureScope.placeTextAndIcon(
 
 @Composable
 private fun BookDiaryBottomNavLayout(
-    selectedIndex : Int,
+    selectedIndex: Int,
     itemCount: Int,
     animSpec: AnimationSpec<Float>,
     indicator: @Composable BoxScope.() -> Unit,
@@ -281,21 +314,21 @@ private fun BookDiaryBottomNavLayout(
 
     //
     Layout(
-        modifier = modifier.height(BottomNavHeight),
+        modifier = modifier.height(bottomNavHeight),
         content = {
             content()
             Box(Modifier.layoutId("indicator"), content = indicator)
         }
-    ) {measurables, constraints ->
-        check(itemCount == (measurables.size -1))
+    ) { measurables, constraints ->
+        check(itemCount == (measurables.size - 1))
 
-        val unselectedWidth = constraints.maxWidth / (itemCount +1)
+        val unselectedWidth = constraints.maxWidth / (itemCount + 1)
         val selectedWidth = 2 * unselectedWidth
         val indicatorMeasurable = measurables.first { it.layoutId == "indicator" }
 
         val itemPlaceables = measurables
             .filterNot { it == indicatorMeasurable }
-            .mapIndexed {index, measurable ->
+            .mapIndexed { index, measurable ->
                 val width = lerp(unselectedWidth, selectedWidth, selectionFractions[index].value)
                 measurable.measure(
                     constraints.copy(
@@ -305,10 +338,10 @@ private fun BookDiaryBottomNavLayout(
                 )
             }
         val indicatorPlaceable = indicatorMeasurable.measure(
-        constraints.copy(
-            minWidth = selectedWidth,
-            maxWidth = selectedWidth
-        )
+            constraints.copy(
+                minWidth = selectedWidth,
+                maxWidth = selectedWidth
+            )
         )
 
         layout(
@@ -318,7 +351,7 @@ private fun BookDiaryBottomNavLayout(
             val indicatorLeft = indicatorIndex.value * unselectedWidth
             indicatorPlaceable.placeRelative(x = indicatorLeft.toInt(), y = 0)
             var x = 0
-            itemPlaceables.forEach{
+            itemPlaceables.forEach {
                 it.placeRelative(x = x, y = 0)
                 x += it.width
             }
@@ -330,12 +363,12 @@ private fun BookDiaryBottomNavLayout(
 private fun BookDiaryBottomNavIndicator(
     strokeWidth: Dp = 2.dp,
     color: Color = BookDiaryTheme.colors.iconInteractive,
-    shape: Shape = BottomNavIndicatorShape
+    shape: Shape = bottomNavIndicatorShape
 ) {
     Spacer(
         modifier = Modifier
             .fillMaxSize()
-            .then(BottomNavigationItemPadding)
+            .then(bottomNavigationItemPadding)
             .border(strokeWidth, color, shape)
     )
 }

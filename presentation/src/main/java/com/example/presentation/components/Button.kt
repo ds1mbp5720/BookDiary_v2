@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mylibrary.R
-import com.example.presentation.theme.BookDiaryColors
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.theme.Neutral5
 import com.example.presentation.util.mirroringBackIcon

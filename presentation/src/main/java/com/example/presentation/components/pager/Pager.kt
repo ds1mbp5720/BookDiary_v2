@@ -27,23 +27,24 @@ data class DotGraphic(
     val borderWidth: Dp? = null,
     val borderColor: Color = Color.White
 )
+
 @Composable
 fun Dot(
     graphic: DotGraphic,
     dotWidth: Dp,
     modifier: Modifier
 ) {
-    val shapeColor = if(dotWidth.value.toInt() == graphic.size.value.toInt()){
+    val shapeColor = if (dotWidth.value.toInt() == graphic.size.value.toInt()) {
         graphic.unSelectedStateColor
     } else {
         graphic.selectedStateColor
     }
-
     Box(
         modifier = modifier
             .background(
                 color = shapeColor,
-                shape = graphic.shape)
+                shape = graphic.shape
+            )
             .size(graphic.size)
             .let {
                 graphic.borderWidth?.let { borderWidth ->
@@ -56,6 +57,10 @@ fun Dot(
             }
     )
 }
+
+/**
+ * 앱 사용방법 화면 하단 페이지 dot 형 표시
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DotsIndicator(
@@ -64,21 +69,22 @@ fun DotsIndicator(
     dotSpacing: Dp = 12.dp,
     type: IndicatorType,
     pagerState: PagerState
-){
+) {
     val coroutineScope = rememberCoroutineScope()
-    DotsIndicator(
+    AnimateDotsIndicator(
         dotCount = dotCount,
         modifier = modifier,
         dotSpacing = dotSpacing,
         type = type,
         currentPage = pagerState.currentPage,
         currentPageOffsetFraction = { pagerState.currentPageOffsetFraction }
-    ){ dotIndex ->
+    ) { dotIndex ->
         coroutineScope.launch { pagerState.animateScrollToPage(dotIndex) }
     }
 }
+
 @Composable
-fun DotsIndicator(
+private fun AnimateDotsIndicator(
     dotCount: Int,
     modifier: Modifier = Modifier,
     dotSpacing: Dp = 12.dp,
@@ -92,18 +98,25 @@ fun DotsIndicator(
             computeGlobalScrollOffset(currentPage, currentPageOffsetFraction(), dotCount)
         }
     }
-    type.IndicatorTypeComposable(globalOffsetProvider = { globalOffset }, modifier = modifier, dotCount = dotCount, dotSpacing = dotSpacing, onDotClicked = onDotClicked)
+    type.IndicatorTypeComposable(
+        globalOffsetProvider = { globalOffset },
+        modifier = modifier,
+        dotCount = dotCount,
+        dotSpacing = dotSpacing,
+        onDotClicked = onDotClicked
+    )
 }
 
-private fun computeGlobalScrollOffset(position: Int, positionOffset: Float, totalCount: Int): Float{
+// 현재 화면 스크롤 위치 반환 함수
+private fun computeGlobalScrollOffset(position: Int, positionOffset: Float, totalCount: Int): Float {
     var offset = position + positionOffset
     val lastPageIndex = (totalCount - 1).toFloat()
-    if(offset == lastPageIndex) {
+    if (offset == lastPageIndex) {
         offset = lastPageIndex - .0001f
     }
     val leftPosition = offset.toInt()
     val rightPosition = leftPosition + 1
-    if(rightPosition > lastPageIndex || leftPosition < 0)
+    if (rightPosition > lastPageIndex || leftPosition < 0)
         return 0f
 
     return leftPosition + offset % 1

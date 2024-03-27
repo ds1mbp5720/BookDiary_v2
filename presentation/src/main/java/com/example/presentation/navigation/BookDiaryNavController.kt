@@ -35,10 +35,12 @@ class BookDiaryNavController(
 ) {
     val currentRoute: String? get() = navController.currentDestination?.route
 
-    fun upPress() { navController.navigateUp() }
+    fun upPress() {
+        navController.navigateUp()
+    }
 
     fun navigateToBottomBarRoute(route: String) {
-        if(route != currentRoute){
+        if (route != currentRoute) {
             navController.navigate(route) {
                 launchSingleTop = true
                 restoreState = true
@@ -50,17 +52,19 @@ class BookDiaryNavController(
     }
 
     fun navigateToBookDetail(bookId: Long, from: NavBackStackEntry) {
-        if(from.lifeCycleIsResume()){
+        if (from.lifeCycleIsResume()) {
             navController.navigate("${MainDestinations.BOOK_DETAIL_ROOT}/$bookId")
         }
     }
+
     fun navigateToRecommendList(listType: String, from: NavBackStackEntry) {
-        if(from.lifeCycleIsResume()){
+        if (from.lifeCycleIsResume()) {
             navController.navigate("${MainDestinations.BOOK_LIST_ROOT}/$listType")
         }
     }
+
     fun navigateToManual(from: NavBackStackEntry) {
-        if(from.lifeCycleIsResume()){
+        if (from.lifeCycleIsResume()) {
             navController.navigate(MainDestinations.MANUAL)
         }
     }
@@ -69,11 +73,12 @@ class BookDiaryNavController(
 // lifecycle resume 체크용 Boolean
 private fun NavBackStackEntry.lifeCycleIsResume() =
     this.lifecycle.currentState == Lifecycle.State.RESUMED
+
 private val NavGraph.startDestination: NavDestination?
     get() = findNode(startDestinationId)
 
 /**
- * Compied JetSnack JetSnackNavController.kt
+ * Copied JetSnack JetSnackNavController.kt
  */
 private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph

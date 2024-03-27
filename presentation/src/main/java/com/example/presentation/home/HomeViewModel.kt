@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.domain.model.BookListModel
 import com.example.domain.model.BookModel
 import com.example.domain.usecase.BookListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     // 종류별 책 리스트 flow 생성
     private val _bookListDataItemNewAll: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val bookListDataItemNewAll: StateFlow<PagingData<BookModel>> = _bookListDataItemNewAll.asStateFlow()
@@ -30,42 +29,45 @@ class HomeViewModel @Inject constructor(
     val bookListDataBestseller: StateFlow<PagingData<BookModel>> = _bookListDataBestseller.asStateFlow()
     private val _bookListDataBlogBest: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val bookListDataBlogBest: StateFlow<PagingData<BookModel>> = _bookListDataBlogBest.asStateFlow()
-    fun getBookListToItemNewAll(queryType: String, size: Int){
+    fun getBookListToItemNewAll(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
-                .collect{
-                     _bookListDataItemNewAll.emit(it)
-            }
+                .collect {
+                    _bookListDataItemNewAll.emit(it)
+                }
         }
     }
-    fun getBookListToItemNewSpecial(queryType: String, size: Int){
+
+    fun getBookListToItemNewSpecial(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _bookListDataItemNewSpecial.emit(it)
                 }
         }
     }
-    fun getBookListToItemBestseller(queryType: String, size: Int){
+
+    fun getBookListToItemBestseller(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _bookListDataBestseller.emit(it)
                 }
         }
     }
-    fun getBookListToItemBlogBest(queryType: String, size: Int){
+
+    fun getBookListToItemBlogBest(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _bookListDataBlogBest.emit(it)
                 }
         }
@@ -74,20 +76,14 @@ class HomeViewModel @Inject constructor(
     private val _singleCategoryBookList: MutableStateFlow<PagingData<BookModel>> = MutableStateFlow(value = PagingData.empty())
     val singleCategoryBookList: StateFlow<PagingData<BookModel>> = _singleCategoryBookList.asStateFlow()
 
-    fun getSingleCategoryBookList(queryType: String, size: Int){
+    fun getSingleCategoryBookList(queryType: String, size: Int) {
         viewModelScope.launch {
             bookListUseCase.getBookListPaging(queryType, size)
                 .distinctUntilChanged()
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _singleCategoryBookList.emit(it)
                 }
         }
     }
-}
-
-sealed class BookListState(val data: BookListModel? = null, val resultCode: String? = ""){
-    object Loading: BookListState()
-    data class Error(val message: String? = ""): BookListState(resultCode = message)
-    data class Success(val bookList: BookListModel): BookListState(data = bookList)
 }

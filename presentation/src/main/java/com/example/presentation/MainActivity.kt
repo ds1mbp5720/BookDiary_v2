@@ -4,29 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.example.domain.model.BookListModel
 import com.example.presentation.home.HomeViewModel
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity: ComponentActivity() {
+class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
-    private val categoryBookList = mutableListOf<BookListModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(this)
         observeUiState()
-        homeViewModel.getBookListToItemNewAll("ItemNewAll",20)
-        homeViewModel.getBookListToItemNewSpecial("ItemNewSpecial",20)
-        homeViewModel.getBookListToItemBestseller("Bestseller",20)
-        homeViewModel.getBookListToItemBlogBest("BlogBest",20)
+        homeViewModel.getBookListToItemNewAll("ItemNewAll", 20)
+        homeViewModel.getBookListToItemNewSpecial("ItemNewSpecial", 20)
+        homeViewModel.getBookListToItemBestseller("Bestseller", 20)
+        homeViewModel.getBookListToItemBlogBest("BlogBest", 20)
         setContent {
             BookDiaryApp()
         }
-
     }
-    private fun observeUiState(){
+
+    private fun observeUiState() {
         // flow 사용으로 해당 부분 미사용
         /*lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED){

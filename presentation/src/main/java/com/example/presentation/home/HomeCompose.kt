@@ -25,7 +25,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,9 +53,10 @@ import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
 
-enum class HomeListType{
+enum class HomeListType {
     ItemNewAll, ItemNewSpecial, Bestseller, BlogBest
 }
+
 @Composable
 fun Home(
     onBookClick: (Long) -> Unit,
@@ -65,7 +65,7 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val showDialog = remember { mutableStateOf(false) }
+    val showFinishDialog = remember { mutableStateOf(false) }
     val activity = LocalContext.current as Activity
     BookDiaryScaffold(
         bottomBar = {
@@ -76,7 +76,7 @@ fun Home(
             )
         },
         modifier = modifier
-    ) {paddingValues ->
+    ) { paddingValues ->
         HomeScreen(
             onBookClick = onBookClick,
             onListClick = onListClick,
@@ -86,16 +86,16 @@ fun Home(
         BackHandler(
             enabled = true
         ) {
-            showDialog.value = true
+            showFinishDialog.value = true
         }
-        if(showDialog.value){
+        if (showFinishDialog.value) {
             BookDiaryBasicDialog(
                 title = stringResource(id = R.string.str_dialog_exit_app),
                 dismissAction = {
-                    showDialog.value = false
+                    showFinishDialog.value = false
                 },
                 confirmAction = {
-                    showDialog.value = false
+                    showFinishDialog.value = false
                     activity.finish()
                 }
             )
@@ -109,13 +109,14 @@ private fun HomeScreen(
     onListClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel
-){
+) {
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
-        Box{
+        Box {
             BookCollectionList(
                 viewModel = viewModel,
-                onBookClick =  onBookClick,
-                onListClick = onListClick)
+                onBookClick = onBookClick,
+                onListClick = onListClick
+            )
         }
     }
 }
@@ -131,9 +132,9 @@ private fun BookCollectionList(
     val bookListDataItemNewSpecial: LazyPagingItems<BookModel> = viewModel.bookListDataItemNewSpecial.collectAsLazyPagingItems()
     val bookListDataBestseller: LazyPagingItems<BookModel> = viewModel.bookListDataBestseller.collectAsLazyPagingItems()
     val bookListDataBlogBest: LazyPagingItems<BookModel> = viewModel.bookListDataBlogBest.collectAsLazyPagingItems()
-    Box(modifier = modifier){
-        LazyColumn{
-            item{
+    Box(modifier = modifier) {
+        LazyColumn {
+            item {
                 Spacer(modifier = Modifier.height(8.dp))
                 AladinLogo()
                 BookDiaryDivider(thickness = 2.dp)
@@ -174,9 +175,14 @@ private fun BookCollectionList(
         }
     }
 }
+
+/**
+ * 상단 알라딘 로고 및 홈페이지 링크 연결 View
+ *  책 상세 정보 (추가) 요청시 조건으로 인한 api 출처 및 홈페이지 연결
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun AladinLogo(url: String = "https://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif"){
+fun AladinLogo(url: String = "https://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif") {
     val context = LocalContext.current
     Card(
         modifier = Modifier
@@ -189,7 +195,7 @@ fun AladinLogo(url: String = "https://image.aladin.co.kr/img/header/2011/aladin_
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         colors = CardDefaults.cardColors(containerColor = BookDiaryTheme.colors.uiBackground),
         shape = RoundedCornerShape(corner = CornerSize(10.dp))
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp)
@@ -200,8 +206,8 @@ fun AladinLogo(url: String = "https://image.aladin.co.kr/img/header/2011/aladin_
             GlideImage(
                 model = url,
                 contentDescription = "aladinLogo",
-                contentScale = ContentScale.Inside ,
-            ){ it.load(url) }
+                contentScale = ContentScale.Inside,
+            ) { it.load(url) }
             Text(
                 text = "도서 DB 제공 : 알라딘 인터넷서점",
                 style = MaterialTheme.typography.titleLarge,
@@ -211,6 +217,9 @@ fun AladinLogo(url: String = "https://image.aladin.co.kr/img/header/2011/aladin_
     }
 }
 
+/**
+ * 카테고리 전체 리스트 보기 화면(list 타입)
+ */
 @Composable
 fun SingleCategoryListScreen(
     listType: HomeListType,
@@ -220,25 +229,30 @@ fun SingleCategoryListScreen(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     val books = viewModel.singleCategoryBookList.collectAsLazyPagingItems()
-    Column{
+    Column {
         Spacer(modifier = Modifier.height(10.dp))
-        Row(){
+        Row() {
             BasicUpButton(upPress, padding = 2.dp)
             Text(
-                text = stringResource(id = when(listType){
-                    HomeListType.ItemNewAll-> {
-                        R.string.str_new_all_title
+                text = stringResource(
+                    id = when (listType) {
+                        HomeListType.ItemNewAll -> {
+                            R.string.str_new_all_title
+                        }
+
+                        HomeListType.ItemNewSpecial -> {
+                            R.string.str_new_special_title
+                        }
+
+                        HomeListType.Bestseller -> {
+                            R.string.str_bestseller_rank
+                        }
+
+                        HomeListType.BlogBest -> {
+                            R.string.str_bolg_best_title
+                        }
                     }
-                    HomeListType.ItemNewSpecial -> {
-                        R.string.str_new_special_title
-                    }
-                    HomeListType.Bestseller -> {
-                        R.string.str_bestseller_rank
-                    }
-                    HomeListType.BlogBest -> {
-                        R.string.str_bolg_best_title
-                    }
-                }),
+                ),
                 style = MaterialTheme.typography.headlineLarge,
                 color = BookDiaryTheme.colors.brand,
                 textAlign = TextAlign.Center,
@@ -249,7 +263,7 @@ fun SingleCategoryListScreen(
                     .wrapContentWidth(Alignment.Start)
             )
         }
-        
+
         Spacer(modifier = Modifier.height(10.dp))
         BookDiaryDivider()
         LazyColumn(

@@ -34,7 +34,7 @@ fun BookDiaryApp() {
         NavHost(
             navController = bookDiaryNavController.navController,
             startDestination = MainDestinations.HOME_ROUTE
-        ){
+        ) {
             bookDiaryNavGraph(
                 onBookSelected = bookDiaryNavController::navigateToBookDetail,
                 onListSelected = bookDiaryNavController::navigateToRecommendList,
@@ -64,21 +64,22 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     navigation(
         route = MainDestinations.HOME_ROUTE,
         startDestination = MainSections.HOME.route,
-    ){
+    ) {
         addMainGraph(
             onBookSelected = onBookSelected,
             onListSelected = onListSelected,
             onManualClick = onManualClick,
-            onNavigateToRoute =  onNavigateToRoute,
+            onNavigateToRoute = onNavigateToRoute,
             homeViewModel = homeViewModel,
             recordViewModel = recordViewModel,
-            searchViewModel = searchViewModel)
+            searchViewModel = searchViewModel
+        )
     }
     // 책 상세보기 화면
     composable(
         "${MainDestinations.BOOK_DETAIL_ROOT}/{${MainDestinations.BOOK_ID_KEY}}",
         arguments = listOf(navArgument(MainDestinations.BOOK_ID_KEY) { type = NavType.LongType })
-    ) {backStackEntry ->
+    ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
         bookDetailViewModel.getBookDetail(itemId = bookId)
@@ -88,16 +89,17 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     composable(
         "${MainDestinations.BOOK_LIST_ROOT}/{${MainDestinations.BOOK_LIST_TYPE}}",
         arguments = listOf(navArgument(MainDestinations.BOOK_LIST_TYPE) { type = NavType.StringType })
-    ) {backStackEntry ->
+    ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val listType = arguments.getString(MainDestinations.BOOK_LIST_TYPE)
         SingleCategoryListScreen(
-            listType = when(listType){
+            listType = when (listType) {
                 HomeListType.ItemNewAll.toString() -> HomeListType.ItemNewAll
                 HomeListType.ItemNewSpecial.toString() -> HomeListType.ItemNewSpecial
                 HomeListType.Bestseller.toString() -> HomeListType.Bestseller
                 HomeListType.BlogBest.toString() -> HomeListType.BlogBest
-                else -> HomeListType.ItemNewAll },
+                else -> HomeListType.ItemNewAll
+            },
             viewModel = homeViewModel,
             onBookClick = { id -> onBookSelected(id, backStackEntry) },
             upPress = upPress
@@ -106,7 +108,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     // 앱 설명화면
     composable(
         MainDestinations.MANUAL
-    ){
+    ) {
         ManualViewPager()
     }
 }
