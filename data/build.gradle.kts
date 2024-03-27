@@ -74,10 +74,4 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-compiler:2.46")
-    //test
-    testImplementation("com.google.dagger:hilt-android-testing:2.46")
-    kaptTest("com.google.dagger:hilt-android-compiler:2.46")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.46")
 }
