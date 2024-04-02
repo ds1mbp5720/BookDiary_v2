@@ -43,12 +43,11 @@ fun BookDiaryBasicDialog(
                 onClick = dismissAction,
                 modifier = Modifier,
                 // colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                border = BorderStroke(width = 1.dp, color = Color.Black)
             ) {
                 Text(
                     text = stringResource(id = R.string.str_cancel),
                     modifier = Modifier.fillMaxWidth(),
-                    color = BookDiaryTheme.colors.textLink,
+                    color = BookDiaryTheme.colors.textSecondary,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )
@@ -59,12 +58,11 @@ fun BookDiaryBasicDialog(
                 onClick = confirmAction,
                 modifier = Modifier,
                 //colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                border = BorderStroke(width = 1.dp, color = Color.Black)
             ) {
                 Text(
                     text = stringResource(id = R.string.str_confirm),
                     modifier = Modifier.fillMaxWidth(),
-                    color = BookDiaryTheme.colors.textLink,
+                    color = BookDiaryTheme.colors.textSecondary,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )

@@ -237,7 +237,7 @@ fun BookItemRow(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium,
-                color = BookDiaryTheme.colors.textSecondary,
+                color = BookDiaryTheme.colors.textPrimary,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(5.dp))

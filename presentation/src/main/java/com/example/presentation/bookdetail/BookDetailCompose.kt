@@ -1,5 +1,7 @@
 package com.example.presentation.bookdetail
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -8,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,6 +33,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,8 +83,8 @@ private val imageOverlap = 115.dp // 상단 정보와 Top 간격 ( scroll 시 �
 private val minTitleOffset = 56.dp
 private val minImageOffset = 42.dp // 이미지 최소 크기일때 padding Top
 private val maxTitleOffset = imageOverlap + minTitleOffset + gradientScroll
-private val expandedImageSize = 300.dp
-private val collapsedImageSize = 150.dp
+private val expandedImageSize = 300.dp // 첫 이미지 사이즈(최대)
+private val collapsedImageSize = 100.dp // 이미지 축소 사이즈
 private val horizontalPadding = Modifier.padding(horizontal = 24.dp)
 
 @Composable
@@ -100,14 +104,16 @@ fun BookDetail(
         Header()
         if (bookDetailInfo != null) {
             val bookDetail = bookDetailInfo.bookList[0]
-            Body(book = bookDetail, scroll = scroll)
-            Title(
+            Body(
                 book = bookDetail,
                 url = bookDetail.link ?: "",
-                offStoreInfo = {
-                    bookDetailViewModel.getOffStoreInfo(bookId.toString())
-                    offStoreDialogVisible = true
-                }
+                scroll = scroll
+            ) {
+                bookDetailViewModel.getOffStoreInfo(bookId.toString())
+                offStoreDialogVisible = true
+            }
+            Title(
+                book = bookDetail,
             ) {
                 scroll.value
             }
@@ -126,7 +132,11 @@ fun BookDetail(
                             period = "테스트 기간"
                         )
                     )
-                    Toast.makeText(context, context.getString(R.string.str_add_record), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.str_add_record),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 },
                 insertWishBook = {
                     bookDetailViewModel.insertWishBook(
@@ -136,7 +146,11 @@ fun BookDetail(
                             title = bookDetail.title ?: "제목 없음"
                         )
                     )
-                    Toast.makeText(context, context.getString(R.string.str_add_wish), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.str_add_wish),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             )
         }
@@ -144,7 +158,9 @@ fun BookDetail(
 
         AnimatedVisibility(
             visible = offStoreDialogVisible,
-            enter = slideInVertically() + expandVertically(expandFrom = Alignment.Top) + fadeIn(initialAlpha = 0.3f),
+            enter = slideInVertically() + expandVertically(expandFrom = Alignment.Top) + fadeIn(
+                initialAlpha = 0.3f
+            ),
             exit = slideOutVertically() + shrinkVertically() + fadeOut()
         ) {
             if (offStoreInfo != null) {
@@ -170,15 +186,10 @@ fun Header() {
 @Composable
 private fun Title(
     book: BookModel,
-    url: String,
-    //bookDetailViewModel: BookDetailViewModel,
-    offStoreInfo: () -> Unit,
-    scrollProvider: () -> Int,
+    scrollProvider: () -> Int
 ) {
-    //val book = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value.data?.bookList
     val maxOffset = with(LocalDensity.current) { maxTitleOffset.toPx() }
     val minOffset = with(LocalDensity.current) { minTitleOffset.toPx() }
-    val context = LocalContext.current
     val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
     val collapseFractionProvider = {
         (scrollProvider() / collapseRange).coerceIn(0f, 1f)
@@ -201,14 +212,14 @@ private fun Title(
             content = {
                 Column {
                     Text(
-                        text = book/*?.get(0)?*/.title?.replace("알라딘 상품정보 - ", "") ?: "No Title",
+                        text = book.title?.replace("알라딘 상품정보 - ", "") ?: "No Title",
                         style = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
                         color = BookDiaryTheme.colors.textPrimary,
                         modifier = horizontalPadding
                     )
                     Text(
-                        text = book/*?.get(0)?*/.author ?: "지은이 미확인",
+                        text = book.author ?: "지은이 미확인",
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
                         color = BookDiaryTheme.colors.textPrimary,
@@ -219,11 +230,16 @@ private fun Title(
         ) { measurables, constraints ->
             val collapseFraction = collapseFractionProvider()
             val titleMaxSize =
-                if (collapseFraction < 0.5f) min(expandedImageSize.roundToPx(), constraints.maxWidth)
+                if (collapseFraction < 0.5f) min(
+                    expandedImageSize.roundToPx(),
+                    constraints.maxWidth
+                )
                 else constraints.maxWidth - min(expandedImageSize.roundToPx(), constraints.maxWidth)
-            val titleMinSize = constraints.maxWidth - max(collapsedImageSize.roundToPx(), constraints.minWidth)
+            val titleMinSize =
+                constraints.maxWidth - max(collapsedImageSize.roundToPx(), constraints.minWidth)
             val titleWidth = lerp(titleMaxSize, titleMinSize, collapseFraction)
-            val titlePlaceable = measurables[0].measure(Constraints.fixed(titleWidth, 90.dp.toPx().toInt()))
+            val titlePlaceable =
+                measurables[0].measure(Constraints.fixed(titleWidth, 90.dp.toPx().toInt()))
             layout(
                 width = constraints.maxWidth,
                 height = 56.dp.toPx().toInt()
@@ -232,43 +248,20 @@ private fun Title(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = (book/*?.get(0)?*/.priceSales ?: "0").addCommaWon(),
-            style = MaterialTheme.typography.displayMedium,
-            color = BookDiaryTheme.colors.textPrimary,
+        Row(
             modifier = horizontalPadding
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        /*Row() {
-            BasicButton(
-                onClick = offStoreInfo,
-                modifier = Modifier.weight(1f),
-                border = BorderStroke(width = 1.dp, color = Color.Black)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.str_btn_shop_inventory),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1
-                )
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            BasicButton(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    context.startActivity(intent)
-                },
-                modifier = Modifier.weight(1f),
-                border = BorderStroke(width = 1.dp, color = Color.Black)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.str_btn_link),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1
-                )
-            }
-        }*/
+        ) {
+            Text(
+                text = "정가:",
+                style = MaterialTheme.typography.labelSmall,
+                color = BookDiaryTheme.colors.textPrimary
+            )
+            Text(
+                text = (book.priceStandard ?: "0").addCommaWon(),
+                style = MaterialTheme.typography.displaySmall,
+                color = BookDiaryTheme.colors.textPrimary
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         BookDiaryDivider()
     }
@@ -335,7 +328,9 @@ private fun CollapsingImageLayout(
 @Composable
 private fun Body(
     book: BookModel,
-    scroll: ScrollState
+    url: String,
+    scroll: ScrollState,
+    offStoreInfo: () -> Unit
 ) {
     val context = LocalContext.current
     Column {
@@ -371,8 +366,8 @@ private fun Body(
                     var seeMore by remember { mutableStateOf(true) }
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = if (book.description != "") book.description ?: "상세정보가 없습니다."
-                        else "상세정보가 없습니다.",
+                        text = if (book.description != "") book.description ?: stringResource(id = R.string.str_no_detail)
+                        else  stringResource(id = R.string.str_no_detail),
                         color = BookDiaryTheme.colors.textPrimary,
                         maxLines = if (seeMore) 2 else Int.MAX_VALUE,
                         overflow = TextOverflow.Ellipsis,
@@ -392,13 +387,12 @@ private fun Body(
                             .clickable { seeMore = !seeMore }
                     )
                     Spacer(modifier = Modifier.height(40.dp))
-
                     DetailInfoColumn(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         title = stringResource(id = R.string.str_category),
                         detail = book.categoryName,
-                        exceptionDetail = "세부 분류가 없습니다."
+                        exceptionDetail = stringResource(id = R.string.str_no_category)
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     DetailInfoColumn(
@@ -406,15 +400,23 @@ private fun Body(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         title = stringResource(id = R.string.str_publisher),
                         detail = book.subInfo?.bestSellerRank,
-                        exceptionDetail = "출판사 정보가 없습니다."
+                        exceptionDetail = stringResource(id = R.string.str_no_publisher)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(7.dp))
+                    DetailInfoColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        title = stringResource(id = R.string.str_pub_date),
+                        detail = book.pubDate,
+                        exceptionDetail = stringResource(id = R.string.str_no_pub_date)
+                    )
+                    Spacer(modifier = Modifier.height(7.dp))
                     DetailInfoColumn(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         title = stringResource(id = R.string.str_bestseller_rank),
                         detail = book.publisher,
-                        exceptionDetail = "베스트셀러 순위 정보가 없습니다."
+                        exceptionDetail = stringResource(id = R.string.str_no_bestseller)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
@@ -423,17 +425,15 @@ private fun Body(
                         color = BookDiaryTheme.colors.textHelp,
                         modifier = horizontalPadding
                     )
-
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row {
-                        val ratingText = "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " + book.subInfo?.ratingInfo?.ratingCount
-                        Text(
-                            text = ratingText,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = BookDiaryTheme.colors.textHelp,
-                            modifier = horizontalPadding
-                        )
-                    }
+                    val ratingText =
+                        "별 평점 : " + book.subInfo?.ratingInfo?.ratingScore + " / 리뷰 수 : " + book.subInfo?.ratingInfo?.ratingCount
+                    Text(
+                        text = ratingText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = BookDiaryTheme.colors.textHelp,
+                        modifier = horizontalPadding
+                    )
                     RatingBar(
                         modifier = horizontalPadding,
                         context = context,
@@ -441,8 +441,40 @@ private fun Body(
                         totalCnt = 10
                     )
                     Spacer(modifier = Modifier.height(6.dp))
+                    Row(
+                        modifier = horizontalPadding
+                    ) {
+                        BasicButton(
+                            onClick = offStoreInfo,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_btn_shop_inventory),
+                                modifier = Modifier.fillMaxWidth(),
+                                color = BookDiaryTheme.colors.textSecondary,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        BasicButton(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                context.startActivity(intent)
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.str_btn_link),
+                                modifier = Modifier.fillMaxWidth(),
+                                color = BookDiaryTheme.colors.textSecondary,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
                     BookDiaryDivider()
-
                     Text(
                         text = stringResource(id = R.string.str_cart_review),
                         style = MaterialTheme.typography.titleLarge,
@@ -475,7 +507,6 @@ private fun Body(
                             .navigationBarsPadding()
                             .height(8.dp)
                     )
-                    //todo 다른 책 리스트 가져와서 BookCollectoin 사용해서 뿌리기
                 }
             }
         }
@@ -508,7 +539,7 @@ private fun DetailSubInfoRow(
         DetailInfoColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             textAlign = TextAlign.Center,
-            title = "Page",
+            title = stringResource(id = R.string.str_page),
             detail = page,
             exceptionDetail = stringResource(id = R.string.str_no_page)
         )
@@ -516,15 +547,15 @@ private fun DetailSubInfoRow(
         DetailInfoColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             textAlign = TextAlign.Center,
-            title = "재고 상태",
-            detail = if (stockStatus?.isEmpty() == true) "재고 있음" else stockStatus,
-            exceptionDetail = "재고 있음"
+            title = stringResource(id = R.string.str_stock_title),
+            detail = if (stockStatus?.isEmpty() == true) stringResource(id = R.string.str_stock) else stockStatus,
+            exceptionDetail = stringResource(id = R.string.str_stock)
         )
 
         DetailInfoColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             textAlign = TextAlign.Center,
-            title = "리뷰 수",
+            title = stringResource(id = R.string.str_review_cnt),
             detail = ratingCnt,
             exceptionDetail = "0"
         )
@@ -557,7 +588,7 @@ private fun DetailInfoColumn(
             text = detail ?: exceptionDetail,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = textAlign,
-            color = BookDiaryTheme.colors.textHelp,
+            color = BookDiaryTheme.colors.textPrimary,
             modifier = horizontalPadding
         )
     }
@@ -579,26 +610,32 @@ private fun DetailBottomBar(
                     .then(horizontalPadding)
                     .heightIn(min = 56.dp)
             ) {
-                BasicButton(
+                IconButton(
                     onClick = insertWishBook,
-                    modifier = Modifier.weight(1f),
-                    border = BorderStroke(width = 1.dp, color = Color.Black)
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = BookDiaryTheme.colors.interactivePrimary
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        )
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.str_btn_wish),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        maxLines = 1
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_bookmark_border_24),
+                        tint = BookDiaryTheme.colors.iconInteractive,
+                        contentDescription = "insert_wish"
                     )
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 BasicButton(
                     onClick = insertMyBook,
-                    modifier = Modifier.weight(1f),
-                    border = BorderStroke(width = 1.dp, color = Color.Black)
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text(
                         text = stringResource(id = R.string.str_btn_record),
+                        color = BookDiaryTheme.colors.textSecondary,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         maxLines = 1

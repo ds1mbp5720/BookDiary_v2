@@ -12,19 +12,27 @@
     <string name="str_rating_title">리뷰</string>
     <string name="str_cart_review">카드 리뷰</string>
     <string name="str_bestseller_rank">주간베스트셀러 순위</string>
+    <string name="str_pub_date">출간일</string>
     <string name="str_page">쪽수</string>
     <string name="str_see_more">더보기</string>
     <string name="str_see_less">접기</string>
+    <string name="str_stock_title">재고 상태</string>
     <string name="str_stock">재고 있음</string>
+    <string name="str_no_stock">재고 있음</string>
     <string name="str_no_title">제목 없음</string>
-    <string name="str_no_page">쪽수정보 없음</string>
     <string name="str_no_author">저자 미확인</string>
-    <string name="str_no_price">가격정보 없음</string>
-
+    <string name="str_review_cnt">리뷰 작성수</string>
     <string name="str_new_all_title">신간 전체</string>
     <string name="str_new_special_title">주목할 만한 신간</string>
     <string name="str_bestseller_title">베스트셀러</string>
     <string name="str_bolg_best_title">블로거 베스트셀러(국내 도서)</string>
+    <string name="str_no_page">쪽수정보 없음</string>
+    <string name="str_no_price">가격정보 없음</string>
+    <string name="str_no_pub_date">출간일 정보가 없습니다.</string>
+    <string name="str_no_publisher">출판사 정보가 없습니다.</string>
+    <string name="str_no_bestseller">베스트셀러 정보가 없습니다.</string>
+    <string name="str_no_category">카테고리 정보가 없습니다.</string>
+    <string name="str_no_detail">상세정보가 없습니다.</string>
 
     <string name="str_btn_link">자세히 보기</string>
     <string name="str_btn_shop_inventory">재고 정보</string>
