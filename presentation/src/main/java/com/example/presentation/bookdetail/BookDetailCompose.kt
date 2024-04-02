@@ -1,7 +1,5 @@
 package com.example.presentation.bookdetail
 
-import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -13,6 +11,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +30,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -74,10 +74,10 @@ import java.lang.Integer.min
 
 private val bottomBarHeight = 56.dp
 private val titleHeight = 128.dp
-private val gradientScroll = 180.dp
-private val imageOverlap = 115.dp
+private val gradientScroll = 230.dp // 스크롤을 위한 간격
+private val imageOverlap = 115.dp // 상단 정보와 Top 간격 ( scroll 시 사라지는 부분)
 private val minTitleOffset = 56.dp
-private val minImageOffset = 12.dp
+private val minImageOffset = 42.dp // 이미지 최소 크기일때 padding Top
 private val maxTitleOffset = imageOverlap + minTitleOffset + gradientScroll
 private val expandedImageSize = 300.dp
 private val collapsedImageSize = 150.dp
@@ -96,7 +96,6 @@ fun BookDetail(
         var offStoreDialogVisible by rememberSaveable { mutableStateOf(false) }
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
         val offStoreInfo = bookDetailViewModel.offStoreInfo.collectAsStateWithLifecycle().value
-        val bookDetailState = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle()
         val scroll = rememberScrollState(0)
         Header()
         if (bookDetailInfo != null) {
@@ -112,7 +111,7 @@ fun BookDetail(
             ) {
                 scroll.value
             }
-            Image(imageUrl = bookDetail.cover ?: "") { scroll.value } // todo 이미지 null 경우 기본 이미지 추가하기
+            Image(imageUrl = bookDetail.cover ?: "") { scroll.value }
             DetailBottomBar(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 insertMyBook = {
@@ -240,7 +239,7 @@ private fun Title(
             modifier = horizontalPadding
         )
         Spacer(modifier = Modifier.height(6.dp))
-        Row() {
+        /*Row() {
             BasicButton(
                 onClick = offStoreInfo,
                 modifier = Modifier.weight(1f),
@@ -269,7 +268,7 @@ private fun Title(
                     maxLines = 1
                 )
             }
-        }
+        }*/
         Spacer(modifier = Modifier.height(8.dp))
         BookDiaryDivider()
     }
@@ -278,10 +277,8 @@ private fun Title(
 @Composable
 private fun Image(
     imageUrl: String,
-    //bookDetailViewModel: BookDetailViewModel,
     scrollProvider: () -> Int
 ) {
-    //val book = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value.data?.bookList
     val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
     val collapseFractionProvider = {
         (scrollProvider() / collapseRange).coerceIn(0f, 1f)
@@ -291,10 +288,10 @@ private fun Image(
         modifier = horizontalPadding.then(Modifier.statusBarsPadding())
     ) {
         BookCoverImage(
-            //imageUrl = book?.get(0)?.cover ?: "",
             imageUrl = imageUrl,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            contentDescription = "detail_cover",
+            modifier = Modifier
+                .fillMaxSize()
         )
     }
 
@@ -317,8 +314,8 @@ private fun CollapsingImageLayout(
 
         val imageMaxSize = min(expandedImageSize.roundToPx(), constraints.maxWidth)
         val imageMinSize = max(collapsedImageSize.roundToPx(), constraints.minWidth)
-        val imageWidth = lerp(imageMaxSize, imageMinSize, collapseFraction)
-        val imagePlaceable = measurables[0].measure(Constraints.fixed(imageWidth, imageWidth))
+        val imageWidth = lerp(imageMaxSize, imageMinSize, collapseFraction)// - 80
+        val imagePlaceable = measurables[0].measure(Constraints.fixed(imageWidth, imageWidth + 140))
 
         val imageY = lerp(minTitleOffset, minImageOffset, collapseFraction).roundToPx()
         val imageX = lerp(
@@ -354,9 +351,15 @@ private fun Body(
             Spacer(modifier = Modifier.height(gradientScroll))
             BookDiarySurface(Modifier.fillMaxWidth()) {
                 Column {
-                    Spacer(modifier = Modifier.height(imageOverlap))
-                    Spacer(modifier = Modifier.height(titleHeight))
-
+                    Spacer(modifier = Modifier.height(imageOverlap + titleHeight + 20.dp))
+                    DetailSubInfoRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        page = book.subInfo?.itemPage,
+                        stockStatus = book.stockStatus,
+                        ratingCnt = book.subInfo?.ratingInfo?.ratingCount
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = stringResource(id = R.string.str_detail_title),
@@ -389,49 +392,30 @@ private fun Body(
                             .clickable { seeMore = !seeMore }
                     )
                     Spacer(modifier = Modifier.height(40.dp))
-                    Text(
-                        text = stringResource(id = R.string.str_category),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
+
+                    DetailInfoColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        title = stringResource(id = R.string.str_category),
+                        detail = book.categoryName,
+                        exceptionDetail = "세부 분류가 없습니다."
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = book.categoryName ?: "세부 분류가 없습니다.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
+                    Spacer(modifier = Modifier.height(7.dp))
+                    DetailInfoColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        title = stringResource(id = R.string.str_publisher),
+                        detail = book.subInfo?.bestSellerRank,
+                        exceptionDetail = "출판사 정보가 없습니다."
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = stringResource(id = R.string.str_publisher),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
+                    DetailInfoColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        title = stringResource(id = R.string.str_bestseller_rank),
+                        detail = book.publisher,
+                        exceptionDetail = "베스트셀러 순위 정보가 없습니다."
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = book.publisher ?: "출판사 정보가 없습니다.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = stringResource(id = R.string.str_bestseller_rank),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
-                    )
-
-                    Text(
-                        text = book.subInfo?.bestSellerRank ?: "베스트셀러 순위 정보가 없습니다.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = BookDiaryTheme.colors.textHelp,
-                        modifier = horizontalPadding
-                    )
-
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(id = R.string.str_rating_title),
@@ -485,21 +469,98 @@ private fun Body(
                             }
                         }
                     }
-
                     Spacer(
                         modifier = Modifier
                             .padding(bottom = bottomBarHeight)
                             .navigationBarsPadding()
                             .height(8.dp)
                     )
-
-
                     //todo 다른 책 리스트 가져와서 BookCollectoin 사용해서 뿌리기
                 }
             }
         }
     }
+}
 
+/**
+ * 페이지, 재고상태, 리뷰수
+ */
+@Composable
+private fun DetailSubInfoRow(
+    modifier: Modifier = Modifier,
+    page: String?,
+    stockStatus: String?,
+    ratingCnt: String?
+) {
+    Row(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color.LightGray,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                color = BookDiaryTheme.colors.uiBackground,
+                shape = RoundedCornerShape(10.dp)
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        DetailInfoColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            textAlign = TextAlign.Center,
+            title = "Page",
+            detail = page,
+            exceptionDetail = stringResource(id = R.string.str_no_page)
+        )
+
+        DetailInfoColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            textAlign = TextAlign.Center,
+            title = "재고 상태",
+            detail = if (stockStatus?.isEmpty() == true) "재고 있음" else stockStatus,
+            exceptionDetail = "재고 있음"
+        )
+
+        DetailInfoColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            textAlign = TextAlign.Center,
+            title = "리뷰 수",
+            detail = ratingCnt,
+            exceptionDetail = "0"
+        )
+    }
+}
+
+@Composable
+private fun DetailInfoColumn(
+    modifier: Modifier = Modifier,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    textAlign: TextAlign = TextAlign.Start,
+    title: String,
+    detail: String?,
+    exceptionDetail: String
+) {
+    Column(
+        modifier = modifier
+            .padding(bottom = 7.dp),
+        horizontalAlignment = horizontalAlignment
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = textAlign,
+            color = BookDiaryTheme.colors.textHelp,
+            modifier = horizontalPadding
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = detail ?: exceptionDetail,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = textAlign,
+            color = BookDiaryTheme.colors.textHelp,
+            modifier = horizontalPadding
+        )
+    }
 }
 
 @Composable

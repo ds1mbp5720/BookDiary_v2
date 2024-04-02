@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.presentation.appinfo.ManualViewPager
 import com.example.presentation.bookdetail.BookDetail
 import com.example.presentation.bookdetail.BookDetailViewModel
 import com.example.presentation.graph.MainSections
@@ -18,7 +19,6 @@ import com.example.presentation.home.HomeViewModel
 import com.example.presentation.home.SingleCategoryListScreen
 import com.example.presentation.navigation.MainDestinations
 import com.example.presentation.navigation.rememberBookDiaryNavController
-import com.example.presentation.appinfo.ManualViewPager
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
@@ -36,7 +36,10 @@ fun BookDiaryApp() {
             startDestination = MainDestinations.HOME_ROUTE
         ) {
             bookDiaryNavGraph(
-                onBookSelected = bookDiaryNavController::navigateToBookDetail,
+                onBookSelected = { id, from ->
+                    bookDetailViewModel.getBookDetail(id)
+                    bookDiaryNavController.navigateToBookDetail(id,from)
+                },
                 onListSelected = bookDiaryNavController::navigateToRecommendList,
                 onManualClick = bookDiaryNavController::navigateToManual,
                 upPress = bookDiaryNavController::upPress,
@@ -82,7 +85,6 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
-        bookDetailViewModel.getBookDetail(itemId = bookId)
         BookDetail(bookId = bookId, upPress = upPress, bookDetailViewModel = bookDetailViewModel)
     }
     // home 화면 한개 리스트 화면

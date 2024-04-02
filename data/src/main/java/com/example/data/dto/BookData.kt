@@ -26,7 +26,7 @@ data class BookData(
     @SerializedName("mallType")
     val mallType: String?, //상품 mall 타입(국내도서: BOOK, 외서:FOREIGN 전자책: EBOOK)
     @SerializedName("stockStatus")
-    val stockStatus: String?, //재고상태
+    val stockStatus: String?, //재고상태 // 재고 있을경우 ==  null, else == "품절", "절판"
     @SerializedName("mileage")
     val mileage: String?, //마일리지
     @SerializedName("cover")

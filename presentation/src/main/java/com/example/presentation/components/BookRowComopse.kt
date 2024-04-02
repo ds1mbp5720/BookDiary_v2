@@ -263,7 +263,7 @@ fun BookCoverImage(
     GlideCard(
         imageUrl = imageUrl,
         contentDescription = contentDescription ?: "",
-        contentScale = ContentScale.FillBounds,
+        contentScale = ContentScale.FillHeight,
         elevation = elevation,
         border = BorderStroke(
             width = 1.dp,

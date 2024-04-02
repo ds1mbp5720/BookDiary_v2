@@ -15,7 +15,9 @@
     <string name="str_page">쪽수</string>
     <string name="str_see_more">더보기</string>
     <string name="str_see_less">접기</string>
+    <string name="str_stock">재고 있음</string>
     <string name="str_no_title">제목 없음</string>
+    <string name="str_no_page">쪽수정보 없음</string>
     <string name="str_no_author">저자 미확인</string>
     <string name="str_no_price">가격정보 없음</string>
 
