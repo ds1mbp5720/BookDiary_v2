@@ -43,12 +43,12 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicUpButton
-import com.example.presentation.components.BookDiaryBasicDialog
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.BookItemList
 import com.example.presentation.components.BookRowContent
+import com.example.presentation.components.dialog.BookDiaryBasicDialog
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme

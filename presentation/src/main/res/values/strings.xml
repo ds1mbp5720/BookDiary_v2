@@ -37,6 +37,8 @@
     <string name="str_btn_link">자세히 보기</string>
     <string name="str_btn_shop_inventory">재고 정보</string>
     <string name="str_btn_record">서랍에 저장</string>
+    <string name="str_btn_record_title">책 기록 작성</string>
+    <string name="str_btn_record_detail">독후감 내용을 작성해주세요.</string>
     <string name="str_btn_wish">찜하기</string>
     <string name="str_add_record">서랍에 추가되었습니다!</string>
     <string name="str_add_wish">찜목록에 추가되었습니다!</string>
@@ -47,6 +49,10 @@
     <string name="str_no_search_record">검색 기록이 없습니다.</string>
     <string name="str_no_off_store_result">해당 책 보유 매장이 없습니다.</string>
 
+    <string name="str_record_date_hint">독서 기간 (미입력시 오늘로 입력됩니다.)</string>
+    <string name="str_start_date">시작 날짜</string>
+    <string name="str_end_date">종료 날짜</string>
+
     <string name="str_change_record">책 기록 보기</string>
     <string name="str_change_wish">찜 목록 보기</string>
 
@@ -56,6 +62,7 @@
     <string name="str_confirm">확인</string>
     <string name="str_next">다음</string>
     <string name="str_prev">이전</string>
+    <string name="str_complete">완료</string>
 
     <string name="str_opensource_license">오픈소스 라이센스</string>
     <string name="str_app_manual">앱 사용 방법</string>

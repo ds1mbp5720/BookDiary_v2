@@ -1,5 +1,6 @@
 package com.example.presentation.util
 
+import android.annotation.SuppressLint
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 // 좌우 위치에 따른 아이콘 대칭 변경 함수
@@ -20,6 +23,14 @@ fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
 fun mirroringBackIcon() = mirroringIcon(
     ltrIcon = Icons.Outlined.ArrowBack, rtlIcon = Icons.Outlined.ArrowForward
 )
+@SuppressLint("SimpleDateFormat")
+fun millToDate(mills: Long): String {
+    val pattern = "yyyy/MM/dd"
+    val formatter = SimpleDateFormat(pattern)
+    val date = formatter.format(Timestamp(mills))
+    return date
+}
+
 // Record 화면의 책 제목 세로형 string 변경 함수
 fun String.textChangeVertical(): String{
     var newString = "\n\n"

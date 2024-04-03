@@ -3,13 +3,6 @@ package com.example.presentation.bookdetail
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -71,16 +64,17 @@ import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.GlideCard
 import com.example.presentation.components.RatingBar
+import com.example.presentation.components.dialog.DialogVisibleAnimate
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.addCommaWon
 import java.lang.Integer.max
 import java.lang.Integer.min
 
 private val bottomBarHeight = 56.dp
-private val titleHeight = 128.dp
+private val titleHeight = 120.dp
 private val gradientScroll = 230.dp // 스크롤을 위한 간격
 private val imageOverlap = 115.dp // 상단 정보와 Top 간격 ( scroll 시 사라지는 부분)
-private val minTitleOffset = 56.dp
+private val minTitleOffset = 85.dp
 private val minImageOffset = 42.dp // 이미지 최소 크기일때 padding Top
 private val maxTitleOffset = imageOverlap + minTitleOffset + gradientScroll
 private val expandedImageSize = 300.dp // 첫 이미지 사이즈(최대)
@@ -98,6 +92,7 @@ fun BookDetail(
     ) {
         val context = LocalContext.current
         var offStoreDialogVisible by rememberSaveable { mutableStateOf(false) }
+        var insertMyBookDialogVisible by rememberSaveable { mutableStateOf(false) }
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
         val offStoreInfo = bookDetailViewModel.offStoreInfo.collectAsStateWithLifecycle().value
         val scroll = rememberScrollState(0)
@@ -121,22 +116,7 @@ fun BookDetail(
             DetailBottomBar(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 insertMyBook = {
-                    bookDetailViewModel.insertMyBook(
-                        book = MyBookModel(
-                            itemId = (bookDetail.itemId ?: "0").toLong(),
-                            imageUrl = bookDetail.cover ?: "",
-                            title = bookDetail.title ?: "제목 없음",
-                            author = bookDetail.author ?: "저자 미확인",
-                            link = bookDetail.link,
-                            myReview = "테스트 리뷰",
-                            period = "테스트 기간"
-                        )
-                    )
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.str_add_record),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    insertMyBookDialogVisible = true
                 },
                 insertWishBook = {
                     bookDetailViewModel.insertWishBook(
@@ -153,21 +133,44 @@ fun BookDetail(
                     ).show()
                 }
             )
+            DialogVisibleAnimate(
+                visible = insertMyBookDialogVisible
+            ) {
+                InsertMyBookDialog(
+                    bookInfo = bookDetail,
+                    onDismiss = {
+                        insertMyBookDialogVisible = false
+                    }
+                ) { review, period ->
+                    bookDetailViewModel.insertMyBook(
+                        book = MyBookModel(
+                            itemId = (bookDetail.itemId ?: "0").toLong(),
+                            imageUrl = bookDetail.cover ?: "",
+                            title = bookDetail.title ?: "제목 없음",
+                            author = bookDetail.author ?: "저자 미확인",
+                            link = bookDetail.link,
+                            myReview = review,
+                            period = period
+                        )
+                    )
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.str_add_record),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
         BasicUpButton(upPress)
-
-        AnimatedVisibility(
-            visible = offStoreDialogVisible,
-            enter = slideInVertically() + expandVertically(expandFrom = Alignment.Top) + fadeIn(
-                initialAlpha = 0.3f
-            ),
-            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        DialogVisibleAnimate(
+            visible = offStoreDialogVisible
         ) {
             if (offStoreInfo != null) {
                 OffStoreDialog(
-                    offStoreInfo = offStoreInfo,
-                    onDismiss = { offStoreDialogVisible = false }
-                )
+                    offStoreInfo = offStoreInfo
+                ) {
+                    offStoreDialogVisible = false
+                }
             }
         }
     }
@@ -210,60 +213,61 @@ private fun Title(
         Spacer(modifier = Modifier.height(16.dp))
         Layout(
             content = {
-                Column {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = book.title?.replace("알라딘 상품정보 - ", "") ?: "No Title",
                         style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
                         maxLines = 2,
                         color = BookDiaryTheme.colors.textPrimary,
                         modifier = horizontalPadding
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp)
                     )
                     Text(
                         text = book.author ?: "지은이 미확인",
                         style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
                         maxLines = 2,
                         color = BookDiaryTheme.colors.textPrimary,
-                        modifier = horizontalPadding
+                        modifier = horizontalPadding.fillMaxWidth()
+                            .padding(bottom = 5.dp)
                     )
+                    Row(
+                        modifier = horizontalPadding.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = "정가:",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = BookDiaryTheme.colors.textPrimary
+                        )
+                        Text(
+                            text = (book.priceStandard ?: "0").addCommaWon(),
+                            style = MaterialTheme.typography.displaySmall,
+                            color = BookDiaryTheme.colors.textPrimary
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    BookDiaryDivider()
                 }
             }
         ) { measurables, constraints ->
             val collapseFraction = collapseFractionProvider()
-            val titleMaxSize =
-                if (collapseFraction < 0.5f) min(
-                    expandedImageSize.roundToPx(),
-                    constraints.maxWidth
-                )
-                else constraints.maxWidth - min(expandedImageSize.roundToPx(), constraints.maxWidth)
+            val titleMaxSize = constraints.maxWidth
             val titleMinSize =
                 constraints.maxWidth - max(collapsedImageSize.roundToPx(), constraints.minWidth)
             val titleWidth = lerp(titleMaxSize, titleMinSize, collapseFraction)
             val titlePlaceable =
-                measurables[0].measure(Constraints.fixed(titleWidth, 90.dp.toPx().toInt()))
+                measurables[0].measure(Constraints.fixed(titleWidth, titleHeight.toPx().toInt()))
             layout(
                 width = constraints.maxWidth,
-                height = 56.dp.toPx().toInt()
+                height = minTitleOffset.toPx().toInt()
             ) {
                 titlePlaceable.placeRelative(0, 0)
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = horizontalPadding
-        ) {
-            Text(
-                text = "정가:",
-                style = MaterialTheme.typography.labelSmall,
-                color = BookDiaryTheme.colors.textPrimary
-            )
-            Text(
-                text = (book.priceStandard ?: "0").addCommaWon(),
-                style = MaterialTheme.typography.displaySmall,
-                color = BookDiaryTheme.colors.textPrimary
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        BookDiaryDivider()
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -333,7 +337,7 @@ private fun Body(
     offStoreInfo: () -> Unit
 ) {
     val context = LocalContext.current
-    Column {
+    Column() {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
@@ -367,7 +371,7 @@ private fun Body(
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
                         text = if (book.description != "") book.description ?: stringResource(id = R.string.str_no_detail)
-                        else  stringResource(id = R.string.str_no_detail),
+                        else stringResource(id = R.string.str_no_detail),
                         color = BookDiaryTheme.colors.textPrimary,
                         maxLines = if (seeMore) 2 else Int.MAX_VALUE,
                         overflow = TextOverflow.Ellipsis,

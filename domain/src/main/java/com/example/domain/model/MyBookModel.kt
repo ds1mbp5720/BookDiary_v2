@@ -7,5 +7,5 @@ data class MyBookModel(
     val author: String, // 저자
     val link: String?, // 상품 링크 Url
     val myReview: String?, // 독후감
-    val period: String // 독서기간 //todo 형 변환 고려
+    val period: String // 독서 기간
 )
