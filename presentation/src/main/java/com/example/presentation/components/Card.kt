@@ -51,7 +51,7 @@ fun GlideCard(
     glideModifier: Modifier = Modifier,
 ) {
     BookDiarySurface(
-        color = Color.LightGray,
+        color = Color.White,
         elevation = elevation,
         shape = RectangleShape,
         modifier = modifier,

@@ -114,7 +114,9 @@ fun Record(
                 BookRecordContent(
                     animationVisible = contentType == RecordType.MYBOOK,
                     contentTitle = "내 책 목록" + " ${myBooks?.size ?: "0"} 권",
-                    books = myBooks?.mapperMyBookToBasicBookRecordList(),
+                    books = myBooks?.mapperMyBookToBasicBookRecordList()?.filter {
+                        it.title.contains(viewModel.searchState.query.text)
+                    },
                     onBookClick = onBookClick,
                     onBookDeleteSwipe = { id ->
                         viewModel.deleteMyBook(id)
@@ -124,7 +126,9 @@ fun Record(
                 BookRecordContent(
                     animationVisible = contentType == RecordType.WISH,
                     contentTitle = "찜 목록" + " ${wishBooks?.size ?: "0"} 권",
-                    books = wishBooks?.mapperWishBookToBasicBookRecordList(),
+                    books = wishBooks?.mapperWishBookToBasicBookRecordList()?.filter {
+                        it.title.contains(viewModel.searchState.query.text)
+                    },
                     onBookClick = onBookClick,
                     onBookDeleteSwipe = { id ->
                         viewModel.deleteWishBook(id)
@@ -138,8 +142,8 @@ fun Record(
                         viewModel.searchState.searching = true
                     },
                     searchFocused = viewModel.searchState.focused || viewModel.searchState.query.text != "",
-                    onSearchFocusChange = {viewModel.searchState.focused = it},
-                    onClearQuery = {viewModel.searchState.query = TextFieldValue("") },
+                    onSearchFocusChange = { viewModel.searchState.focused = it },
+                    onClearQuery = { viewModel.searchState.query = TextFieldValue("") },
                     searching = viewModel.searchState.searching,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -155,10 +159,11 @@ fun Record(
                         contentType = if (contentType == RecordType.MYBOOK) RecordType.WISH else RecordType.MYBOOK
                     }
                 )
-                BannersAds(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .align(Alignment.BottomCenter)
+                BannersAds(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(70.dp)
+                        .align(Alignment.BottomCenter)
                 )
             }
         }
@@ -176,7 +181,7 @@ fun SwipeContentButton(
         modifier = modifier,
         border = BorderStroke(width = 1.dp, color = Color.Black)
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             modifier = Modifier.weight(1f),
             imageVector = if (contentType == RecordType.MYBOOK) Icons.Filled.Edit else Icons.Filled.ShoppingCart,
             contentDescription = "swipe_content"

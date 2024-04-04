@@ -52,7 +52,7 @@
     <string name="str_record_date_hint">독서 기간 (미입력시 오늘로 입력됩니다.)</string>
     <string name="str_start_date">시작 날짜</string>
     <string name="str_end_date">종료 날짜</string>
-
+    <string name="str_home_record_info_title">기록한 책</string>
     <string name="str_change_record">책 기록 보기</string>
     <string name="str_change_wish">찜 목록 보기</string>
 

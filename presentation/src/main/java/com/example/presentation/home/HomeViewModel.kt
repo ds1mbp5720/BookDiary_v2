@@ -1,13 +1,18 @@
 package com.example.presentation.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.domain.model.BookModel
+import com.example.domain.model.MyBookModel
 import com.example.domain.usecase.BookListUseCase
+import com.example.domain.usecase.MyBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val bookListUseCase: BookListUseCase,
+    private val myBookUseCase: MyBookUseCase,
     application: Application
 ) : AndroidViewModel(application) {
     // 종류별 책 리스트 flow 생성
@@ -84,6 +90,21 @@ class HomeViewModel @Inject constructor(
                 .collect {
                     _singleCategoryBookList.emit(it)
                 }
+        }
+    }
+
+    val myBookList = MutableLiveData<List<MyBookModel>>()
+    fun getMyBookList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            myBookUseCase.execute(
+                onSuccess = {
+                    myBookList.value = it
+                },
+                onError = {
+                    Log.e("", "room Error (MyBook) $it")
+                }
+            )
+            myBookUseCase.getMyBookList()
         }
     }
 }

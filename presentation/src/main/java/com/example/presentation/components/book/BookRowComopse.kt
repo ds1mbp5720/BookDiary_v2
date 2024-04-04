@@ -1,4 +1,4 @@
-package com.example.presentation.components
+package com.example.presentation.components.book
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,9 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
+import com.example.presentation.components.BookCard
+import com.example.presentation.components.GlideCard
+import com.example.presentation.components.offsetGradientBackground
 import com.example.presentation.home.HomeListType
 import com.example.presentation.home.HomeViewModel
 import com.example.presentation.theme.BookDiaryTheme
@@ -90,7 +94,8 @@ fun BookRowContent(
                     }
                 ),
                 style = MaterialTheme.typography.titleLarge,
-                color = BookDiaryTheme.colors.brand,
+                color = BookDiaryTheme.colors.textPrimary,
+                fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -267,7 +272,7 @@ fun BookCoverImage(
         elevation = elevation,
         border = BorderStroke(
             width = 1.dp,
-            color = Color.Black
+            color = Color.White
         ),
         modifier = modifier,
         glideModifier = Modifier.fillMaxSize()

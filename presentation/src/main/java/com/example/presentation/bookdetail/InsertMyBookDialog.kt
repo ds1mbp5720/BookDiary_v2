@@ -38,7 +38,6 @@ import com.example.presentation.util.millToDate
  * 내 책 기록 작성 dialog
  * 독서 기간 선택 버튼, 독후감 작성 editText
  * 독서 기간 미 선택시 오늘 날짜로 기록
- *
  */
 @Composable
 fun InsertMyBookDialog(

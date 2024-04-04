@@ -1,4 +1,4 @@
-package com.example.presentation.components
+package com.example.presentation.components.book
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +16,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
+import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.addCommaWon
 

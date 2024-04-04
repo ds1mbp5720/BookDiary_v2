@@ -59,7 +59,7 @@ import com.example.domain.model.WishBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicButton
 import com.example.presentation.components.BasicUpButton
-import com.example.presentation.components.BookCoverImage
+import com.example.presentation.components.book.BookCoverImage
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.GlideCard
@@ -153,6 +153,7 @@ fun BookDetail(
                             period = period
                         )
                     )
+                    insertMyBookDialogVisible = false
                     Toast.makeText(
                         context,
                         context.getString(R.string.str_add_record),

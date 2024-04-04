@@ -18,13 +18,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,17 +49,20 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.domain.model.BookModel
+import com.example.domain.model.MyBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicUpButton
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiaryScaffold
 import com.example.presentation.components.BookDiarySurface
-import com.example.presentation.components.BookItemList
-import com.example.presentation.components.BookRowContent
+import com.example.presentation.components.book.BookItemList
+import com.example.presentation.components.book.BookRowContent
+import com.example.presentation.components.book.MyBookRowItem
 import com.example.presentation.components.dialog.BookDiaryBasicDialog
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
 import com.example.presentation.theme.BookDiaryTheme
+import com.example.presentation.util.mirroringIcon
 
 enum class HomeListType {
     ItemNewAll, ItemNewSpecial, Bestseller, BlogBest
@@ -65,7 +76,9 @@ fun Home(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
 ) {
+    viewModel.getMyBookList()
     val showFinishDialog = remember { mutableStateOf(false) }
+    val myBookList = viewModel.myBookList.observeAsState().value
     val activity = LocalContext.current as Activity
     BookDiaryScaffold(
         bottomBar = {
@@ -81,7 +94,8 @@ fun Home(
             onBookClick = onBookClick,
             onListClick = onListClick,
             modifier = Modifier.padding(paddingValues),
-            viewModel = viewModel
+            viewModel = viewModel,
+            myBookList = myBookList
         )
         BackHandler(
             enabled = true
@@ -108,15 +122,83 @@ private fun HomeScreen(
     onBookClick: (Long) -> Unit,
     onListClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    myBookList: List<MyBookModel>?
 ) {
     BookDiarySurface(modifier = modifier.fillMaxSize()) {
-        Box {
-            BookCollectionList(
-                viewModel = viewModel,
-                onBookClick = onBookClick,
-                onListClick = onListClick
+        LazyColumn {
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                AladinLogo()
+                BookDiaryDivider(thickness = 2.dp)
+                RecordInfoView(
+                    modifier = Modifier,
+                    myBookList = myBookList,
+                    onBookClick = onBookClick
+                )
+                Box {
+                    BookCollectionList(
+                        viewModel = viewModel,
+                        onBookClick = onBookClick,
+                        onListClick = onListClick
+                    )
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+private fun RecordInfoView(
+    modifier: Modifier = Modifier,
+    myBookList: List<MyBookModel>?,
+    onBookClick: (Long) -> Unit
+) {
+    Column(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .padding(start = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(id = R.string.str_home_record_info_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = BookDiaryTheme.colors.textPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentWidth(Alignment.Start)
             )
+            IconButton(
+                onClick = {
+                    // todo move to record screen
+                },
+                modifier = Modifier.align(Alignment.CenterVertically)
+            ) {
+                Icon(
+                    imageVector = mirroringIcon(
+                        ltrIcon = Icons.Outlined.ArrowForward,
+                        rtlIcon = Icons.Outlined.ArrowBack
+                    ),
+                    tint = BookDiaryTheme.colors.brand,
+                    contentDescription = null
+                )
+            }
+        }
+        LazyRow {
+            if (myBookList != null) {
+                items(myBookList.size) {
+                    MyBookRowItem(
+                        modifier = Modifier,
+                        myBook = myBookList[it]
+                    ) { bookId ->
+                        onBookClick(bookId) //todo change move to myBook detail
+                    }
+                }
+            }
         }
     }
 }
@@ -133,45 +215,38 @@ private fun BookCollectionList(
     val bookListDataBestseller: LazyPagingItems<BookModel> = viewModel.bookListDataBestseller.collectAsLazyPagingItems()
     val bookListDataBlogBest: LazyPagingItems<BookModel> = viewModel.bookListDataBlogBest.collectAsLazyPagingItems()
     Box(modifier = modifier) {
-        LazyColumn {
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                AladinLogo()
-                BookDiaryDivider(thickness = 2.dp)
-                BookRowContent(
-                    contentTitle = HomeListType.ItemNewAll,
-                    books = bookListDataItemNewAll,
-                    onBookClick = onBookClick,
-                    onListClick = onListClick,
-                    viewModel = viewModel
-                )
-                BookDiaryDivider(thickness = 2.dp)
-                BookRowContent(
-                    contentTitle = HomeListType.ItemNewSpecial,
-                    books = bookListDataItemNewSpecial,
-                    onBookClick = onBookClick,
-                    onListClick = onListClick,
-                    viewModel = viewModel
-                )
-                BookDiaryDivider(thickness = 2.dp)
-                BookRowContent(
-                    contentTitle = HomeListType.Bestseller,
-                    books = bookListDataBestseller,
-                    onBookClick = onBookClick,
-                    onListClick = onListClick,
-                    viewModel = viewModel
-                )
-                BookDiaryDivider(thickness = 2.dp)
-                BookRowContent(
-                    contentTitle = HomeListType.BlogBest,
-                    books = bookListDataBlogBest,
-                    onBookClick = onBookClick,
-                    onListClick = onListClick,
-                    viewModel = viewModel
-                )
-            }
-
-
+        Column {
+            BookRowContent(
+                contentTitle = HomeListType.ItemNewAll,
+                books = bookListDataItemNewAll,
+                onBookClick = onBookClick,
+                onListClick = onListClick,
+                viewModel = viewModel
+            )
+            BookDiaryDivider(thickness = 2.dp)
+            BookRowContent(
+                contentTitle = HomeListType.ItemNewSpecial,
+                books = bookListDataItemNewSpecial,
+                onBookClick = onBookClick,
+                onListClick = onListClick,
+                viewModel = viewModel
+            )
+            BookDiaryDivider(thickness = 2.dp)
+            BookRowContent(
+                contentTitle = HomeListType.Bestseller,
+                books = bookListDataBestseller,
+                onBookClick = onBookClick,
+                onListClick = onListClick,
+                viewModel = viewModel
+            )
+            BookDiaryDivider(thickness = 2.dp)
+            BookRowContent(
+                contentTitle = HomeListType.BlogBest,
+                books = bookListDataBlogBest,
+                onBookClick = onBookClick,
+                onListClick = onListClick,
+                viewModel = viewModel
+            )
         }
     }
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.domain.model.BookModel
 import com.example.mylibrary.R
-import com.example.presentation.components.BookItemList
+import com.example.presentation.components.book.BookItemList
 import com.example.presentation.theme.BookDiaryTheme
 
 @Composable
