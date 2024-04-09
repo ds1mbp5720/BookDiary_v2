@@ -52,10 +52,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.mylibrary.R
+import com.example.presentation.appinfo.AppInfo
 import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.home.Home
 import com.example.presentation.home.HomeViewModel
-import com.example.presentation.appinfo.AppInfo
 import com.example.presentation.record.Record
 import com.example.presentation.record.RecordViewModel
 import com.example.presentation.search.Search
@@ -84,6 +84,7 @@ fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
     onManualClick: (NavBackStackEntry) -> Unit,
+    onSettingClick: (NavBackStackEntry) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel,
@@ -118,6 +119,7 @@ fun NavGraphBuilder.addMainGraph(
     composable(MainSections.AppInfo.route) { from ->
         AppInfo(
             onManualClick = { onManualClick(from) },
+            onSettingClick = { onSettingClick(from) },
             onNavigateToRoute = onNavigateToRoute,
             modifier = modifier
         )

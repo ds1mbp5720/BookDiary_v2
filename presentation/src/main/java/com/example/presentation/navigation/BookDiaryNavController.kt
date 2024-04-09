@@ -20,6 +20,7 @@ object MainDestinations {
     const val BOOK_LIST_ROOT = "book_list"
     const val BOOK_LIST_TYPE = "list_type"
     const val MANUAL = "manual"
+    const val SETTING = "setting"
 }
 
 @Composable
@@ -66,6 +67,12 @@ class BookDiaryNavController(
     fun navigateToManual(from: NavBackStackEntry) {
         if (from.lifeCycleIsResume()) {
             navController.navigate(MainDestinations.MANUAL)
+        }
+    }
+
+    fun navigateToSetting(from: NavBackStackEntry) {
+        if(from.lifeCycleIsResume()) {
+            navController.navigate(MainDestinations.SETTING)
         }
     }
 }

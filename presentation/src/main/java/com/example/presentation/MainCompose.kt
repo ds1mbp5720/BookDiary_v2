@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.presentation.appinfo.ManualViewPager
+import com.example.presentation.appinfo.SettingScreen
 import com.example.presentation.bookdetail.BookDetail
 import com.example.presentation.bookdetail.BookDetailViewModel
 import com.example.presentation.graph.MainSections
@@ -42,6 +43,7 @@ fun BookDiaryApp() {
                 },
                 onListSelected = bookDiaryNavController::navigateToRecommendList,
                 onManualClick = bookDiaryNavController::navigateToManual,
+                onSettingClick = bookDiaryNavController::navigateToSetting,
                 upPress = bookDiaryNavController::upPress,
                 onNavigateToRoute = bookDiaryNavController::navigateToBottomBarRoute,
                 homeViewModel = homeViewModel,
@@ -57,6 +59,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
     onManualClick: (NavBackStackEntry) -> Unit,
+    onSettingClick: (NavBackStackEntry) -> Unit,
     upPress: () -> Unit,
     onNavigateToRoute: (String) -> Unit,
     homeViewModel: HomeViewModel,
@@ -72,6 +75,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
             onBookSelected = onBookSelected,
             onListSelected = onListSelected,
             onManualClick = onManualClick,
+            onSettingClick = onSettingClick,
             onNavigateToRoute = onNavigateToRoute,
             homeViewModel = homeViewModel,
             recordViewModel = recordViewModel,
@@ -107,10 +111,16 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
             upPress = upPress
         )
     }
-    // 앱 설명화면
+    // 앱 설명 화면
     composable(
         MainDestinations.MANUAL
     ) {
         ManualViewPager()
+    }
+    // 환경설정 화면
+    composable(
+        MainDestinations.SETTING
+    ) {
+        SettingScreen()
     }
 }

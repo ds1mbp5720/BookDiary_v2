@@ -67,6 +67,7 @@
     <string name="str_opensource_license">오픈소스 라이센스</string>
     <string name="str_app_manual">앱 사용 방법</string>
     <string name="str_app_version">앱 버전 %s</string>
+    <string name="str_app_setting_title">환경설정</string>
 
     <string name="str_manual_desc1">첫번째 설명 스크립트</string>
     <string name="str_manual_desc2">두번째 설명 스크립트</string>

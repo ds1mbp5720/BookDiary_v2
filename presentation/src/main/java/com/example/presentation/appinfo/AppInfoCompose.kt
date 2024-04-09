@@ -22,6 +22,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 @Composable
 fun AppInfo(
     onManualClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -37,6 +38,7 @@ fun AppInfo(
     ) { paddingValues ->
         ProfileScreen(
             onManualClick = onManualClick,
+            onSettingClick = onSettingClick,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -45,6 +47,7 @@ fun AppInfo(
 @Composable
 private fun ProfileScreen(
     onManualClick: () -> Unit,
+    onSettingClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -63,16 +66,17 @@ private fun ProfileScreen(
             )
             Spacer(modifier = Modifier.height(7.dp))
             AppInfoButton(
-                onClick = {
-                    onManualClick()
-                },
+                onClick = onManualClick,
                 text = stringResource(id = R.string.str_app_manual)
             )
             Spacer(modifier = Modifier.height(7.dp))
             AppInfoButton(
-                onClick = {
-                    //todo: 이전 버전 기록들
-                },
+                onClick = onSettingClick ,
+                text = stringResource(id = R.string.str_app_setting_title, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
+            )
+            Spacer(modifier = Modifier.height(7.dp))
+            AppInfoButton(
+                onClick = {},
                 text = stringResource(id = R.string.str_app_version, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
             )
         }
