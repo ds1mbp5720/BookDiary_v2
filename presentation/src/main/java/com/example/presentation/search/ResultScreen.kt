@@ -1,5 +1,6 @@
 package com.example.presentation.search
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ fun ResultScreen(
     books: LazyPagingItems<BookModel>,
     onBookClick: (Long) -> Unit,
     searchResult: Boolean,
+    resetSearchState: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (searchResult) {
@@ -48,5 +50,11 @@ fun ResultScreen(
                 )
             }
         }
+    }
+    // 검색 상태 초기화
+    BackHandler(
+        enabled = true
+    ) {
+        resetSearchState.invoke()
     }
 }

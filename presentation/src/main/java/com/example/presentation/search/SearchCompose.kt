@@ -167,6 +167,12 @@ fun Search(
                             books = searchBookList,
                             onBookClick = onBookClick,
                             searchResult = viewModel.searchState.noResult,
+                            resetSearchState = {
+                                viewModel.searchState.query = TextFieldValue("")
+                                viewModel.searchState.focused = false
+                                viewModel.searchState.searching = false
+                                viewModel.searchState.noResult = false
+                            },
                             modifier = Modifier
                                 .pullRefresh(
                                     state = pullRefreshState,
