@@ -82,6 +82,7 @@ enum class MainSections(
 
 fun NavGraphBuilder.addMainGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
+    onMyBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
     onManualClick: (NavBackStackEntry) -> Unit,
     onSettingClick: (NavBackStackEntry) -> Unit,
@@ -110,7 +111,8 @@ fun NavGraphBuilder.addMainGraph(
     }
     composable(MainSections.RECORD.route) { from ->
         Record(
-            onBookClick = { id -> onBookSelected(id, from) },
+            onWishBookClick = { id -> onBookSelected(id, from) },
+            onMyBookClick = { id -> onMyBookSelected(id, from) },
             onNavigateToRoute = onNavigateToRoute,
             modifier = modifier,
             viewModel = recordViewModel

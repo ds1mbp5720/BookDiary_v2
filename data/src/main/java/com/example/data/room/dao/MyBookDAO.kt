@@ -19,6 +19,9 @@ interface MyBookDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMyBook(book: MyBookEntity)
 
+    @Query("SELECT * FROM BookInfo WHERE itemId = :bookId")
+    fun findMyBook(bookId: Long): Single<MyBookEntity>
+
     @Update
     fun update(book: MyBookEntity)
 

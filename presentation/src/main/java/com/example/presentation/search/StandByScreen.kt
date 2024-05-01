@@ -62,7 +62,7 @@ import com.example.presentation.theme.BookDiaryTheme
 fun StandByScreen(
     searchViewModel: SearchViewModel = viewModel()
 ) {
-    var historyMode by remember { mutableStateOf(true) } // true: list -> false : flow
+    var historyMode by remember { mutableStateOf(false) } // true: list -> false : flow
     val searchHistory = searchViewModel.searchHistory.collectAsState().value
     if (searchHistory.isEmpty()) {
         Text(

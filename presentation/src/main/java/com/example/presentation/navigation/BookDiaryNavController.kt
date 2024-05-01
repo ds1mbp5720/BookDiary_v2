@@ -16,7 +16,9 @@ object MainDestinations {
     const val RECORD_ROOT = "record"
     const val MY_PAGE_ROOT = "myPage"
     const val BOOK_DETAIL_ROOT = "detail"
+    const val MY_BOOK_DETAIL_ROOT = "my_book_detail"
     const val BOOK_ID_KEY = "bookId"
+    const val MY_BOOK_ID_KEY = "my_bookId"
     const val BOOK_LIST_ROOT = "book_list"
     const val BOOK_LIST_TYPE = "list_type"
     const val MANUAL = "manual"
@@ -57,6 +59,11 @@ class BookDiaryNavController(
             navController.navigate("${MainDestinations.BOOK_DETAIL_ROOT}/$bookId")
         }
     }
+    fun navigateToMyBookDetail(bookId: Long, from: NavBackStackEntry) {
+        if( from.lifeCycleIsResume()) {
+            navController.navigate("${MainDestinations.MY_BOOK_DETAIL_ROOT}/$bookId")
+        }
+    }
 
     fun navigateToRecommendList(listType: String, from: NavBackStackEntry) {
         if (from.lifeCycleIsResume()) {
@@ -71,7 +78,7 @@ class BookDiaryNavController(
     }
 
     fun navigateToSetting(from: NavBackStackEntry) {
-        if(from.lifeCycleIsResume()) {
+        if (from.lifeCycleIsResume()) {
             navController.navigate(MainDestinations.SETTING)
         }
     }

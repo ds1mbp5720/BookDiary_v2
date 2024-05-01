@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.MyBookModel
@@ -22,9 +23,16 @@ class RecordViewModel @Inject constructor(
     private val wishBookUseCase: WishBookUseCase,
     application: Application
 ) : AndroidViewModel(application) {
-    val searchState: SearchState = SearchState(query = TextFieldValue(""), focused = false, searching = false, noResult = true) // 상태에 맞춰 상단 검색 바 갱신
+    var recordVisibleType = RecordType.MYBOOK
+    val searchState: SearchState = SearchState(
+        query = TextFieldValue(""),
+        focused = false,
+        searching = false,
+        noResult = true
+    ) // 상태에 맞춰 상단 검색 바 갱신
     val myBookList = MutableLiveData<List<MyBookModel>>()
     val wishBookList = MutableLiveData<List<WishBookModel>>()
+    val myBookDetail = MutableLiveData<MyBookModel>()
     fun getMyBookList() {
         viewModelScope.launch(Dispatchers.IO) {
             myBookUseCase.execute(
@@ -38,6 +46,25 @@ class RecordViewModel @Inject constructor(
             myBookUseCase.getMyBookList()
         }
     }
+
+    fun findMyBook (bookId: Long) {
+        myBookDetail.value = myBookList.value?.find { it.itemId == bookId }
+    }
+
+    // roomDB 에서 직접 find Method
+    /*fun getMyBook(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            myBookUseCase.execute(
+                onSuccess = {
+                    myBookDetail.value
+                },
+                onError = {
+                    Log.e("", "room Error (MyBookDetail $it")
+                }
+            )
+        }
+    }*/
+
     fun getWishBookList() {
         viewModelScope.launch(Dispatchers.IO) {
             wishBookUseCase.execute(

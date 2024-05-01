@@ -21,6 +21,7 @@ import com.example.presentation.home.SingleCategoryListScreen
 import com.example.presentation.navigation.MainDestinations
 import com.example.presentation.navigation.rememberBookDiaryNavController
 import com.example.presentation.record.RecordViewModel
+import com.example.presentation.record.detail.RecordDetailScreen
 import com.example.presentation.search.SearchViewModel
 import com.example.presentation.theme.BookDiaryTheme
 
@@ -39,7 +40,10 @@ fun BookDiaryApp() {
             bookDiaryNavGraph(
                 onBookSelected = { id, from ->
                     bookDetailViewModel.getBookDetail(id)
-                    bookDiaryNavController.navigateToBookDetail(id,from)
+                    bookDiaryNavController.navigateToBookDetail(id, from)
+                },
+                onMyBookSelected = { id, from ->
+                    bookDiaryNavController.navigateToMyBookDetail(id, from)
                 },
                 onListSelected = bookDiaryNavController::navigateToRecommendList,
                 onManualClick = bookDiaryNavController::navigateToManual,
@@ -57,6 +61,7 @@ fun BookDiaryApp() {
 
 private fun NavGraphBuilder.bookDiaryNavGraph(
     onBookSelected: (Long, NavBackStackEntry) -> Unit,
+    onMyBookSelected: (Long, NavBackStackEntry) -> Unit,
     onListSelected: (String, NavBackStackEntry) -> Unit,
     onManualClick: (NavBackStackEntry) -> Unit,
     onSettingClick: (NavBackStackEntry) -> Unit,
@@ -73,6 +78,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     ) {
         addMainGraph(
             onBookSelected = onBookSelected,
+            onMyBookSelected = onMyBookSelected,
             onListSelected = onListSelected,
             onManualClick = onManualClick,
             onSettingClick = onSettingClick,
@@ -90,6 +96,15 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
         val arguments = requireNotNull(backStackEntry.arguments)
         val bookId = arguments.getLong(MainDestinations.BOOK_ID_KEY)
         BookDetail(bookId = bookId, upPress = upPress, bookDetailViewModel = bookDetailViewModel)
+    }
+    // 책 기록 상세보기 화면
+    composable(
+        "${MainDestinations.MY_BOOK_DETAIL_ROOT}/{${MainDestinations.MY_BOOK_ID_KEY}}",
+        arguments = listOf(navArgument(MainDestinations.MY_BOOK_ID_KEY) {type = NavType.LongType} )
+    ) {backStackEntry ->
+        val arguments = requireNotNull(backStackEntry.arguments)
+        val myBookId = arguments.getLong(MainDestinations.MY_BOOK_ID_KEY)
+        RecordDetailScreen(upPress = upPress, recordViewModel = recordViewModel)
     }
     // home 화면 한개 리스트 화면
     composable(

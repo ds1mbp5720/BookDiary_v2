@@ -8,6 +8,7 @@ interface MyBookUseCase {
     fun insertMyBook(book: MyBookModel)
     fun update(book: MyBookModel)
     fun delete(bookId: Long)
+    fun findMyBook(bookId: Long): Single<MyBookModel>
     fun execute(
         onSuccess: ((t: List<MyBookModel>) -> Unit),
         onError: ((t: Throwable) -> Unit),

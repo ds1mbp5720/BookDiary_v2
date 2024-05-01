@@ -12,6 +12,15 @@ fun MyBookModel.toEntity() = MyBookEntity(
     myReview = myReview,
     period = period
 )
+fun MyBookEntity.toModel() = MyBookModel(
+    itemId = itemId,
+    imageUrl = imageUrl,
+    title = title,
+    author = author,
+    link = link,
+    myReview = myReview,
+    period = period
+)
 
 /**
  * room DB의 List Mapper 간 map으로 묶기 위한 interface

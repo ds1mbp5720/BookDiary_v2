@@ -12,4 +12,5 @@ interface MyBookRepository {
     fun update(book: MyBookModel)
 
     fun delete(bookId: Long)
+    fun findMyBook(bookId: Long): Single<MyBookModel>
 }

@@ -27,6 +27,10 @@ class MyBookUseCaseImpl @Inject constructor(
         myBookRepository.delete(bookId)
     }
 
+    override fun findMyBook(bookId: Long): Single<MyBookModel> {
+        return myBookRepository.findMyBook(bookId = bookId)
+    }
+
     @SuppressLint("CheckResult")
     override fun execute(
         onSuccess: (t: List<MyBookModel>) -> Unit,
@@ -39,6 +43,4 @@ class MyBookUseCaseImpl @Inject constructor(
             .doAfterTerminate(onFinished)
             .subscribe(onSuccess, onError)
     }
-
-
 }

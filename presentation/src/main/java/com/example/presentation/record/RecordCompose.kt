@@ -79,18 +79,19 @@ enum class RecordType {
 
 @Composable
 fun Record(
-    onBookClick: (Long) -> Unit,
+    onWishBookClick: (Long) -> Unit,
+    onMyBookClick: (Long) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecordViewModel = viewModel()
 ) {
-    val myBookList = viewModel.myBookList.observeAsState()
-    val wishBookList = viewModel.wishBookList.observeAsState()
+    val myBookList = viewModel.myBookList.observeAsState() // 서랍
+    val wishBookList = viewModel.wishBookList.observeAsState() // 찜
+    var recordVisibleType by remember { mutableStateOf(viewModel.recordVisibleType) }
     viewModel.getMyBookList()
     viewModel.getWishBookList()
     val myBooks = myBookList.value
     val wishBooks = wishBookList.value
-    var contentType by remember { mutableStateOf(RecordType.MYBOOK) }
     val scrollState = rememberScrollState()
     BookDiaryScaffold(
         bottomBar = {
@@ -112,24 +113,27 @@ fun Record(
                     .fillMaxSize(),
             ) {
                 BookRecordContent(
-                    animationVisible = contentType == RecordType.MYBOOK,
+                    animationVisible = recordVisibleType == RecordType.MYBOOK,
                     contentTitle = "내 책 목록" + " ${myBooks?.size ?: "0"} 권",
                     books = myBooks?.mapperMyBookToBasicBookRecordList()?.filter {
                         it.title.contains(viewModel.searchState.query.text)
                     },
-                    onBookClick = onBookClick,
+                    onBookClick = { bookId ->
+                        onMyBookClick.invoke(bookId)
+                        viewModel.findMyBook(bookId = bookId)
+                    },
                     onBookDeleteSwipe = { id ->
                         viewModel.deleteMyBook(id)
                     },
                     modifier = modifier.background(BookDiaryTheme.colors.brandSecondary)
                 )
                 BookRecordContent(
-                    animationVisible = contentType == RecordType.WISH,
+                    animationVisible = recordVisibleType == RecordType.WISH,
                     contentTitle = "찜 목록" + " ${wishBooks?.size ?: "0"} 권",
                     books = wishBooks?.mapperWishBookToBasicBookRecordList()?.filter {
                         it.title.contains(viewModel.searchState.query.text)
                     },
-                    onBookClick = onBookClick,
+                    onBookClick = onWishBookClick,
                     onBookDeleteSwipe = { id ->
                         viewModel.deleteWishBook(id)
                     },
@@ -150,13 +154,19 @@ fun Record(
                 )
                 BookDiaryDivider(modifier = Modifier.padding(top = 56.dp))
                 SwipeContentButton(
-                    contentType = contentType,
+                    contentType = recordVisibleType,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(horizontal = 30.dp, vertical = 70.dp),
                     onClick = {
-                        contentType = if (contentType == RecordType.MYBOOK) RecordType.WISH else RecordType.MYBOOK
+                        viewModel.recordVisibleType =
+                            if (viewModel.recordVisibleType == RecordType.MYBOOK) {
+                                RecordType.WISH
+                            } else {
+                                RecordType.MYBOOK
+                            }
+                        recordVisibleType = viewModel.recordVisibleType
                     }
                 )
                 BannersAds(
@@ -188,7 +198,9 @@ fun SwipeContentButton(
         )
         Text(
             modifier = Modifier.weight(1f),
-            text = if (contentType == RecordType.MYBOOK) stringResource(id = R.string.str_change_wish) else stringResource(id = R.string.str_change_record),
+            text = if (contentType == RecordType.MYBOOK) stringResource(id = R.string.str_change_wish) else stringResource(
+                id = R.string.str_change_record
+            ),
             color = BookDiaryTheme.colors.textLink,
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Start
@@ -303,11 +315,13 @@ fun BookRecordRow(
                         }, label = ""
                     )
                     val alignment = Alignment.CenterEnd
-                    val icon = if (dismissState.targetValue == DismissValue.DismissedToStart) Icons.Default.Delete
-                    else Icons.Default.Edit
+                    val icon =
+                        if (dismissState.targetValue == DismissValue.DismissedToStart) Icons.Default.Delete
+                        else Icons.Default.Edit
 
                     val scale by animateFloatAsState(
-                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f, label = ""
+                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f,
+                        label = ""
                     )
                     Box(
                         Modifier

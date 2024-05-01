@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.data.mapper.MyBookEntityMapper
 import com.example.data.mapper.toEntity
+import com.example.data.mapper.toModel
 import com.example.data.room.database.MyBookDataBase
 import com.example.domain.model.MyBookModel
 import com.example.domain.repository.MyBookRepository
@@ -18,7 +19,6 @@ class MyBookRepositoryImpl @Inject constructor(
             }
     }
 
-
     override fun insertMyBook(book: MyBookModel) {
         database.getMyBookDao().insertMyBook(book = book.toEntity())
     }
@@ -29,6 +29,12 @@ class MyBookRepositoryImpl @Inject constructor(
 
     override fun delete(bookId: Long) {
         database.getMyBookDao().delete(bookId = bookId)
+    }
+
+    override fun findMyBook(bookId: Long): Single<MyBookModel> {
+        return database.getMyBookDao().findMyBook(bookId = bookId).map {
+            it.toModel()
+        }
     }
 
 }
