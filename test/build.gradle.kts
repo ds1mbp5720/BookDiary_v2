@@ -8,10 +8,10 @@ plugins {
 
 android {
     namespace = "com.example.test"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "com.example.test.TestRunner"
         consumerProguardFiles("consumer-rules.pro")

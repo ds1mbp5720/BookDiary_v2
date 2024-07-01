@@ -59,11 +59,12 @@ import com.example.domain.model.WishBookModel
 import com.example.mylibrary.R
 import com.example.presentation.components.BasicButton
 import com.example.presentation.components.BasicUpButton
-import com.example.presentation.components.book.BookCoverImage
 import com.example.presentation.components.BookDiaryDivider
 import com.example.presentation.components.BookDiarySurface
+import com.example.presentation.components.DetailHeader
 import com.example.presentation.components.GlideCard
 import com.example.presentation.components.RatingBar
+import com.example.presentation.components.book.BookCoverImage
 import com.example.presentation.components.dialog.DialogVisibleAnimate
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.addCommaWon
@@ -96,7 +97,7 @@ fun BookDetail(
         val bookDetailInfo = bookDetailViewModel.bookDetail.collectAsStateWithLifecycle().value
         val offStoreInfo = bookDetailViewModel.offStoreInfo.collectAsStateWithLifecycle().value
         val scroll = rememberScrollState(0)
-        Header()
+        DetailHeader()
         if (bookDetailInfo != null) {
             val bookDetail = bookDetailInfo.bookList[0]
             Body(
@@ -175,16 +176,6 @@ fun BookDetail(
             }
         }
     }
-}
-
-@Composable
-fun Header() {
-    Spacer(
-        modifier = Modifier
-            .height(280.dp)
-            .fillMaxWidth()
-            .background(Brush.horizontalGradient(BookDiaryTheme.colors.tornado1))
-    )
 }
 
 @Composable
@@ -292,7 +283,6 @@ private fun Image(
                 .fillMaxSize()
         )
     }
-
 }
 
 // scroll 하단 이동시 이미지 size 변경

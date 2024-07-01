@@ -11,10 +11,10 @@ fun getTTBKey(propertyKey: String): String {
 
 android {
     namespace = "com.example.data"
-    compileSdk = 33
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         buildConfigField("String", "TTB_KEY", getTTBKey("TTB_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

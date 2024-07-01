@@ -101,7 +101,7 @@ private fun NavGraphBuilder.bookDiaryNavGraph(
     composable(
         "${MainDestinations.MY_BOOK_DETAIL_ROOT}/{${MainDestinations.MY_BOOK_ID_KEY}}",
         arguments = listOf(navArgument(MainDestinations.MY_BOOK_ID_KEY) {type = NavType.LongType} )
-    ) {backStackEntry ->
+    ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val myBookId = arguments.getLong(MainDestinations.MY_BOOK_ID_KEY)
         RecordDetailScreen(upPress = upPress, recordViewModel = recordViewModel)

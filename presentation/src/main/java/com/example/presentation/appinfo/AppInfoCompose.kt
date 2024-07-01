@@ -72,12 +72,12 @@ private fun ProfileScreen(
             Spacer(modifier = Modifier.height(7.dp))
             AppInfoButton(
                 onClick = onSettingClick ,
-                text = stringResource(id = R.string.str_app_setting_title, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
+                text = stringResource(id = R.string.str_app_setting_title)//, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
             )
             Spacer(modifier = Modifier.height(7.dp))
             AppInfoButton(
                 onClick = {},
-                text = stringResource(id = R.string.str_app_version, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
+                text = stringResource(id = R.string.str_app_version)//, context.packageManager.getPackageInfo(context.packageName, 0).versionName)
             )
         }
     }
