@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -40,18 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
-import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.domain.model.BookModel
 import com.example.domain.model.MyBookModel
@@ -64,23 +57,10 @@ import com.example.presentation.components.BookDiarySurface
 import com.example.presentation.components.DetailHeader
 import com.example.presentation.components.GlideCard
 import com.example.presentation.components.RatingBar
-import com.example.presentation.components.book.BookCoverImage
 import com.example.presentation.components.dialog.DialogVisibleAnimate
 import com.example.presentation.theme.BookDiaryTheme
-import com.example.presentation.util.addCommaWon
-import java.lang.Integer.max
-import java.lang.Integer.min
 
-private val bottomBarHeight = 56.dp
-private val titleHeight = 120.dp
-private val gradientScroll = 230.dp // 스크롤을 위한 간격
-private val imageOverlap = 115.dp // 상단 정보와 Top 간격 ( scroll 시 사라지는 부분)
-private val minTitleOffset = 85.dp
-private val minImageOffset = 42.dp // 이미지 최소 크기일때 padding Top
-private val maxTitleOffset = imageOverlap + minTitleOffset + gradientScroll
-private val expandedImageSize = 300.dp // 첫 이미지 사이즈(최대)
-private val collapsedImageSize = 100.dp // 이미지 축소 사이즈
-private val horizontalPadding = Modifier.padding(horizontal = 24.dp)
+val bottomBarHeight = 56.dp
 
 @Composable
 fun BookDetail(
@@ -109,7 +89,9 @@ fun BookDetail(
                 offStoreDialogVisible = true
             }
             Title(
-                book = bookDetail,
+                title = bookDetail.title,
+                author = bookDetail.author,
+                priceStandard = bookDetail.priceStandard,
             ) {
                 scroll.value
             }
@@ -174,148 +156,6 @@ fun BookDetail(
                     offStoreDialogVisible = false
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun Title(
-    book: BookModel,
-    scrollProvider: () -> Int
-) {
-    val maxOffset = with(LocalDensity.current) { maxTitleOffset.toPx() }
-    val minOffset = with(LocalDensity.current) { minTitleOffset.toPx() }
-    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
-    val collapseFractionProvider = {
-        (scrollProvider() / collapseRange).coerceIn(0f, 1f)
-    }
-
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-        modifier = Modifier
-            .heightIn(min = titleHeight)
-            .statusBarsPadding()
-            .offset {
-                val scroll = scrollProvider()
-                val offset = (maxOffset - scroll).coerceAtLeast(minOffset)
-                IntOffset(x = 0, y = offset.toInt())
-            }
-            .background(color = BookDiaryTheme.colors.uiBackground)
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Layout(
-            content = {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = book.title?.replace("알라딘 상품정보 - ", "") ?: "No Title",
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        color = BookDiaryTheme.colors.textPrimary,
-                        modifier = horizontalPadding
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp)
-                    )
-                    Text(
-                        text = book.author ?: "지은이 미확인",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        color = BookDiaryTheme.colors.textPrimary,
-                        modifier = horizontalPadding.fillMaxWidth()
-                            .padding(bottom = 5.dp)
-                    )
-                    Row(
-                        modifier = horizontalPadding.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Text(
-                            text = "정가:",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = BookDiaryTheme.colors.textPrimary
-                        )
-                        Text(
-                            text = (book.priceStandard ?: "0").addCommaWon(),
-                            style = MaterialTheme.typography.displaySmall,
-                            color = BookDiaryTheme.colors.textPrimary
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    BookDiaryDivider()
-                }
-            }
-        ) { measurables, constraints ->
-            val collapseFraction = collapseFractionProvider()
-            val titleMaxSize = constraints.maxWidth
-            val titleMinSize =
-                constraints.maxWidth - max(collapsedImageSize.roundToPx(), constraints.minWidth)
-            val titleWidth = lerp(titleMaxSize, titleMinSize, collapseFraction)
-            val titlePlaceable =
-                measurables[0].measure(Constraints.fixed(titleWidth, titleHeight.toPx().toInt()))
-            layout(
-                width = constraints.maxWidth,
-                height = minTitleOffset.toPx().toInt()
-            ) {
-                titlePlaceable.placeRelative(0, 0)
-            }
-        }
-        Spacer(modifier = Modifier.height(32.dp))
-    }
-}
-
-@Composable
-private fun Image(
-    imageUrl: String,
-    scrollProvider: () -> Int
-) {
-    val collapseRange = with(LocalDensity.current) { (maxTitleOffset - minTitleOffset).toPx() }
-    val collapseFractionProvider = {
-        (scrollProvider() / collapseRange).coerceIn(0f, 1f)
-    }
-    CollapsingImageLayout(
-        collapseFractionProvider = collapseFractionProvider,
-        modifier = horizontalPadding.then(Modifier.statusBarsPadding())
-    ) {
-        BookCoverImage(
-            imageUrl = imageUrl,
-            contentDescription = "detail_cover",
-            modifier = Modifier
-                .fillMaxSize()
-        )
-    }
-}
-
-// scroll 하단 이동시 이미지 size 변경
-@Composable
-private fun CollapsingImageLayout(
-    collapseFractionProvider: () -> Float,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Layout(
-        modifier = modifier,
-        content = content
-    ) { measurables, constraints ->
-        check(measurables.size == 1)
-
-        val collapseFraction = collapseFractionProvider()
-
-        val imageMaxSize = min(expandedImageSize.roundToPx(), constraints.maxWidth)
-        val imageMinSize = max(collapsedImageSize.roundToPx(), constraints.minWidth)
-        val imageWidth = lerp(imageMaxSize, imageMinSize, collapseFraction)// - 80
-        val imagePlaceable = measurables[0].measure(Constraints.fixed(imageWidth, imageWidth + 140))
-
-        val imageY = lerp(minTitleOffset, minImageOffset, collapseFraction).roundToPx()
-        val imageX = lerp(
-            (constraints.maxWidth - imageWidth) / 2,
-            constraints.maxWidth - imageWidth,
-            collapseFraction
-        )
-        layout(
-            width = constraints.maxWidth,
-            height = imageY + imageWidth
-        ) {
-            imagePlaceable.placeRelative(imageX, imageY)
         }
     }
 }

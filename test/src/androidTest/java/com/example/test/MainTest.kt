@@ -1,5 +1,6 @@
 package com.example.test
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -27,7 +28,7 @@ class MainTest {
         hiltTestRule.inject()
         composeTestRule.setContent {
             BookDiaryTheme{
-                SearchHistoryCard("test",{})
+                SearchHistoryCard(Modifier,"test", onClickEvent = {})
             }
         //BookDiaryApp()
         }
