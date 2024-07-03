@@ -95,10 +95,16 @@ fun NavGraphBuilder.addMainGraph(
     composable(MainSections.HOME.route) { from ->
         Home(
             onBookClick = { id -> onBookSelected(id, from) },
+            onMyBookClick = { id ->
+                recordViewModel.getMyBookList()
+                recordViewModel.findMyBook(id)
+                onMyBookSelected(id, from)
+                            },
             onListClick = { type -> onListSelected(type, from) },
             onNavigateToRoute = onNavigateToRoute,
             modifier = modifier,
-            viewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            recordViewModel = recordViewModel
         )
     }
     composable(MainSections.SEARCH.route) { from ->

@@ -32,11 +32,7 @@ class MyBookUseCaseImpl @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    override fun execute(
-        onSuccess: (t: List<MyBookModel>) -> Unit,
-        onError: (t: Throwable) -> Unit,
-        onFinished: () -> Unit
-    ) {
+    override fun execute(onSuccess: (t: List<MyBookModel>) -> Unit, onError: (t: Throwable) -> Unit, onFinished: () -> Unit) {
         getMyBookList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

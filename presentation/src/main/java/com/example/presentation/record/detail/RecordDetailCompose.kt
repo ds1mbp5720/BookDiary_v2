@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylibrary.R
 import com.example.presentation.bookdetail.Image
 import com.example.presentation.bookdetail.Title
@@ -41,7 +42,7 @@ import com.example.presentation.theme.ReviewPaperColor
 fun RecordDetailScreen(
     modifier: Modifier = Modifier,
     upPress: () -> Unit,
-    recordViewModel: RecordViewModel
+    recordViewModel: RecordViewModel = viewModel()
 ) {
     val bookDetailInfo = recordViewModel.myBookDetail.observeAsState().value
     Box(
@@ -80,6 +81,7 @@ fun RecordDetailScreen(
         BasicUpButton(upPress)
     }
 }
+
 
 @Composable
 private fun Body(
@@ -143,5 +145,14 @@ private fun PreViewBody() {
     Body(
         myReview = "테스트 리뷰",
         scroll = rememberScrollState(0)
+    )
+}
+
+@Preview
+@Composable
+private fun PreViewRecordDetail() {
+    RecordDetailScreen(
+        modifier = Modifier,
+        upPress = {}
     )
 }

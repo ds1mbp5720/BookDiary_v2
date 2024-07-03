@@ -61,6 +61,7 @@ import com.example.presentation.components.book.MyBookRowItem
 import com.example.presentation.components.dialog.BookDiaryBasicDialog
 import com.example.presentation.graph.BookDiaryBottomBar
 import com.example.presentation.graph.MainSections
+import com.example.presentation.record.RecordViewModel
 import com.example.presentation.theme.BookDiaryTheme
 import com.example.presentation.util.mirroringIcon
 
@@ -71,14 +72,16 @@ enum class HomeListType {
 @Composable
 fun Home(
     onBookClick: (Long) -> Unit,
+    onMyBookClick: (Long) -> Unit,
     onListClick: (String) -> Unit,
     onNavigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel()
+    homeViewModel: HomeViewModel = viewModel(),
+    recordViewModel: RecordViewModel = viewModel()
 ) {
-    viewModel.getMyBookList()
+    recordViewModel.getMyBookList()
     val showFinishDialog = remember { mutableStateOf(false) }
-    val myBookList = viewModel.myBookList.observeAsState().value
+    val myBookList = recordViewModel.myBookList.observeAsState().value
     val activity = LocalContext.current as Activity
     BookDiaryScaffold(
         bottomBar = {
@@ -92,9 +95,10 @@ fun Home(
     ) { paddingValues ->
         HomeScreen(
             onBookClick = onBookClick,
+            onMyBookClick = onMyBookClick,
             onListClick = onListClick,
             modifier = Modifier.padding(paddingValues),
-            viewModel = viewModel,
+            viewModel = homeViewModel,
             myBookList = myBookList
         )
         BackHandler(
@@ -120,6 +124,7 @@ fun Home(
 @Composable
 private fun HomeScreen(
     onBookClick: (Long) -> Unit,
+    onMyBookClick: (Long) -> Unit,
     onListClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel,
@@ -134,7 +139,7 @@ private fun HomeScreen(
                 RecordInfoView(
                     modifier = Modifier,
                     myBookList = myBookList,
-                    onBookClick = onBookClick
+                    onMyBookClick = onMyBookClick
                 )
                 Box {
                     BookCollectionList(
@@ -153,7 +158,7 @@ private fun HomeScreen(
 private fun RecordInfoView(
     modifier: Modifier = Modifier,
     myBookList: List<MyBookModel>?,
-    onBookClick: (Long) -> Unit
+    onMyBookClick: (Long) -> Unit
 ) {
     Column(modifier = modifier) {
         Row(
@@ -195,7 +200,7 @@ private fun RecordInfoView(
                         modifier = Modifier,
                         myBook = myBookList[it]
                     ) { bookId ->
-                        onBookClick(bookId) //todo change move to myBook detail
+                        onMyBookClick(bookId)
                     }
                 }
             }
